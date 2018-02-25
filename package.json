@@ -16,7 +16,6 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "ethereumjs-testrpc": "^6.0.3",
     "ethjs": "^0.3.3",
     "truffle-contract": "^3.0.3",
     "vue": "^2.5.2",

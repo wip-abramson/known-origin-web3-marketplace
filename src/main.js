@@ -10,10 +10,11 @@ Vue.config.productionTip = false
 
 ;(async () => {
   try {
-    const defaultEthWallet = await getDefaultEthWallet();
-    const netIdString = await getNetIdString();
-    store.commit('setNetworkId', netIdString);
-    store.commit('setDefaultEthWallet', defaultEthWallet);
+    // TODO re-enable
+    // const defaultEthWallet = await getDefaultEthWallet();
+    // const netIdString = await getNetIdString();
+    // store.commit('setNetworkId', netIdString);
+    // store.commit('setDefaultEthWallet', defaultEthWallet);
   } catch (e) {
     // eslint-disable-next-line
     console.log(e)
@@ -27,4 +28,4 @@ Vue.config.productionTip = false
       template: '<App/>'
     });
   }
-})()
+})();

@@ -28,6 +28,8 @@ module.exports = {
     "comma-dangle": 0,
     "no-unused-vars": 0,
     "spaced-comment": 0,
+    "padded-blocks": 0,
+    "no-undef": 0,
 
     // allow async-await
     'generator-star-spacing': 0,

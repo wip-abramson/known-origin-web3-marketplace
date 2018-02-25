@@ -2,20 +2,37 @@
   <div class="dashboard">
     <h1>{{ msg }}</h1>
 
-    <div v-if="netIdString" class="message is-primary">
+    <div v-if="curatorAddress" class="message is-primary">
       <div class="message-header">
-        <p>Connected To:</p>
+        <p>curatorAddress: </p>
       </div>
       <div class="message-body">
-        {{ netIdString }}
+        {{ curatorAddress }}
       </div>
     </div>
-    <div v-if="defaultEthWallet" class="message is-primary">
+    <div v-if="totalSupply" class="message is-primary">
       <div class="message-header">
-        <p>Wallet Address:</p>
+        <p>totalSupply:</p>
       </div>
       <div class="message-body">
-        {{ defaultEthWallet }}
+        {{ totalSupply }}
+      </div>
+    </div>
+    <div v-if="totalPurchaseValueInWei && totalNumberOfPurchases " class="message is-primary">
+      <div class="message-header">
+        <p>totals:</p>
+      </div>
+      <div class="message-body">
+        totalPurchaseValueInWei = {{ totalPurchaseValueInWei }}
+        totalNumberOfPurchases = {{ totalNumberOfPurchases }}
+      </div>
+    </div>
+    <div v-if="contractName && contractSymbol" class="message is-primary">
+      <div class="message-header">
+        <p>totals:</p>
+      </div>
+      <div class="message-body">
+        contractName = {{ contractName }} | contractSymbol = {{ contractSymbol }}
       </div>
     </div>
 
@@ -28,23 +45,33 @@
 
 <script>
 
+  import {mapGetters} from 'vuex'
+
   export default {
     name: 'dashboard',
     data() {
       return {
         msg: 'Welcome to your truffle-vue dApp',
-        pseudo: undefined
       }
     },
     computed: {
-      userExists: function () {
-        return (typeof this.pseudo !== 'undefined')
+      curatorAddress() {
+        return this.$store.state.curatorAddress;
       },
-      netIdString() {
-        return this.$store.state.netIdString;
+      totalSupply() {
+        return this.$store.state.totalSupply;
       },
-      defaultEthWallet() {
-        return this.$store.state.defaultEthWallet;
+      totalPurchaseValueInWei() {
+        return this.$store.state.totalPurchaseValueInWei;
+      },
+      totalNumberOfPurchases() {
+        return this.$store.state.totalNumberOfPurchases;
+      },
+      contractName() {
+        return this.$store.state.contractName;
+      },
+      contractSymbol() {
+        return this.$store.state.contractSymbol;
       }
     },
     beforeCreate: function () {
