@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import * as actions from './actions'
 import * as mutations from './mutation-types'
 import _ from 'lodash'
+import Web3 from 'web3'
 
 const utils = require('../utils');
 import {KnownOriginDigitalAsset} from '../contracts/index'
@@ -123,6 +124,7 @@ const store = new Vuex.Store({
                   editionNumber: result[4].toNumber(),
                   purchased: result[5].toNumber(),
                   priceInWei: result[6].toString(),
+                  priceInEther: Web3.utils.fromWei(result[6].toString(), 'ether').valueOf()
                 }
               });
 
