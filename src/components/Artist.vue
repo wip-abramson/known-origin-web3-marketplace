@@ -1,5 +1,9 @@
 <template>
-  <div><i>Switch in Artist stuff from Artists</i></div>
+  <div class="artist-tile">
+    <h3>{{ artist.name }}</h3>
+    <img :src="artist.img"/>
+    <p>{{ artist.bio }}</p>
+  </div>
 </template>
 
 <script>
@@ -7,11 +11,16 @@
 
   export default {
     name: 'artist',
-    computed: {},
+    props: ['artist'],
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .artist-tile {
+    text-align: center;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid gray;
+  }
 </style>

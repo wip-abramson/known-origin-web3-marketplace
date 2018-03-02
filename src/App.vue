@@ -8,6 +8,12 @@
       <router-view></router-view>
     </div>
 
+    <div id="links">
+      <router-link :to="{ name: 'dashboard' }">Dash</router-link> |
+      <router-link :to="{ name: 'artists' }">Artists</router-link> |
+      <router-link :to="{ name: 'details' }">Contract details</router-link>
+    </div>
+
     <div id="footer">
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
@@ -51,6 +57,10 @@
 </script>
 
 <style>
+  h1, h2 {
+    display: block;
+  }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -66,7 +76,7 @@
   }
 
   a {
-    color: white;
+    color: darkgray;
   }
 
   #footer, #header {

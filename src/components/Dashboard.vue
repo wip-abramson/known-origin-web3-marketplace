@@ -1,98 +1,67 @@
 <template>
   <div class="dashboard">
-    <h1>{{ msg }}</h1>
 
-    <div v-if="curatorAddress" class="message is-primary">
-      <div class="message-header">
-        <p>Addresses: </p>
-      </div>
-      <div class="message-body">
-        curatorAddress = {{ curatorAddress }} commissionAddress = {{ commissionAddress }} contractDeveloperAddress = {{ contractDeveloperAddress }}
-      </div>
-    </div>
-    <div v-if="totalSupply" class="message is-primary">
-      <div class="message-header">
-        <p>totalSupply:</p>
-      </div>
-      <div class="message-body">
-        {{ totalSupply }}
-      </div>
-    </div>
-    <div v-if="totalPurchaseValueInWei && totalNumberOfPurchases && totalPurchaseValueInEther" class="message is-primary">
-      <div class="message-header">
-        <p>totals:</p>
-      </div>
-      <div class="message-body">
-        totalPurchaseValueInWei = {{ totalPurchaseValueInWei }} |
-        totalNumberOfPurchases = {{ totalNumberOfPurchases }} |
-        totalPurchaseValueInEther = {{ totalPurchaseValueInEther }}
-      </div>
-    </div>
-    <div v-if="contractName && contractSymbol" class="message is-primary">
-      <div class="message-header">
-        <p>totals:</p>
-      </div>
-      <div class="message-body">
-        contractName = {{ contractName }} | contractSymbol = {{ contractSymbol }}
-      </div>
+    <div id="splash">
+      <h1>{{ title }}</h1>
+      <p>Buy original artwork and rare digital assets</p>
+      <button class="btn">View gallery</button>
     </div>
 
-    <div class="gallery">
-
+    <div id="featured-artists">
+      <h2>Featured artists</h2>
+      <div v-for="artist in artists">
+        <artist :artist="artist"></artist>
+      </div>
     </div>
-
-    <router-link :to="{ name: 'artists' }">Artists</router-link>
   </div>
 </template>
 
 <script>
 
   import {mapGetters, mapState} from 'vuex'
+  import Artist from './Artist'
 
   export default {
     name: 'dashboard',
+    components: {Artist},
     data() {
       return {
-        msg: 'Digital arts festival',
+        title: 'Be original. Buy original.',
       }
     },
     computed: {
       ...mapState([
-        'curatorAddress',
-        'contractDeveloperAddress',
-        'commissionAddress',
-        'totalSupply',
         'totalPurchaseValueInWei',
         'totalNumberOfPurchases',
         'totalPurchaseValueInEther',
-        'contractName',
-        'contractSymbol',
+        'artists',
       ])
-    },
-    beforeCreate: function () {
-
-    },
-    methods: {}
+    }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    display: block;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
   a {
     color: #42b983;
+  }
+
+  #splash, #featured-artists {
+    text-align: center;
+    padding: 10px;
+    margin: 5px;
+  }
+
+  .btn {
+    background: #3e27d9;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+  }
+
+  .btn:hover {
+    background: #3e27d9;
+    text-decoration: none;
   }
 </style>
