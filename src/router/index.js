@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import Artists from '@/components/Artists'
 import Details from '@/components/Details'
+import Gallery from '@/components/Gallery'
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/details',
       name: 'details',
       component: Details
+    },
+    {
+      path: '/gallery',
+      name: 'gallery',
+      component: Gallery
     }
   ]
 })

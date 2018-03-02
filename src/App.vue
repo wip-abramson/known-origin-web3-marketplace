@@ -11,6 +11,7 @@
     <div id="links">
       <router-link :to="{ name: 'dashboard' }">Dash</router-link> |
       <router-link :to="{ name: 'artists' }">Artists</router-link> |
+      <router-link :to="{ name: 'gallery' }">Gallery</router-link> |
       <router-link :to="{ name: 'details' }">Contract details</router-link>
     </div>
 
@@ -59,6 +60,19 @@
 <style>
   h1, h2 {
     display: block;
+  }
+
+  .btn {
+    background: #3e27d9;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+  }
+
+  .btn:hover {
+    background: #3e27d9;
+    text-decoration: none;
   }
 
   #app {

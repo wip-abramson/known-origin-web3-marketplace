@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div id="details">
     <h1>{{ title }}</h1>
 
     <div v-if="curatorAddress" class="message is-primary">

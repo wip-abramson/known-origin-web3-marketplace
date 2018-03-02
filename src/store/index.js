@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import * as actions from './actions'
 import * as mutations from './mutation-types'
 import _ from 'lodash'
-import Web3 from 'web3'
 
 const utils = require('../utils');
 import {KnownOriginDigitalAsset} from '../contracts/index'
@@ -34,14 +33,19 @@ const store = new Vuex.Store({
     // non-contract data
     artists: [
       {
-        name: 'Andy',
-        bio: 'Hull based painter',
+        name: 'BARRIE J DAVIES',
+        bio: 'Brighton based artist and all round good guy!',
         img: 'https://static1.squarespace.com/static/5a8b2af5692ebefdc3fc957a/t/5a948d3a652dea86531e1b20/1519684938013/BarrieJD.png'
       },
       {
-        name: 'James',
-        bio: 'Graffiti legend',
+        name: 'JANE BOWYER',
+        bio: 'Independent graphic designer and illustrator.',
         img: 'https://static1.squarespace.com/static/5a8b2af5692ebefdc3fc957a/t/5a948a6de4966b8b93cd2a3b/1519684215997/JaneB.png'
+      },
+      {
+        name: 'JAMES O\'CONNELL',
+        bio: 'Manchester based creative and illustrator',
+        img: 'https://static1.squarespace.com/static/5a8b2af5692ebefdc3fc957a/t/5a94896c0d929738ef116393/1519683968371/JamesO_profile.png'
       }
     ],
     assets: [],

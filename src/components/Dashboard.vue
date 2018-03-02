@@ -1,10 +1,10 @@
 <template>
-  <div class="dashboard">
+  <div id="dashboard">
 
     <div id="splash">
       <h1>{{ title }}</h1>
       <p>Buy original artwork and rare digital assets</p>
-      <button class="btn">View gallery</button>
+      <router-link :to="{ name: 'gallery' }" tag="button" class="btn">View gallery</router-link>
     </div>
 
     <div id="featured-artists">
@@ -20,10 +20,11 @@
 
   import {mapGetters, mapState} from 'vuex'
   import Artist from './Artist'
+  import Gallery from './Gallery'
 
   export default {
     name: 'dashboard',
-    components: {Artist},
+    components: {Artist, Gallery},
     data() {
       return {
         title: 'Be original. Buy original.',
@@ -31,10 +32,7 @@
     },
     computed: {
       ...mapState([
-        'totalPurchaseValueInWei',
-        'totalNumberOfPurchases',
-        'totalPurchaseValueInEther',
-        'artists',
+        'artists'
       ])
     }
   }
@@ -50,18 +48,5 @@
     text-align: center;
     padding: 10px;
     margin: 5px;
-  }
-
-  .btn {
-    background: #3e27d9;
-    color: #ffffff;
-    font-size: 20px;
-    padding: 10px 20px 10px 20px;
-    text-decoration: none;
-  }
-
-  .btn:hover {
-    background: #3e27d9;
-    text-decoration: none;
   }
 </style>
