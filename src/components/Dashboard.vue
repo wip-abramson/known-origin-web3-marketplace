@@ -12,6 +12,16 @@
       <div v-for="artist in artists">
         <artist :artist="artist"></artist>
       </div>
+      <p>More artists and workshops to be announced...</p>
+    </div>
+
+    <div id="quote">
+      <p>Can we use the power of Ethereum blockchain and the integrity of digital assets in the art world to improve the proof of ownership, provenance, authenticity and reducing forgery of artwork?</p>
+    </div>
+
+    <div id="partners">
+      <h2>Our partners</h2>
+      <img src="../assets/Partner_Footer2.png" style="max-width: 100%"/>
     </div>
   </div>
 </template>
@@ -43,9 +53,17 @@
     color: #42b983;
   }
 
-  #splash, #featured-artists {
+  #splash, #featured-artists, #partners, #quote {
     text-align: center;
     padding: 10px;
     margin: 5px;
+  }
+
+  #quote {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    margin: 50px;
   }
 </style>

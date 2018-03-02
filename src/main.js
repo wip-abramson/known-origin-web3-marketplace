@@ -4,17 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store';
-import {getDefaultEthWallet, getNetIdString} from './services/web3Service';
 
 Vue.config.productionTip = false
 
 ;(async () => {
   try {
-    // TODO re-enable
-    // const defaultEthWallet = await getDefaultEthWallet();
-    // const netIdString = await getNetIdString();
-    // store.commit('setNetworkId', netIdString);
-    // store.commit('setDefaultEthWallet', defaultEthWallet);
+    // pre-Vue JS bootstrap
   } catch (e) {
     // eslint-disable-next-line
     console.log(e)

@@ -109,7 +109,7 @@ const store = new Vuex.Store({
 
       state.contract.deployed()
         .then((contract) => {
-          let supply = _.range(0, state.totalSupply);
+          let supply = _.range(0, state.totalSupply)
           return Promise.all(_.map(supply, (index) => {
             return contract.assetInfo(index)
           }))
@@ -126,18 +126,18 @@ const store = new Vuex.Store({
                   priceInWei: result[6].toString(),
                   priceInEther: Web3.utils.fromWei(result[6].toString(), 'ether').valueOf()
                 }
-              });
+              })
 
-              let assetsByEditions = _.groupBy(flatMappedAssets, 'edition');
-              let assetsByArtists = _.groupBy(flatMappedAssets, 'meta.artist_name');
+              let assetsByEditions = _.groupBy(flatMappedAssets, 'edition')
+              let assetsByArtists = _.groupBy(flatMappedAssets, 'meta.artist_name')
 
               commit(mutations.SET_ASSETS, {
                 assets: flatMappedAssets,
                 assetsByEditions: assetsByEditions,
                 assetsByArtists: assetsByArtists,
-              });
-            });
-        });
+              })
+            })
+        })
     },
     [actions.REFRESH_CONTRACT_DETAILS]({commit, dispatch, state}) {
       console.log("REFRESH_CONTRACT_DETAILS ACTION");

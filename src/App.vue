@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="header">
+    <div id="header" class="header-branding">
       KnownOrigin.io
     </div>
 
@@ -44,12 +44,11 @@
         return
       }
       if (web3) {
-        // Use Mist/MetaMask's provider
+        // Use Mist / MetaMask's / provided provider
         window.web3 = new Web3(web3.currentProvider)
 
         web3.eth.getAccounts()
           .then((accounts) => {
-            console.log(accounts);
             this.$store.dispatch('REFRESH_ACCOUNT', accounts[0]);
           })
       }
@@ -58,13 +57,19 @@
 </script>
 
 <style>
-  h1, h2 {
+  h1 {
     display: block;
+    font-size: 32px;
+  }
+
+  h2 {
+    display: block;
+    font-size: 28px;
   }
 
   .btn {
     background: #3e27d9;
-    color: #ffffff;
+    color: #f2f2f2;
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
@@ -83,6 +88,7 @@
     max-width: 600px;
     margin: 0 auto !important;
     float: none !important;
+    background-color: #f2f2f2;
   }
 
   #content {
@@ -90,18 +96,29 @@
   }
 
   a {
-    color: darkgray;
+    color: #3e27d9;
   }
 
-  #footer, #header {
+  #header {
+    background-color:white ;
+    color: #3e27d9;
+    padding: 10px;
+  }
+
+  #footer {
     background-color: #3e27d9;
     color: white;
     padding: 10px;
   }
 
-  #header {
-    min-height: 60px;
-    width: 100%;
-    font-size: 1.5em;
+  .header-branding {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 34px;
+    letter-spacing: 0em;
+    line-height: 1em;
+    text-transform: none;
+    color: #3e27d9;
   }
+
 </style>
