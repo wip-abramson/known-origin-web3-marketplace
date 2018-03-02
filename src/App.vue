@@ -92,7 +92,7 @@
   }
 
   #content {
-
+    margin: 20px;
   }
 
   a {
@@ -100,15 +100,19 @@
   }
 
   #header {
-    background-color:white ;
+    background-color: white ;
     color: #3e27d9;
     padding: 10px;
   }
 
   #footer {
     background-color: #3e27d9;
-    color: white;
+    color: #f2f2f2;;
     padding: 10px;
+  }
+
+  #footer a {
+    color: #f2f2f2;
   }
 
   .header-branding {
