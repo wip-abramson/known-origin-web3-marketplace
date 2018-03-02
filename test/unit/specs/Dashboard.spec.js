@@ -9,4 +9,4 @@ describe('Dashboard.vue', () => {
     expect(vm.$el.querySelector('.dashboard h1').textContent)
       .to.equal('Welcome to your truffle-vue dApp')
   })
-})
+});

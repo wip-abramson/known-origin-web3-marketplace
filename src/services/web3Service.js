@@ -1,11 +1,8 @@
-// import contract from 'truffle-contract';
-import Web3 from 'web3';
-import store from '../store/index';
-
-// TODO re-enable
-
+// import Web3 from 'web3';
+// import store from '../store/index';
+//
 // const getNetIdString = async () => {
-//   const id = await store.web3.eth.net.getId();
+//   const id = await window.web3.eth.net.getId();
 //   switch (id) {
 //     case 1:
 //       return 'Main Ethereum Network';
@@ -25,7 +22,7 @@ import store from '../store/index';
 //
 // const getDefaultEthWallet = () =>
 //   new Promise((resolve, reject) => {
-//     web3.eth.getAccounts((err, res) => {
+//     window.web3.eth.getAccounts((err, res) => {
 //       if (!err) return resolve(res[0]);
 //       reject(err);
 //     });

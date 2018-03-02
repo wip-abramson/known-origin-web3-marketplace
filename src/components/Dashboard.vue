@@ -4,10 +4,10 @@
 
     <div v-if="curatorAddress" class="message is-primary">
       <div class="message-header">
-        <p>curatorAddress: </p>
+        <p>Addresses: </p>
       </div>
       <div class="message-body">
-        {{ curatorAddress }}
+        curatorAddress = {{ curatorAddress }} commissionAddress = {{ commissionAddress }} contractDeveloperAddress = {{ contractDeveloperAddress }}
       </div>
     </div>
     <div v-if="totalSupply" class="message is-primary">
@@ -18,13 +18,14 @@
         {{ totalSupply }}
       </div>
     </div>
-    <div v-if="totalPurchaseValueInWei && totalNumberOfPurchases " class="message is-primary">
+    <div v-if="totalPurchaseValueInWei && totalNumberOfPurchases && totalPurchaseValueInEther" class="message is-primary">
       <div class="message-header">
         <p>totals:</p>
       </div>
       <div class="message-body">
-        totalPurchaseValueInWei = {{ totalPurchaseValueInWei }}
-        totalNumberOfPurchases = {{ totalNumberOfPurchases }}
+        totalPurchaseValueInWei = {{ totalPurchaseValueInWei }} |
+        totalNumberOfPurchases = {{ totalNumberOfPurchases }} |
+        totalPurchaseValueInEther = {{ totalPurchaseValueInEther }}
       </div>
     </div>
     <div v-if="contractName && contractSymbol" class="message is-primary">
@@ -40,39 +41,33 @@
 
     </div>
 
+    <router-link :to="{ name: 'artists' }">Artists</router-link>
   </div>
 </template>
 
 <script>
 
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapState} from 'vuex'
 
   export default {
     name: 'dashboard',
     data() {
       return {
-        msg: 'Welcome to your truffle-vue dApp',
+        msg: 'Digital arts festival',
       }
     },
     computed: {
-      curatorAddress() {
-        return this.$store.state.curatorAddress;
-      },
-      totalSupply() {
-        return this.$store.state.totalSupply;
-      },
-      totalPurchaseValueInWei() {
-        return this.$store.state.totalPurchaseValueInWei;
-      },
-      totalNumberOfPurchases() {
-        return this.$store.state.totalNumberOfPurchases;
-      },
-      contractName() {
-        return this.$store.state.contractName;
-      },
-      contractSymbol() {
-        return this.$store.state.contractSymbol;
-      }
+      ...mapState([
+        'curatorAddress',
+        'contractDeveloperAddress',
+        'commissionAddress',
+        'totalSupply',
+        'totalPurchaseValueInWei',
+        'totalNumberOfPurchases',
+        'totalPurchaseValueInEther',
+        'contractName',
+        'contractSymbol',
+      ])
     },
     beforeCreate: function () {
 
@@ -84,7 +79,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   h1, h2 {
-    font-weight: normal;
     display: block;
   }
 

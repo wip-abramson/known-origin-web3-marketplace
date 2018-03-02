@@ -1,11 +1,12 @@
 {
-  "name": "truffle-vue",
-  "version": "0.2.0",
-  "description": "A vue.js truffle box",
-  "author": "osarrouy <olivier.sarrouy@gmail.com>",
+  "name": "known-origin-web3-marketstore",
+  "version": "0.0.1",
+  "description": "Web3JS enable digital arts store",
+  "author": "james@blockchainmanchester.co.uk & andy@blockchainmanchester.co.uk",
   "private": true,
   "scripts": {
     "dev": "node scripts/dev-server.js",
+    "clean": "cleandir ./build",
     "start": "npm run dev",
     "build": "node scripts/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
@@ -92,8 +93,8 @@
     "webpack-merge": "^4.1.0"
   },
   "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 3.0.0"
+    "node": ">= 8.0.0",
+    "npm": ">= 5.0.0"
   },
   "browserslist": [
     "> 1%",

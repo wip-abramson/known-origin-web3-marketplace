@@ -1,7 +1,20 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <div id="header">
+      KnownOrigin.io
+    </div>
+
+    <div id="content">
+      <router-view></router-view>
+    </div>
+
+    <div id="footer">
+      <p>&copy; 2018 KNOWNORIGIN</p>
+      <p>BE ORIGINAL. BUY ORIGINAL.</p>
+      <p>(+44) 7715 86 28 33</p>
+      <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
+    </div>
+
   </div>
 </template>
 
@@ -34,8 +47,27 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+  }
+
+  #content {
+    max-width: 600px;
+    margin: 0 auto !important;
+    float: none !important;
+  }
+
+  a {
+    color: white;
+  }
+
+  #footer, #header {
+    background-color: #3e27d9;
+    color: white;
+  }
+
+  #header {
+    min-height: 60px;
+    width: 100%;
+    font-size: 1.5em;
   }
 </style>

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
-// import Signup from '@/components/Signup'
+import Artists from '@/components/Artists'
 
 Vue.use(Router);
 
@@ -13,6 +13,11 @@ export default new Router({
       path: '/',
       name: 'dashboard',
       component: Dashboard
+    },
+    {
+      path: '/artists',
+      name: 'artists',
+      component: Artists
     }
     // ,{
     //   path: '/signup',
