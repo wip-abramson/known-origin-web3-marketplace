@@ -22,8 +22,7 @@
   /* global web3:true */
 
   import Web3 from 'web3'
-  import Eth from "ethjs";
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import * as actions from './store/actions'
 
   export default {
@@ -37,7 +36,16 @@
         console.error('No web3 detected...');
         return
       }
-      this.$store.dispatch(actions.INIT_ETHJS);
+      if (web3) {
+        // Use Mist/MetaMask's provider
+        window.web3 = new Web3(web3.currentProvider)
+
+        web3.eth.getAccounts()
+          .then((accounts) => {
+            console.log(accounts);
+            this.$store.dispatch('REFRESH_ACCOUNT', accounts[0]);
+          })
+      }
     },
   }
 </script>
@@ -48,12 +56,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-  }
-
-  #content {
     max-width: 600px;
     margin: 0 auto !important;
     float: none !important;
+  }
+
+  #content {
+
   }
 
   a {
@@ -63,6 +72,7 @@
   #footer, #header {
     background-color: #3e27d9;
     color: white;
+    padding: 10px;
   }
 
   #header {

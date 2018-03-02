@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as actions from './actions'
 import * as mutations from './mutation-types'
-import Eth from "ethjs";
 import _ from 'lodash'
 import Web3 from 'web3'
 
@@ -14,7 +13,6 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     // connectivity
-    eth: null,
     account: null,
 
     // contract metadata
@@ -46,7 +44,9 @@ const store = new Vuex.Store({
         img: 'https://static1.squarespace.com/static/5a8b2af5692ebefdc3fc957a/t/5a948a6de4966b8b93cd2a3b/1519684215997/JaneB.png'
       }
     ],
-    assets: []
+    assets: [],
+    assetsByEditions: [],
+    assetsByArtists: []
   },
   getters: {},
   mutations: {
@@ -55,8 +55,10 @@ const store = new Vuex.Store({
       state.commissionAddress = commissionAddress;
       state.contractDeveloperAddress = contractDeveloperAddress;
     },
-    [mutations.SET_ASSETS](state, {assets}) {
+    [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtists}) {
       state.assets = assets;
+      state.assetsByEditions = assetsByEditions;
+      state.assetsByArtists = assetsByArtists;
     },
     [mutations.SET_ARTISTS](state, {artists}) {
       state.artists = artists;
@@ -71,9 +73,6 @@ const store = new Vuex.Store({
       state.contractSymbol = symbol;
       state.contractName = name;
     },
-    [mutations.SET_ETHJS](state, eth) {
-      state.eth = eth;
-    },
     [mutations.SET_CONTRACT](state, contract) {
       state.contract = contract
     },
@@ -82,35 +81,15 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    [actions.INIT_ETHJS]({commit, dispatch, state}) {
-      console.log("INIT_ETHJS ACTION");
+    [actions.REFRESH_ACCOUNT]({commit, dispatch, state}, account) {
 
-      // Default to ropsten/infrua for now
-      let eth = new Eth(new Eth.HttpProvider('https://ropsten.infura.io'));
+      console.log("Found account" + account);
 
-      // Enable MetaMask support:
-      if (typeof window.web3 !== 'undefined' && typeof window.web3.currentProvider !== 'undefined') {
-        console.log("FOUND WEB3 - setting current provider", window.web3.currentProvider);
-        eth.setProvider(window.web3.currentProvider);
-      }
+      // store the account
+      commit(mutations.SET_ACCOUNT, account);
 
-      commit(mutations.SET_ETHJS, eth);
-
-      // Refresh account reference
-      store.dispatch(actions.REFRESH_ACCOUNT);
-    },
-    [actions.REFRESH_ACCOUNT]({commit, dispatch, state}) {
-      state.eth.accounts()
-        .then((accounts) => {
-          console.log("Found accounts", accounts);
-
-          // store the account
-          commit(mutations.SET_ACCOUNT, accounts[0]);
-
-          // init the KODA contract
-          store.dispatch(actions.INIT_KODA_CONTRACT);
-        })
-        .catch((error) => console.log(error));
+      // init the KODA contract
+      store.dispatch(actions.INIT_KODA_CONTRACT);
     },
     [actions.INIT_KODA_CONTRACT]({commit, dispatch, state}) {
       console.log("INIT_KODA_CONTRACT ACTION");
@@ -142,14 +121,15 @@ const store = new Vuex.Store({
                   priceInWei: result[6].toString(),
                 }
               });
-              commit(mutations.SET_ASSETS, {assets: flatMappedAssets});
 
-              let editions = _.groupBy(flatMappedAssets, 'edition');
-              console.log(editions);
+              let assetsByEditions = _.groupBy(flatMappedAssets, 'edition');
+              let assetsByArtists = _.groupBy(flatMappedAssets, 'meta.artist_name');
 
-              let artists = _.groupBy(flatMappedAssets, 'meta.artist_name');
-              console.log(artists);
-
+              commit(mutations.SET_ASSETS, {
+                assets: flatMappedAssets,
+                assetsByEditions: assetsByEditions,
+                assetsByArtists: assetsByArtists,
+              });
             });
         });
     },
@@ -181,7 +161,7 @@ const store = new Vuex.Store({
           Promise.all([contract.totalPurchaseValueInWei(), contract.totalNumberOfPurchases()])
             .then((results) => {
               commit(mutations.SET_TOTAL_PURCHASED, {
-                totalPurchaseValueInEther: Eth.fromWei(results[0].toString(), 'ether'),
+                totalPurchaseValueInEther: 0, //window.web3.fromWei(results[0].toString(), 'ether'),
                 totalPurchaseValueInWei: results[0].toString(),
                 totalNumberOfPurchases: results[1].toString()
               });

@@ -1,7 +1,4 @@
-
-
 // setup calls
-export const INIT_ETHJS = 'INIT_ETHJS';
 export const INIT_KODA_CONTRACT = 'INIT_KODA_CONTRACT';
 
 // contract calls
