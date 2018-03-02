@@ -1,11 +1,11 @@
 <template>
   <div class="edition-tile">
     <p><strong>{{ edition.edition }}</strong> <span style="float: right">{{ count }}</span></p>
-    <img src="https://picsum.photos/400/400"/>
+    <img src="https://picsum.photos/400/400"/> <!-- add real IPFS image -->
     <p>{{ edition.meta.artist_name }}</p>
     <p>{{ edition.meta.type }}</p>
     <p><i>{{ edition.priceInEther }} ETH</i></p>
-    <p><i>{{ edition.owner }}</i></p>
+    <p>{{ edition.owner }}</p>
   </div>
 </template>
 
@@ -18,7 +18,6 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .edition-tile {
     text-align: center;

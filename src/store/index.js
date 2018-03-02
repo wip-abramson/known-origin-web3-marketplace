@@ -178,3 +178,24 @@ const store = new Vuex.Store({
 });
 
 export default store;
+
+// if we need to diplay network use below
+
+// const getNetIdString = async () => {
+//   const id = await window.web3.eth.net.getId();
+//   switch (id) {
+//     case 1:
+//       return 'Main Ethereum Network';
+//     case 3:
+//       return 'Ropsten Test Network';
+//     case 4:
+//       return 'Rinkeby Test Network';
+//     case 42:
+//       return 'Kovan Test Network';
+//     case 'loading':
+//       return undefined;
+//     // Will be some random number when connected locally
+//     default:
+//       return 'Local Test Net';
+//   }
+// };
