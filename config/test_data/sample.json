@@ -7,7 +7,7 @@
           "artwork_name": "Lending a hand 3",
           "description": "At the core of my artistic practice is an interrogation of contemporary society in the postinternet age. This painting explores the concept of ‘false self’, a phrase used when discussing the IRL/URL paradigm",
           "low_res_img": "https://www.dropbox.com/s/mi3ymrbh98giyq5/Lending%20a%20hand%203_lowres.jpeg?dl=0",
-          "edition": "original",
+          "edition_type": "original",
           "pieces": [
             {
               "type": "physical",
@@ -27,7 +27,7 @@
           "artwork_name": "Lending a hand 2",
           "description": "At the core of my artistic practice is an interrogation of contemporary society in the postinternet age. This painting explores the concept of ‘false self’, a phrase used when discussing the IRL/URL paradigm",
           "low_res_img": "https://www.dropbox.com/s/h2coxm61r01md5t/Lending%20a%20hand%202_lowres.jpeg?dl=0",
-          "edition": "original",
+          "edition_type": "original",
           "pieces": [
             {
               "type": "physical",
@@ -52,7 +52,7 @@
           "artwork_name": "Start me up",
           "description": "Pop art painting.2015. Mixed media on canvas 90cm x 90cm",
           "low_res_img": "https://www.dropbox.com/s/ghbga9j2u273qlq/Start%20me%20up%20by%20Barrie%20J%20Davies%202015.jpeg?dl=0",
-          "edition": "original",
+          "edition_type": "original",
           "pieces": [
             {
               "type": "physical",
@@ -71,7 +71,7 @@
           "artwork_name": "Funcational Flatteryp",
           "description": "A reflection of the funcation and flattery that the Chanel brand brought to the fashion industry.",
           "low_res_img": "https://www.dropbox.com/s/kzqdrwt48r54cni/Functional%20Flattery_Channel%20by%20JamesOcnnell.jpg?dl=0",
-          "edition": "original",
+          "edition_type": "original",
           "pieces": [
             {
               "type": "physical",

@@ -145,8 +145,11 @@ const store = new Vuex.Store({
               commit(mutations.SET_ASSETS, {assets: flatMappedAssets});
 
               let editions = _.groupBy(flatMappedAssets, 'edition');
+              console.log(editions);
 
               let artists = _.groupBy(flatMappedAssets, 'meta.artist_name');
+              console.log(artists);
+
             });
         });
     },

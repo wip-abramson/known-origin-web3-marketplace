@@ -38,7 +38,7 @@ const loadSeedData = (instance, _curatorAccount) => {
     console.log(`Seeding test data = ${JSON.stringify(insert, null, 4)}`);
 
     let ipfs_data = {
-      edition: insert.edition,
+      edition_type: insert.edition_type,
       description: insert.description,
       artist_name: insert.artist_name,
       low_res_img: insert.low_res_img,
@@ -75,7 +75,7 @@ const flattenTestData = () => {
 
       let artwork_name = artwork.artwork_name;
       let description = artwork.description;
-      let edition = artwork.edition;
+      let edition_type = artwork.edition_type;
 
       let pieces = artwork.pieces;
 
@@ -91,7 +91,7 @@ const flattenTestData = () => {
 
         let meta_data = {
           type: type,
-          artist_name: artist.name,
+          artist_name: artist.name
         };
 
         let auction_start_date = 123; // TODO ability to convert start date to timestamp
@@ -103,7 +103,7 @@ const flattenTestData = () => {
           description,
           meta_data,
           low_res_img,
-          edition,
+          edition_type,
           fiat_cost,
           cost_in_eth,
           cost_in_wei,
@@ -120,7 +120,7 @@ const flattenTestData = () => {
 "5777": {
   "events": {},
   "links": {},
-  "address": "0x5034f49b27353cedc562b49ea91c7438ea351d36",
-  "transactionHash": "0xa671d8c31ad13008fb7e710e6ab20ce9ac44a5e83697a2f17c0495a58f5b1d08"
+  "address": "0x345ca3e014aaf5dca488057592ee47305d9b3e10",
+  "transactionHash": "0x5494484f9242d926c550fa95e4b03ee3e961fb5350b44f329aad7f1274fe561c"
 }
  */
