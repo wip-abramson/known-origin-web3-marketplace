@@ -4,40 +4,40 @@
       "name": "Peter Davis MAFA",
       "artworks": [
         {
-          "artwork_name": "Lending a hand 3",
-          "ipfs_path": "lending_a_hand_3",
-          "edition_type": "original",
+          "artworkName": "Lending a hand 3",
+          "ipfsPath": "lending_a_hand_3",
+          "editionType": "original",
           "pieces": [
             {
               "type": "physical",
-              "number_of_editions": 1,
-              "fiat_cost": 499,
-              "cost_in_eth": 0.78
+              "numberOfEditions": 1,
+              "fiatCost": 499,
+              "costInEth": 0.78
             },
             {
               "type": "digital",
-              "number_of_editions": 10,
-              "fiat_cost": 49,
-              "cost_in_eth": 0.08
+              "numberOfEditions": 10,
+              "fiatCost": 49,
+              "costInEth": 0.08
             }
           ]
         },
         {
-          "artwork_name": "Lending a hand 2",
-          "ipfs_path": "lending_a_hand_2",
-          "edition_type": "original",
+          "artworkName": "Lending a hand 2",
+          "ipfsPath": "lending_a_hand_2",
+          "editionType": "original",
           "pieces": [
             {
               "type": "physical",
-              "number_of_editions": 1,
-              "fiat_cost": 499,
-              "cost_in_eth": 0.78
+              "numberOfEditions": 1,
+              "fiatCost": 499,
+              "costInEth": 0.78
             },
             {
               "type": "digital",
-              "number_of_editions": 10,
-              "fiat_cost": 49,
-              "cost_in_eth": 0.08
+              "numberOfEditions": 10,
+              "fiatCost": 49,
+              "costInEth": 0.08
             }
           ]
         }
@@ -47,15 +47,15 @@
       "name": "Barrie J Davies",
       "artworks": [
         {
-          "artwork_name": "Start me up",
-          "ipfs_path": "start_me_up",
-          "edition_type": "original",
+          "artworkName": "Start me up",
+          "ipfsPath": "start_me_up",
+          "editionType": "original",
           "pieces": [
             {
               "type": "physical",
-              "number_of_editions": 1,
-              "fiat_cost": 1000,
-              "cost_in_eth": 1.57
+              "numberOfEditions": 1,
+              "fiatCost": 1000,
+              "costInEth": 1.57
             }
           ]
         }
@@ -65,15 +65,15 @@
       "name": "James O'connell",
       "artworks": [
         {
-          "artwork_name": "Functional Flattery",
-          "ipfs_path": "functional_flattery",
-          "edition_type": "original",
+          "artworkName": "Functional Flattery",
+          "ipfsPath": "functional_flattery",
+          "editionType": "original",
           "pieces": [
             {
               "type": "physical",
-              "number_of_editions": 1,
-              "fiat_cost": 70,
-              "cost_in_eth": 0.11
+              "numberOfEditions": 1,
+              "fiatCost": 70,
+              "costInEth": 0.11
             }
           ]
         }

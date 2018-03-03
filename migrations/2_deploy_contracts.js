@@ -36,23 +36,23 @@ const loadSeedData = (instance, _curatorAccount) => {
   let flat_inserts = flattenTestData();
 
   return Promise.all(_.map(flat_inserts, (insert) => {
-    console.log(`Seeding test data for [${insert.artwork_name}]`);
+    console.log(`Seeding test data for [${insert.artworkName}]`);
 
     return ipfsUploader.uploadMetaData(insert)
       .then((res) => {
 
-        // on success add ipfs_id
-        insert.meta_data.ipfs_id = res.hash;
+        // on success add ipfsHash
+        insert.metaData.ipfsHash = res.hash;
 
-        let meta_data = JSON.stringify(insert.meta_data);
+        let metaData = JSON.stringify(insert.metaData);
 
         // mint edition
         return instance.mintEdition(
-          meta_data,
-          insert.artwork_name,
-          insert.number_of_editions,
-          insert.cost_in_wei.toString(10),
-          insert.auction_start_date,
+          metaData,
+          insert.artworkName,
+          insert.numberOfEditions,
+          insert.costInWei.toString(10),
+          insert.auctionStartDate,
           {
             from: _curatorAccount,
           }
@@ -68,33 +68,33 @@ const flattenTestData = () => {
 
     _.forEach(artist.artworks, (artwork) => {
 
-      let artwork_name = artwork.artwork_name;
+      let artworkName = artwork.artworkName;
       let pieces = artwork.pieces;
-      let ipfs_path = artwork.ipfs_path;
+      let ipfsPath = artwork.ipfsPath;
 
       _.forEach(pieces, (piece) => {
 
         let type = piece.type;
-        let number_of_editions = piece.number_of_editions;
+        let numberOfEditions = piece.numberOfEditions;
 
-        let fiat_cost = piece.fiat_cost;
-        let cost_in_wei = Eth.toWei(piece.cost_in_eth, 'ether');
+        let fiatCost = piece.fiatCost;
+        let costInWei = Eth.toWei(piece.costInEth, 'ether');
 
-        let meta_data = {
+        let metaData = {
           type: type,
-          artist_name: artist.name
+          artistName: artist.name
         };
 
-        let auction_start_date = 123; // TODO ability to convert start date to timestamp
+        let auctionStartDate = 123; // TODO ability to convert start date to timestamp
 
         flat_inserts.push({
-          number_of_editions,
-          artwork_name,
-          fiat_cost,
-          cost_in_wei,
-          auction_start_date,
-          meta_data,
-          ipfs_path
+          numberOfEditions,
+          artworkName,
+          fiatCost,
+          costInWei,
+          auctionStartDate,
+          metaData,
+          ipfsPath
         })
       });
     });

@@ -57,7 +57,18 @@ const store = new Vuex.Store({
     assetsByEditions: [],
     assetsByArtists: []
   },
-  getters: {},
+  getters: {
+    assetsForArtistAndEditionByType: (state, getters) => (artistName, edition) => {
+      let foundAssets = getters.assetsForArtistAndEdition(artistName, edition);
+      // returns map keyed by type:assets e.g. { physical:[...], digital:[...] }
+      return _.groupBy(foundAssets, 'meta.type')
+    },
+    assetsForArtistAndEdition: (state) => (artistName, edition) => {
+      return state.assets
+        .filter((asset) => asset.edition === edition)
+        .filter((asset) => asset.meta.artistName === artistName);
+    }
+  },
   mutations: {
     [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, commissionAddress, contractDeveloperAddress}) {
       state.curatorAddress = curatorAddress;
@@ -122,16 +133,16 @@ const store = new Vuex.Store({
 
                 let meta = utils.safeFromJson(result[2]);
 
-                let lowResImg = `https://ipfs.infura.io/ipfs/${meta.ipfs_id}/low_res.jpeg`;
+                let lowResImg = `https://ipfs.infura.io/ipfs/${meta.ipfsHash}/low_res.jpeg`;
 
-                return lookupIpfsMeta(meta.ipfs_id)
+                return lookupIpfsMeta(meta.ipfsHash)
                   .then((ipfsMetaData) => {
                     return {
                       id: result[0].toNumber(),
                       owner: result[1].toString(),
                       meta: meta,
-                      low_res_img: lowResImg,
-                      ipfs_meta: ipfsMetaData,
+                      lowResImg: lowResImg,
+                      ipfsMeta: ipfsMetaData,
                       edition: result[3].toString(),
                       editionNumber: result[4].toNumber(),
                       purchased: result[5].toNumber(),
@@ -145,10 +156,10 @@ const store = new Vuex.Store({
                 .then((assets) => {
 
                   let assetsByEditions = _.groupBy(assets, 'edition');
-                  let assetsByArtists = _.groupBy(assets, 'meta.artist_name');
+                  let assetsByArtists = _.groupBy(assets, 'meta.artistName');
 
                   commit(mutations.SET_ASSETS, {
-                    assets: flatMappedAssets,
+                    assets: assets,
                     assetsByEditions: assetsByEditions,
                     assetsByArtists: assetsByArtists,
                   })
