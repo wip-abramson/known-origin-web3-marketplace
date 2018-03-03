@@ -1,0 +1,33 @@
+<template>
+  <div id="account">
+    <h1>{{ title }}</h1>
+    <p><i>{{ account }}</i></p>
+
+    <h2>Purchased assets</h2>
+  </div>
+</template>
+
+<script>
+
+  import { mapGetters, mapState } from 'vuex'
+  import Artist from './Artist'
+  import Gallery from './Gallery'
+
+  export default {
+    name: 'dashboard',
+    components: {},
+    data() {
+      return {
+        title: 'Account',
+      }
+    },
+    computed: {
+      ...mapState([
+        'account'
+      ])
+    }
+  }
+</script>
+
+<style scoped>
+</style>

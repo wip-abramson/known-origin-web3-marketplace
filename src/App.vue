@@ -4,6 +4,8 @@
       KnownOrigin.io
     </div>
 
+    <span style="float: right"><router-link :to="{ name: 'account' }">Account</router-link></span>
+
     <div id="content">
       <router-view></router-view>
     </div>
@@ -59,12 +61,12 @@
 <style>
   h1 {
     display: block;
-    font-size: 32px;
+    font-size: 38px;
   }
 
   h2 {
     display: block;
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .btn {
