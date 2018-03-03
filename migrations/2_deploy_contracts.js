@@ -3,7 +3,7 @@ const Eth = require('ethjs');
 
 const KnownOriginDigitalAsset = artifacts.require("KnownOriginDigitalAsset");
 
-const ipfsUploader = require('./ipfs_uploader');
+const ipfsUploader = require('../scripts/ipfs-uploader');
 
 const gallery_data = require('../config/data/gallery.json');
 
