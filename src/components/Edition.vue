@@ -8,9 +8,14 @@
     <p>{{ edition.meta.type }} | {{edition.ipfsMeta.editionType}}</p>
     <p><i>{{ edition.priceInEther }} ETH</i></p>
     <p>Owner: {{ edition.owner }}</p>
-    <!--<p>{{ assetsForArtistAndEdition(edition.meta.artistName, edition.edition) }}</p>-->
-    <!--<p>{{ assetsForArtistAndEditionByType(edition.meta.artistName, edition.edition) }}</p>-->
-    
+
+    <router-link :to="{
+      name: 'purchaseEdition',
+      params: {
+        artist: edition.meta.artistName,
+        edition: edition.edition
+      }
+    }" tag="button" class="btn">Buy Now</router-link>
   </div>
 </template>
 
@@ -22,10 +27,7 @@
     props: ['edition', 'count'],
     computed: {
       ...mapState([]),
-      ...mapGetters([
-        'assetsForArtistAndEdition',
-        'assetsForArtistAndEditionByType'
-      ])
+      ...mapGetters([])
     }
   }
 </script>

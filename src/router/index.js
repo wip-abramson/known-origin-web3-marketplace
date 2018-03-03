@@ -4,6 +4,7 @@ import Dashboard from '@/components/Dashboard'
 import Artists from '@/components/Artists'
 import Details from '@/components/Details'
 import Gallery from '@/components/Gallery'
+import PurchaseEdition from '@/components/PurchaseEdition'
 
 Vue.use(Router);
 
@@ -30,6 +31,12 @@ export default new Router({
       path: '/gallery',
       name: 'gallery',
       component: Gallery
+    },
+    {
+      path: '/purchase/:artist/:edition',
+      name: 'purchaseEdition',
+      component: PurchaseEdition,
+      props: true
     }
   ]
 })
