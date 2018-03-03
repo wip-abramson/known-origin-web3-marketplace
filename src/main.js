@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store';
+import logging from './logging';
 
 Vue.config.productionTip = false
 
@@ -19,6 +20,7 @@ Vue.config.productionTip = false
       el: '#app',
       store,
       router,
+      logging,
       components: {App},
       template: '<App/>'
     });

@@ -4,13 +4,17 @@ import * as actions from './actions'
 import * as mutations from './mutation-types'
 import _ from 'lodash'
 import Web3 from 'web3'
+import axios from 'axios'
+import createLogger from 'vuex/dist/logger'
+
+import {KnownOriginDigitalAsset} from '../contracts/index'
 
 const utils = require('../utils');
-import {KnownOriginDigitalAsset} from '../contracts/index'
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  plugins: [createLogger()],
   state: {
     // connectivity
     account: null,
@@ -87,9 +91,6 @@ const store = new Vuex.Store({
   },
   actions: {
     [actions.REFRESH_ACCOUNT]({commit, dispatch, state}, account) {
-
-      console.log("Found account" + account);
-
       // store the account
       commit(mutations.SET_ACCOUNT, account);
 
@@ -97,51 +98,65 @@ const store = new Vuex.Store({
       store.dispatch(actions.INIT_KODA_CONTRACT);
     },
     [actions.INIT_KODA_CONTRACT]({commit, dispatch, state}) {
-      console.log("INIT_KODA_CONTRACT ACTION");
-
       commit(mutations.SET_CONTRACT, KnownOriginDigitalAsset);
 
       // Refresh latest contract details
       store.dispatch(actions.REFRESH_CONTRACT_DETAILS);
     },
     [actions.GET_ALL_ASSETS]({commit, dispatch, state}) {
-      console.log("GET_ALL_ASSETS ACTION");
+
+      let lookupIpfsMeta = (hash) => {
+        return axios.get(`https://ipfs.infura.io/ipfs/${hash}/meta.json`)
+          .then((result) => result.data);
+      };
 
       state.contract.deployed()
         .then((contract) => {
-          let supply = _.range(0, state.totalSupply)
+          let supply = _.range(0, state.totalSupply);
           return Promise.all(_.map(supply, (index) => {
             return contract.assetInfo(index)
           }))
             .then((results) => {
 
               let flatMappedAssets = _.map(results, (result) => {
-                return {
-                  id: result[0].toNumber(),
-                  owner: result[1].toString(),
-                  meta: utils.safeFromJson(result[2]),
-                  edition: result[3].toString(),
-                  editionNumber: result[4].toNumber(),
-                  purchased: result[5].toNumber(),
-                  priceInWei: result[6].toString(),
-                  priceInEther: Web3.utils.fromWei(result[6].toString(), 'ether').valueOf()
-                }
-              })
 
-              let assetsByEditions = _.groupBy(flatMappedAssets, 'edition')
-              let assetsByArtists = _.groupBy(flatMappedAssets, 'meta.artist_name')
+                let meta = utils.safeFromJson(result[2]);
 
-              commit(mutations.SET_ASSETS, {
-                assets: flatMappedAssets,
-                assetsByEditions: assetsByEditions,
-                assetsByArtists: assetsByArtists,
-              })
+                let lowResImg = `https://ipfs.infura.io/ipfs/${meta.ipfs_id}/low_res.jpeg`;
+
+                return lookupIpfsMeta(meta.ipfs_id)
+                  .then((ipfsMetaData) => {
+                    return {
+                      id: result[0].toNumber(),
+                      owner: result[1].toString(),
+                      meta: meta,
+                      low_res_img: lowResImg,
+                      ipfs_meta: ipfsMetaData,
+                      edition: result[3].toString(),
+                      editionNumber: result[4].toNumber(),
+                      purchased: result[5].toNumber(),
+                      priceInWei: result[6].toString(),
+                      priceInEther: Web3.utils.fromWei(result[6].toString(), 'ether').valueOf()
+                    }
+                  });
+              });
+
+              Promise.all(flatMappedAssets)
+                .then((assets) => {
+
+                  let assetsByEditions = _.groupBy(assets, 'edition');
+                  let assetsByArtists = _.groupBy(assets, 'meta.artist_name');
+
+                  commit(mutations.SET_ASSETS, {
+                    assets: flatMappedAssets,
+                    assetsByEditions: assetsByEditions,
+                    assetsByArtists: assetsByArtists,
+                  })
+                });
             })
         })
     },
     [actions.REFRESH_CONTRACT_DETAILS]({commit, dispatch, state}) {
-      console.log("REFRESH_CONTRACT_DETAILS ACTION");
-
       state.contract.deployed()
         .then((contract) => {
 
