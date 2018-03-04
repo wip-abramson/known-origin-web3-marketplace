@@ -77,9 +77,9 @@ const store = new Vuex.Store({
       state.contractDeveloperAddress = contractDeveloperAddress;
     },
     [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtists}) {
-      state.assets = assets;
-      state.assetsByEditions = assetsByEditions;
-      state.assetsByArtists = assetsByArtists;
+      state.assets = [...assets];
+      state.assetsByEditions = [...assetsByEditions];
+      state.assetsByArtists = [...assetsByArtists];
     },
     [mutations.SET_ARTISTS](state, {artists}) {
       state.artists = artists;
@@ -129,11 +129,7 @@ const store = new Vuex.Store({
         .then((contract) => {
           let supply = _.range(0, state.totalSupply);
 
-          const assetLookups = _.map(supply, (index) => {
-            return contract.assetInfo(index)
-          });
-
-          return Promise.all(assetLookups)
+          return Promise.all(_.map(supply, (index) => contract.assetInfo(index)))
             .then((results) => {
 
               let flatMappedAssets = _.map(results, (result) => {
@@ -206,6 +202,46 @@ const store = new Vuex.Store({
               });
             });
         });
+    },
+    [actions.PURCHASE_ASSET]({commit, dispatch, state}, assetToPurchase) {
+      console.log('assetToPurchase', assetToPurchase);
+      Vue.$log.debug(`Attempting purchase of ${assetToPurchase.meta.type} asset - ID ${assetToPurchase.id}`);
+
+      // TODO do we need to double check asset still available before submitting a transaction?
+      // TODO do we need to validate account balances and account set?
+      // TODO Handle errors
+      // TODO send event to disable UI when in play
+      // TODO send event to re-enable UI once complete
+      // TODO why doesnt the state update on 2nd get all assets?
+
+      if (assetToPurchase.meta.type === 'physical') {
+
+        state.contract.deployed()
+          .then((contract) => contract.purchaseWithFiat(assetToPurchase.id, {
+            from: state.account
+          }))
+          .then((res) => {
+            Vue.$log.debug("SUCCESS", res);
+            dispatch(actions.GET_ALL_ASSETS);
+          })
+          .catch((e) => Vue.$log.error)
+
+      } else if (assetToPurchase.meta.type === 'digital') {
+
+        state.contract.deployed()
+          .then((contract) => contract.purchaseWithEther(assetToPurchase.id, {
+            from: state.account,
+            value: assetToPurchase.priceInWei
+          }))
+          .then((res) => {
+            Vue.$log.debug("SUCCESS", res);
+            dispatch(actions.GET_ALL_ASSETS);
+          })
+          .catch((e) => Vue.$log.error)
+
+      } else {
+        Vue.$log.error(`Unknown meta type ${assetToPurchase.meta.type}`);
+      }
     }
   }
 });

@@ -43,7 +43,9 @@
     },
     methods: {
       countPurchased: (assets) => {
-        return _.filter(assets, {'purchased': 1})
+        return _.filter(assets, (val) => {
+          return val.purchased === 1 || val.purchased === 2;
+        })
       },
       countAvailable: (assets) => {
         return _.filter(assets, {'purchased': 0})
