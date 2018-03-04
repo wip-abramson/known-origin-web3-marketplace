@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "ethjs": "^0.3.3",
+    "lodash": "^4.17.5",
     "truffle-contract": "^3.0.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
