@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="header" class="header-branding">
-      KnownOrigin.io
+      KnownOrigin.io <current-network></current-network>
     </div>
 
     <span style="float: right"><router-link :to="{ name: 'account' }">Account</router-link></span>
@@ -31,13 +31,18 @@
   /* global web3:true */
 
   import Web3 from 'web3'
-  import { mapGetters } from 'vuex'
+  import {mapGetters, mapState} from 'vuex'
+  import {getNetIdString} from "./utils";
   import * as actions from './store/actions'
+  import * as mutations from './store/mutation-types'
+  import CurrentNetwork from './components/CurrentNetwork'
 
   export default {
     name: 'app',
+    components: {CurrentNetwork},
     computed: {
-      ...mapGetters([])
+      ...mapGetters([]),
+      ...mapState([]),
     },
     mounted() {
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -47,12 +52,19 @@
       }
       if (web3) {
         // Use Mist / MetaMask's / provided provider
-        window.web3 = new Web3(web3.currentProvider)
+        window.web3 = new Web3(web3.currentProvider);
 
+        // TODO should this live here? - flow should be fire INIT action which does this, fires commit
         web3.eth.getAccounts()
           .then((accounts) => {
-            this.$store.dispatch('REFRESH_ACCOUNT', accounts[0]);
-          })
+            this.$store.dispatch(actions.REFRESH_ACCOUNT, accounts[0]);
+            return getNetIdString()
+              .then((currentNetwork) => {
+                console.log("currentNetwork" + currentNetwork);
+                this.$store.commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
+              })
+          }).catch((e) => console.log(e));
+
       }
     },
   }
@@ -102,7 +114,7 @@
   }
 
   #header {
-    background-color: white ;
+    background-color: white;
     color: #3e27d9;
     padding: 10px;
   }

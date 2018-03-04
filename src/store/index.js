@@ -18,6 +18,7 @@ const store = new Vuex.Store({
   state: {
     // connectivity
     account: null,
+    currentNetwork: null,
 
     // contract metadata
     contract: null,
@@ -99,6 +100,9 @@ const store = new Vuex.Store({
     [mutations.SET_ACCOUNT](state, account) {
       state.account = account
     },
+    [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
+      state.currentNetwork = currentNetwork
+    },
   },
   actions: {
     [actions.REFRESH_ACCOUNT]({commit, dispatch, state}, account) {
@@ -116,7 +120,7 @@ const store = new Vuex.Store({
     },
     [actions.GET_ALL_ASSETS]({commit, dispatch, state}) {
 
-      let lookupIpfsMeta = (hash) => {
+      const lookupIpfsMeta = (hash) => {
         return axios.get(`https://ipfs.infura.io/ipfs/${hash}/meta.json`)
           .then((result) => result.data);
       };
@@ -124,9 +128,12 @@ const store = new Vuex.Store({
       state.contract.deployed()
         .then((contract) => {
           let supply = _.range(0, state.totalSupply);
-          return Promise.all(_.map(supply, (index) => {
+
+          const assetLookups = _.map(supply, (index) => {
             return contract.assetInfo(index)
-          }))
+          });
+
+          return Promise.all(assetLookups)
             .then((results) => {
 
               let flatMappedAssets = _.map(results, (result) => {
@@ -204,24 +211,3 @@ const store = new Vuex.Store({
 });
 
 export default store;
-
-// if we need to diplay network use below
-
-// const getNetIdString = async () => {
-//   const id = await window.web3.eth.net.getId();
-//   switch (id) {
-//     case 1:
-//       return 'Main Ethereum Network';
-//     case 3:
-//       return 'Ropsten Test Network';
-//     case 4:
-//       return 'Rinkeby Test Network';
-//     case 42:
-//       return 'Kovan Test Network';
-//     case 'loading':
-//       return undefined;
-//     // Will be some random number when connected locally
-//     default:
-//       return 'Local Test Net';
-//   }
-// };
