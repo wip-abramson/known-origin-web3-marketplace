@@ -32,7 +32,6 @@
 
   import Web3 from 'web3'
   import {mapGetters, mapState} from 'vuex'
-  import {getNetIdString} from "./utils";
   import * as actions from './store/actions'
   import * as mutations from './store/mutation-types'
   import CurrentNetwork from './components/CurrentNetwork'
@@ -54,17 +53,14 @@
         // Use Mist / MetaMask's / provided provider
         window.web3 = new Web3(web3.currentProvider);
 
-        // TODO should this live here? - flow should be fire INIT action which does this, fires commit
-        web3.eth.getAccounts()
-          .then((accounts) => {
-            this.$store.dispatch(actions.REFRESH_ACCOUNT, accounts[0]);
-            return getNetIdString()
-              .then((currentNetwork) => {
-                console.log("currentNetwork" + currentNetwork);
-                this.$store.commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
-              })
-          }).catch((e) => console.log(e));
+        // Bootstrap the full app
+        this.$store.dispatch(actions.INIT_APP);
 
+        // Find current network
+        this.$store.dispatch(actions.GET_CURRENT_NETOWKR);
+
+      } else {
+        // TODO fire action - WEB_3_NOT_FOUND - show error banner
       }
     },
   }

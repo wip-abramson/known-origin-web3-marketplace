@@ -6,6 +6,7 @@ import _ from 'lodash'
 import Web3 from 'web3'
 import axios from 'axios'
 import createLogger from 'vuex/dist/logger'
+import {getNetIdString} from "../utils";
 
 import {KnownOriginDigitalAsset} from '../contracts/index'
 
@@ -36,6 +37,7 @@ const store = new Vuex.Store({
     commissionAddress: null,
     contractDeveloperAddress: null,
 
+    // TODO we need a solution for artists?
     // non-contract data
     artists: [
       {
@@ -78,8 +80,8 @@ const store = new Vuex.Store({
     },
     [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtists}) {
       state.assets = [...assets];
-      state.assetsByEditions = [...assetsByEditions];
-      state.assetsByArtists = [...assetsByArtists];
+      state.assetsByEditions = assetsByEditions;
+      state.assetsByArtists = assetsByArtists;
     },
     [mutations.SET_ARTISTS](state, {artists}) {
       state.artists = artists;
@@ -98,6 +100,7 @@ const store = new Vuex.Store({
       state.contract = contract
     },
     [mutations.SET_ACCOUNT](state, account) {
+      // TODO how to look up the balance of an account
       state.account = account
     },
     [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
@@ -105,12 +108,23 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    [actions.REFRESH_ACCOUNT]({commit, dispatch, state}, account) {
-      // store the account
-      commit(mutations.SET_ACCOUNT, account);
+    [actions.GET_CURRENT_NETOWKR]({commit, dispatch, state}) {
+      getNetIdString()
+        .then((currentNetwork) => {
+          commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
+        });
+    },
+    [actions.INIT_APP]({commit, dispatch, state}, account) {
+      web3.eth.getAccounts()
+        .then((accounts) => {
+          // TODO add refresh cycle / timeout
 
-      // init the KODA contract
-      store.dispatch(actions.INIT_KODA_CONTRACT);
+          // store the account
+          commit(mutations.SET_ACCOUNT, accounts[0]);
+
+          // init the KODA contract
+          dispatch(actions.INIT_KODA_CONTRACT);
+        });
     },
     [actions.INIT_KODA_CONTRACT]({commit, dispatch, state}) {
       commit(mutations.SET_CONTRACT, KnownOriginDigitalAsset);
@@ -138,21 +152,23 @@ const store = new Vuex.Store({
 
                 let lowResImg = `https://ipfs.infura.io/ipfs/${meta.ipfsHash}/low_res.jpeg`;
 
+                const decorateIpfsData = (ipfsMetaData) => {
+                  return {
+                    id: result[0].toNumber(),
+                    owner: result[1].toString(),
+                    meta: meta,
+                    lowResImg: lowResImg,
+                    ipfsMeta: ipfsMetaData,
+                    edition: result[3].toString(),
+                    editionNumber: result[4].toNumber(),
+                    purchased: result[5].toNumber(),
+                    priceInWei: result[6].toString(),
+                    priceInEther: Web3.utils.fromWei(result[6].toString(), 'ether').valueOf()
+                  }
+                };
+
                 return lookupIpfsMeta(meta.ipfsHash)
-                  .then((ipfsMetaData) => {
-                    return {
-                      id: result[0].toNumber(),
-                      owner: result[1].toString(),
-                      meta: meta,
-                      lowResImg: lowResImg,
-                      ipfsMeta: ipfsMetaData,
-                      edition: result[3].toString(),
-                      editionNumber: result[4].toNumber(),
-                      purchased: result[5].toNumber(),
-                      priceInWei: result[6].toString(),
-                      priceInEther: Web3.utils.fromWei(result[6].toString(), 'ether').valueOf()
-                    }
-                  });
+                  .then(decorateIpfsData);
               });
 
               Promise.all(flatMappedAssets)
@@ -190,6 +206,8 @@ const store = new Vuex.Store({
                 symbol: results[1],
                 totalSupply: results[2].toString()
               });
+
+              // We require totalSupply to lookup all ASSETS
               dispatch(actions.GET_ALL_ASSETS);
             });
 
@@ -214,16 +232,18 @@ const store = new Vuex.Store({
       // TODO send event to re-enable UI once complete
       // TODO why doesnt the state update on 2nd get all assets?
 
+      const onSuccess = (res) => {
+        Vue.$log.debug("SUCCESS", res);
+        dispatch(actions.REFRESH_CONTRACT_DETAILS);
+      };
+
       if (assetToPurchase.meta.type === 'physical') {
 
         state.contract.deployed()
           .then((contract) => contract.purchaseWithFiat(assetToPurchase.id, {
             from: state.account
           }))
-          .then((res) => {
-            Vue.$log.debug("SUCCESS", res);
-            dispatch(actions.GET_ALL_ASSETS);
-          })
+          .then((res) => onSuccess(res))
           .catch((e) => Vue.$log.error)
 
       } else if (assetToPurchase.meta.type === 'digital') {
@@ -233,10 +253,7 @@ const store = new Vuex.Store({
             from: state.account,
             value: assetToPurchase.priceInWei
           }))
-          .then((res) => {
-            Vue.$log.debug("SUCCESS", res);
-            dispatch(actions.GET_ALL_ASSETS);
-          })
+          .then((res) => onSuccess(res))
           .catch((e) => Vue.$log.error)
 
       } else {
