@@ -3,9 +3,9 @@
     <form>
       <p>
         <input type="checkbox"
-               :id="'confirm_terms_' + editionType"
+               :id="'confirm_terms'"
                v-model="confirm_terms">
-        <label :for="'confirm_terms_' + editionType">I confirm that I have read the T&C's blah blah blah blah</label>
+        <label :for="'confirm_terms'">I confirm that I have read the T&C's blah blah blah blah</label>
       </p>
       <p>
         <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
@@ -25,10 +25,6 @@
     name: 'completePurchaseButton',
     components: {},
     props: {
-      editionType: {
-        required: true,
-        type: String
-      },
       editions: {
         required: true,
         type: Array

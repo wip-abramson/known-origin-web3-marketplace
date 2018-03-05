@@ -2,8 +2,8 @@
   <div class="assets_to_buy">
     <h1>{{ title }}</h1>
 
-    <div v-for="edition in assetsForArtistAndEdition($route.params.artist, $route.params.edition)">
-      <p>Purchase the <strong>{{edition.meta.type}}</strong> asset</p>
+    <div>
+      <p>Purchase the <strong>{{assetsForArtistAndEdition($route.params.artist, $route.params.edition)[0].meta.type}}</strong> asset</p>
       <p>
         Available {{ countAvailable(assetsForArtistAndEdition($route.params.artist, $route.params.edition)).length }} |
         Purchased {{ countPurchased(assetsForArtistAndEdition($route.params.artist, $route.params.edition)).length }}
@@ -13,7 +13,7 @@
       <edition :edition="assetsForArtistAndEdition($route.params.artist, $route.params.edition)[0]" :count="assetsForArtistAndEdition($route.params.artist, $route.params.edition).length" :hide-buy-button="true"></edition>
 
       <!-- the final purchase button -->
-      <complete-purchase-button :edition-type="edition.meta.type" :editions="assetsForArtistAndEdition($route.params.artist, $route.params.edition)"></complete-purchase-button>
+      <complete-purchase-button :editions="assetsForArtistAndEdition($route.params.artist, $route.params.edition)"></complete-purchase-button>
 
     </div>
 
