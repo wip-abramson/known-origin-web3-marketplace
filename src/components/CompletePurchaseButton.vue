@@ -8,7 +8,7 @@
         <label :for="'confirm_terms_' + editionType">I confirm that I have read the T&C's blah blah blah blah</label>
       </p>
       <p>
-        <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase">
+        <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
           Purchase with Ether
         </button>
       </p>

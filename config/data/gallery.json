@@ -13,12 +13,6 @@
               "numberOfEditions": 1,
               "fiatCost": 499,
               "costInEth": 0.78
-            },
-            {
-              "type": "digital",
-              "numberOfEditions": 10,
-              "fiatCost": 49,
-              "costInEth": 0.08
             }
           ]
         },
@@ -32,7 +26,27 @@
               "numberOfEditions": 1,
               "fiatCost": 499,
               "costInEth": 0.78
-            },
+            }
+          ]
+        },
+        {
+          "artworkName": "Lending a hand 3",
+          "ipfsPath": "lending_a_hand_3",
+          "editionType": "original",
+          "pieces": [
+            {
+              "type": "digital",
+              "numberOfEditions": 10,
+              "fiatCost": 49,
+              "costInEth": 0.08
+            }
+          ]
+        },
+        {
+          "artworkName": "Lending a hand 2",
+          "ipfsPath": "lending_a_hand_2",
+          "editionType": "original",
+          "pieces": [
             {
               "type": "digital",
               "numberOfEditions": 10,
@@ -62,7 +76,7 @@
       ]
     },
     {
-      "name": "James O'connell",
+      "name": "James O'Connell",
       "artworks": [
         {
           "artworkName": "Functional Flattery",

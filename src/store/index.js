@@ -37,7 +37,7 @@ const store = new Vuex.Store({
     commissionAddress: null,
     contractDeveloperAddress: null,
 
-    // TODO we need a solution for artists?
+    // TODO we need a solution for artists? <<< METADATA in IPFS?
     // non-contract data
     artists: [
       {
@@ -61,11 +61,6 @@ const store = new Vuex.Store({
     assetsByArtists: []
   },
   getters: {
-    assetsForArtistAndEditionByType: (state, getters) => (artistName, edition) => {
-      let foundAssets = getters.assetsForArtistAndEdition(artistName, edition);
-      // returns map keyed by type:assets e.g. { physical:[...], digital:[...] }
-      return _.groupBy(foundAssets, 'meta.type')
-    },
     assetsForArtistAndEdition: (state) => (artistName, edition) => {
       return state.assets
         .filter((asset) => asset.edition === edition)
