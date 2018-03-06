@@ -3,17 +3,16 @@
     <h1>{{ title }}</h1>
 
     <div>
-      <p>Purchase the <strong>{{assetsForArtistAndEdition($route.params.artist, $route.params.edition)[0].meta.type}}</strong> asset</p>
       <p>
-        Available {{ countAvailable(assetsForArtistAndEdition($route.params.artist, $route.params.edition)).length }} |
-        Purchased {{ countPurchased(assetsForArtistAndEdition($route.params.artist, $route.params.edition)).length }}
+        Available {{ countAvailable(assetsForEdition($route.params.edition)).length }} |
+        Purchased {{ countPurchased(assetsForEdition($route.params.edition)).length }}
       </p>
 
       <!-- edition overview -->
-      <edition :edition="assetsForArtistAndEdition($route.params.artist, $route.params.edition)[0]" :count="assetsForArtistAndEdition($route.params.artist, $route.params.edition).length" :hide-buy-button="true"></edition>
+      <edition :edition="firstAssetForEdition($route.params.edition)" :count="assetsForEdition($route.params.edition).length" :hide-buy-button="true"></edition>
 
       <!-- the final purchase button -->
-      <complete-purchase-button :editions="assetsForArtistAndEdition($route.params.artist, $route.params.edition)"></complete-purchase-button>
+      <complete-purchase-button :editions="assetsForEdition($route.params.edition)"></complete-purchase-button>
 
     </div>
 
@@ -37,11 +36,9 @@
     },
     computed: {
       ...mapGetters([
-        'assetsForArtistAndEdition'
+        'assetsForEdition',
+        'firstAssetForEdition'
       ]),
-
-    },
-    mounted() {
 
     },
     methods: {

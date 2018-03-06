@@ -39,7 +39,7 @@ export default new Router({
       component: Account
     },
     {
-      path: '/purchase/:artist/:edition',
+      path: '/edition/:edition',
       name: 'purchaseEdition',
       component: PurchaseEdition,
       props: true

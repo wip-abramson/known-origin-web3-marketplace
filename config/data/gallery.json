@@ -6,7 +6,7 @@
         {
           "artworkName": "Start me up",
           "ipfsPath": "start_me_up_physical",
-          "edition": "BJDSMU01",
+          "edition": "BJDSMUP01PHY",
           "type": "physical",
           "numberOfEditions": 1,
           "fiatCost": 1000,
@@ -15,7 +15,7 @@
         {
           "artworkName": "Start me up",
           "ipfsPath": "start_me_up_digital",
-          "edition": "BJDSMU01",
+          "edition": "BJDSMU01DIG",
           "type": "digital",
           "numberOfEditions": 3,
           "fiatCost": 100,
@@ -29,7 +29,7 @@
         {
           "artworkName": "Functional Flattery",
           "ipfsPath": "functional_flattery",
-          "edition": "JOCFFF01",
+          "edition": "JOCFFF01PHY",
           "type": "physical",
           "numberOfEditions": 1,
           "fiatCost": 70,

@@ -1,10 +1,9 @@
 <template>
   <div class="edition-tile">
-    <p>{{edition.meta.artistName}} - <strong>{{ edition.edition }}</strong> <span style="float: right">1 of {{ count}}</span></p>
+    <p>{{ edition.meta.artistName }} - <strong>{{ edition.edition }}</strong> <span style="float: right">1 of {{ count}}</span></p>
     <img :src="edition.lowResImg" style="max-width: 400px"/> <!-- add real IPFS image -->
-    <p>{{ edition.meta.artistNme }}</p>
     <p>{{ edition.ipfsMeta.description }}</p>
-    <p>{{ edition.meta.type }} | {{edition.ipfsMeta.editionType}}</p>
+    <p><strong>{{ edition.meta.type }}</strong></p>
     <p><i>{{ edition.priceInEther }} ETH</i></p>
     <p>Owner: {{ edition.owner }}</p>
 
@@ -14,7 +13,6 @@
       :to="{
         name: 'purchaseEdition',
         params: {
-          artist: edition.meta.artistName,
           edition: edition.edition
         }
       }" tag="button" class="btn">Buy Now
@@ -34,10 +32,6 @@
         default: false,
         type: [Boolean]
       },
-    },
-    computed: {
-      ...mapState([]),
-      ...mapGetters([])
     }
   }
 </script>

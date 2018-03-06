@@ -61,10 +61,12 @@ const store = new Vuex.Store({
     assetsByArtists: []
   },
   getters: {
-    assetsForArtistAndEdition: (state) => (artistName, edition) => {
-      return state.assets
-        .filter((asset) => asset.edition === edition)
-        .filter((asset) => asset.meta.artistName === artistName);
+    assetsForEdition: (state) => (edition) => {
+      return state.assets.filter((asset) => asset.edition === edition);
+    },
+    firstAssetForEdition: (state) => (edition) => {
+      // TODO safe?
+      return state.assets.filter((asset) => asset.edition === edition)[0];
     }
   },
   mutations: {

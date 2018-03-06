@@ -35,21 +35,18 @@
         confirm_terms: false
       }
     },
-    mounted() {
-    },
-    computed: {
-      ...mapGetters([]),
-      ...mapState([]),
-    },
     methods: {
       completePurchase: function () {
-        console.log("Completing purchase");
+
 
         let nextAssetToPurchase = _.chain(this.editions)
           .orderBy('editionNumber')
           .filter({purchased: 0})
           .head()
           .value();
+
+        console.log("Completing purchase");
+        console.log(nextAssetToPurchase);
 
         this.$store.dispatch(actions.PURCHASE_ASSET, nextAssetToPurchase)
       }
