@@ -79,7 +79,8 @@ const flattenTestData = () => {
 
       let metaData = {
         type: type,
-        artistName: artist.name
+        artistName: artist.name,
+        artworkName: artworkName
       }
 
       let auctionStartDate = 123 // TODO ability to convert start date to timestamp

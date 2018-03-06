@@ -1,6 +1,7 @@
 <template>
   <div class="edition-tile">
-    <p>{{ edition.meta.artistName }} - <strong>{{ edition.edition }}</strong> <span style="float: right">1 of {{ count}}</span></p>
+    <p>{{ edition.meta.artistName }} - <strong>{{ edition.meta.artworkName }}</strong> <span style="float: right">1 of {{ count}}</span></p>
+    <p>{{ edition.edition }}</p>
     <img :src="edition.lowResImg" style="max-width: 400px"/> <!-- add real IPFS image -->
     <p>{{ edition.ipfsMeta.description }}</p>
     <p><strong>{{ edition.meta.type }}</strong></p>

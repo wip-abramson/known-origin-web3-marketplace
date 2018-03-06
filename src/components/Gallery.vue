@@ -3,7 +3,6 @@
     <h1>{{ title }}</h1>
 
     <div v-for="assetEdition in assetsByEditions" class="edition-wrap">
-      <!-- TODO this needs to take in the list so we can display prices for all types physical/digital -->
       <edition :edition="assetEdition[0]" :count="assetEdition.length"></edition>
     </div>
 
