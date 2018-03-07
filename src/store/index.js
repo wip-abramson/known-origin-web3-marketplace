@@ -22,7 +22,6 @@ const store = new Vuex.Store({
     currentNetwork: null,
 
     // contract metadata
-    contract: null,
     contractName: '',
     contractSymbol: '',
 
@@ -93,9 +92,6 @@ const store = new Vuex.Store({
       state.contractSymbol = symbol;
       state.contractName = name;
     },
-    [mutations.SET_CONTRACT](state, contract) {
-      state.contract = contract
-    },
     [mutations.SET_ACCOUNT](state, account) {
       // TODO how to look up the balance of an account
       state.account = account
@@ -120,14 +116,8 @@ const store = new Vuex.Store({
           commit(mutations.SET_ACCOUNT, accounts[0]);
 
           // init the KODA contract
-          dispatch(actions.INIT_KODA_CONTRACT);
+          store.dispatch(actions.REFRESH_CONTRACT_DETAILS);
         });
-    },
-    [actions.INIT_KODA_CONTRACT]({commit, dispatch, state}) {
-      commit(mutations.SET_CONTRACT, KnownOriginDigitalAsset);
-
-      // Refresh latest contract details
-      store.dispatch(actions.REFRESH_CONTRACT_DETAILS);
     },
     [actions.GET_ALL_ASSETS]({commit, dispatch, state}) {
 
@@ -136,7 +126,7 @@ const store = new Vuex.Store({
           .then((result) => result.data);
       };
 
-      state.contract.deployed()
+      KnownOriginDigitalAsset.deployed()
         .then((contract) => {
           let supply = _.range(0, state.totalSupply);
 
@@ -164,8 +154,7 @@ const store = new Vuex.Store({
                   }
                 };
 
-                return lookupIpfsMeta(meta.ipfsHash)
-                  .then(decorateIpfsData);
+                return lookupIpfsMeta(meta.ipfsHash).then(decorateIpfsData);
               });
 
               Promise.all(flatMappedAssets)
@@ -184,7 +173,7 @@ const store = new Vuex.Store({
         })
     },
     [actions.REFRESH_CONTRACT_DETAILS]({commit, dispatch, state}) {
-      state.contract.deployed()
+      KnownOriginDigitalAsset.deployed()
         .then((contract) => {
 
           Promise.all([contract.curator(), contract.commissionAccount(), contract.contractDeveloper()])
@@ -204,16 +193,16 @@ const store = new Vuex.Store({
                 totalSupply: results[2].toString()
               });
 
-              // We require totalSupply to lookup all ASSETS
+                // We require totalSupply to lookup all ASSETS
               dispatch(actions.GET_ALL_ASSETS);
             });
 
           Promise.all([contract.totalPurchaseValueInWei(), contract.totalNumberOfPurchases()])
             .then((results) => {
               commit(mutations.SET_TOTAL_PURCHASED, {
-                totalPurchaseValueInEther: 0, //window.web3.fromWei(results[0].toString(), 'ether'),
-                totalPurchaseValueInWei: results[0].toString(),
-                totalNumberOfPurchases: results[1].toString()
+                totalPurchaseValueInEther: Web3.utils.fromWei(results[0].toString(10), 'ether'),
+                totalPurchaseValueInWei: results[0].toString(10),
+                totalNumberOfPurchases: results[1].toString(10)
               });
             });
         });
@@ -236,7 +225,7 @@ const store = new Vuex.Store({
 
       if (assetToPurchase.meta.type === 'physical') {
 
-        state.contract.deployed()
+        KnownOriginDigitalAsset.deployed()
           .then((contract) => contract.purchaseWithFiat(assetToPurchase.id, {
             from: state.account
           }))
@@ -245,7 +234,7 @@ const store = new Vuex.Store({
 
       } else if (assetToPurchase.meta.type === 'digital') {
 
-        state.contract.deployed()
+        KnownOriginDigitalAsset.deployed()
           .then((contract) => contract.purchaseWithEther(assetToPurchase.id, {
             from: state.account,
             value: assetToPurchase.priceInWei

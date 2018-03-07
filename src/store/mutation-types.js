@@ -3,8 +3,6 @@
 export const SET_ACCOUNT = 'SET_ACCOUNT';
 export const SET_CURRENT_NETWORK = 'SET_CURRENT_NETWORK';
 
-export const SET_CONTRACT = 'SET_CONTRACT';
-
 export const SET_ASSETS = 'SET_ASSETS';
 export const SET_ARTISTS = 'SET_ARTISTS';
 

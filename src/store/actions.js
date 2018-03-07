@@ -1,6 +1,5 @@
 // setup calls
 export const INIT_APP = 'INIT_APP';
-export const INIT_KODA_CONTRACT = 'INIT_KODA_CONTRACT';
 
 // Web3 lookups
 export const GET_CURRENT_NETOWKR = 'GET_CURRENT_NETOWKR';
