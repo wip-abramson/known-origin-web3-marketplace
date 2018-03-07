@@ -64,8 +64,7 @@ const store = new Vuex.Store({
       return state.assets.filter((asset) => asset.edition === edition);
     },
     firstAssetForEdition: (state) => (edition) => {
-      // TODO safe?
-      return state.assets.filter((asset) => asset.edition === edition)[0];
+      return _.head(state.assets.filter((asset) => asset.edition === edition));
     }
   },
   mutations: {
@@ -75,9 +74,12 @@ const store = new Vuex.Store({
       state.contractDeveloperAddress = contractDeveloperAddress;
     },
     [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtists}) {
-      state.assets = [...assets];
-      state.assetsByEditions = assetsByEditions;
-      state.assetsByArtists = assetsByArtists;
+      // state.assets = [...assets];
+      // state.assetsByEditions = assetsByEditions;
+      // state.assetsByArtists = assetsByArtists;
+      Vue.set(state, 'assets', assets);
+      Vue.set(state, 'assetsByEditions', assetsByEditions);
+      Vue.set(state, 'assetsByArtists', assetsByArtists);
     },
     [mutations.SET_ARTISTS](state, {artists}) {
       state.artists = artists;
@@ -225,12 +227,7 @@ const store = new Vuex.Store({
 
       if (assetToPurchase.meta.type === 'physical') {
 
-        KnownOriginDigitalAsset.deployed()
-          .then((contract) => contract.purchaseWithFiat(assetToPurchase.id, {
-            from: state.account
-          }))
-          .then((res) => onSuccess(res))
-          .catch((e) => Vue.$log.error)
+        // TODO handle physical purchases
 
       } else if (assetToPurchase.meta.type === 'digital') {
 

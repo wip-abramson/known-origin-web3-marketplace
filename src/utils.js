@@ -11,6 +11,7 @@ const safeFromJson = (raw) => {
 const getNetIdString = () => {
   return window.web3.eth.net.getId()
     .then((id) => {
+      console.log(`Running on netork ID ${id}`);
       switch (id) {
         case 1:
           return 'Main Ethereum Network';

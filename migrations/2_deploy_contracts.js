@@ -1,17 +1,17 @@
-const _ = require('lodash')
-const Eth = require('ethjs')
+const _ = require('lodash');
+const Eth = require('ethjs');
 
-const KnownOriginDigitalAsset = artifacts.require('KnownOriginDigitalAsset')
+const KnownOriginDigitalAsset = artifacts.require('KnownOriginDigitalAsset');
 
-const ipfsUploader = require('../scripts/ipfs-uploader')
+const ipfsUploader = require('../scripts/ipfs-uploader');
 
-const gallery_data = require('../config/data/gallery.json')
+const gallery_data = require('../config/data/gallery.json');
 
 module.exports = function (deployer, network, accounts) {
 
-  let _curatorAccount = accounts[0]
-  let _commissionAccount = accounts[1]
-  let _contractDeveloper = accounts[2]
+  let _curatorAccount = accounts[0];
+  let _commissionAccount = accounts[1];
+  let _contractDeveloper = accounts[2];
 
   deployer
     .then(() => {
@@ -19,7 +19,7 @@ module.exports = function (deployer, network, accounts) {
     })
     .then((instance) => {
 
-      console.log(`Deployed contract to address = [${instance.address}] to network [${network}]`)
+      console.log(`Deployed contract to address = [${instance.address}] to network [${network}]`);
 
       if (network === 'development') {
         return loadSeedData(instance, _curatorAccount)
@@ -28,22 +28,22 @@ module.exports = function (deployer, network, accounts) {
       return instance
     })
 
-}
+};
 
 const loadSeedData = (instance, _curatorAccount) => {
 
-  let flatInserts = flattenTestData()
+  let flatInserts = flattenTestData();
 
   return Promise.all(_.map(flatInserts, (insert) => {
-    console.log(`Seeding test data for [${insert.artworkName}]`)
+    console.log(`Seeding test data for [${insert.artworkName}]`);
 
     return ipfsUploader.uploadMetaData(insert)
       .then((res) => {
 
         // on success add ipfsHash
-        insert.metaData.ipfsHash = res.hash
+        insert.metaData.ipfsHash = res.hash;
 
-        let metaData = JSON.stringify(insert.metaData)
+        let metaData = JSON.stringify(insert.metaData);
 
         // mint edition
         return instance.mintEdition(
@@ -58,32 +58,32 @@ const loadSeedData = (instance, _curatorAccount) => {
         )
       })
   }))
-}
+};
 
 const flattenTestData = () => {
-  let flatInserts = []
+  let flatInserts = [];
 
   _.forEach(gallery_data.artists, (artist) => {
 
     _.forEach(artist.artworks, (artwork) => {
 
-      let artworkName = artwork.artworkName
-      let ipfsPath = artwork.ipfsPath
+      let artworkName = artwork.artworkName;
+      let ipfsPath = artwork.ipfsPath;
 
-      let type = artwork.type
-      let numberOfEditions = artwork.numberOfEditions
-      let edition = artwork.edition
+      let type = artwork.type;
+      let numberOfEditions = artwork.numberOfEditions;
+      let edition = artwork.edition;
 
-      let fiatCost = artwork.fiatCost
-      let costInWei = Eth.toWei(artwork.costInEth, 'ether')
+      let fiatCost = artwork.fiatCost;
+      let costInWei = Eth.toWei(artwork.costInEth, 'ether');
 
       let metaData = {
         type: type,
         artistName: artist.name,
         artworkName: artworkName
-      }
+      };
 
-      let auctionStartDate = 123 // TODO ability to convert start date to timestamp
+      let auctionStartDate = 123; // TODO ability to convert start date to timestamp
 
       flatInserts.push({
         numberOfEditions,
@@ -97,10 +97,10 @@ const flattenTestData = () => {
       })
 
     })
-  })
+  });
 
   return flatInserts
-}
+};
 
 /*
  "5777": {
