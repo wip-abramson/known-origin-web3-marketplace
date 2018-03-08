@@ -39,7 +39,6 @@
     methods: {
       completePurchase: function () {
 
-
         let nextAssetToPurchase = _.chain(this.editions)
           .orderBy('editionNumber')
           .filter({purchased: 0})

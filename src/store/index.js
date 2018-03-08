@@ -67,7 +67,10 @@ const store = new Vuex.Store({
     },
     firstAssetForEdition: (state) => (edition) => {
       return _.head(state.assets.filter((asset) => asset.edition === edition));
-    }
+    },
+    assetById: (state) => (tokenId) => {
+      return _.find(state.assets, (asset) => asset.id.toString() === tokenId);
+    },
   },
   mutations: {
     [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, commissionAddress, contractDeveloperAddress}) {

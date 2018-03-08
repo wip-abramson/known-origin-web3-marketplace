@@ -9,7 +9,9 @@
       </p>
 
       <!-- edition overview -->
-      <edition :edition="firstAssetForEdition($route.params.edition)" :count="assetsForEdition($route.params.edition).length" :hide-buy-button="true"></edition>
+      <edition :edition="firstAssetForEdition($route.params.edition)"
+               :hide-buy-button="true">
+      </edition>
 
       <!-- the final purchase button -->
       <complete-purchase-button :editions="assetsForEdition($route.params.edition)"></complete-purchase-button>
@@ -39,7 +41,6 @@
         'assetsForEdition',
         'firstAssetForEdition'
       ]),
-
     },
     methods: {
       countPurchased: (assets) => {

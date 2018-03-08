@@ -3,9 +3,17 @@
     <h1>{{ title }}</h1>
     <p><i>{{ account }}</i></p>
     <p><i>{{ accountBalance }} ETH</i></p>
-    <p><i>{{ assetsPurchasedByAccount }} token IDS purchased</i></p>
+    <p><i>{{ assetsPurchasedByAccount.length }} Purchased</i></p>
 
     <h2>Purchased assets</h2>
+
+    <div v-for="tokenId in assetsPurchasedByAccount">
+      <edition :edition="assetById(tokenId)"
+               :edition-is-purchased="true"
+               :hide-buy-button="true">
+      </edition>
+    </div>
+
   </div>
 </template>
 
@@ -14,10 +22,11 @@
   import { mapGetters, mapState } from 'vuex'
   import Artist from './Artist'
   import Gallery from './Gallery'
+  import Edition from './Edition'
 
   export default {
     name: 'dashboard',
-    components: {},
+    components: {Edition},
     data() {
       return {
         title: 'Account',
@@ -28,6 +37,9 @@
         'account',
         'accountBalance',
         'assetsPurchasedByAccount',
+      ]),
+      ...mapGetters([
+        'assetById',
       ])
     },
     mounted() {
