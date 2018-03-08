@@ -1,34 +1,44 @@
 <template>
-  <div class="edition-tile" v-if="edition">
-    <p>
-      {{ edition.meta.artistName }} - <strong>{{ edition.meta.artworkName }}</strong>
+  <article class="card" v-if="edition">
+    <a href="#">
+      <figure class="thumbnail">
+        <img :src="edition.lowResImg"/>
+      </figure>
+      <div class="card-content">
 
-      <span v-if="editionIsPurchased || galleryView" style="float: right">
-        Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
-        Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
-      </span>
+        <h2>{{ edition.meta.artworkName }}</h2>
 
-      <span v-if="editionIsPurchased" style="float: right">TOKEN ID {{edition.id}}</span>
-    </p>
-    <!--<p>{{ edition.edition }}</p>-->
-    <img :src="edition.lowResImg" style="max-width: 400px"/>
-    <p v-if="!galleryView">{{ edition.ipfsMeta.description }}</p>
-    <p><strong>{{ edition.meta.type }}</strong></p>
-    <p><i>{{ edition.priceInEther }} ETH</i></p>
+        <span v-if="!editionIsPurchased">
+          Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
+          Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
+        </span>
 
-    <p v-if="editionIsPurchased">Owner: {{ edition.owner }}</p>
+        <span v-if="editionIsPurchased">TOKEN ID {{edition.id}}</span>
 
-    <div v-if="!hideBuyButton">
-      <router-link
-        :to="{
-          name: 'purchaseEdition',
-          params: {
-            edition: edition.edition
-          }
-        }" tag="button" class="btn">View Details
-      </router-link>
-    </div>
-  </div>
+        <p>{{ edition.edition }}</p>
+
+        <p v-if="editionIsPurchased">Owner: {{ edition.owner }}</p>
+
+        <p>{{ edition.ipfsMeta.description }}</p>
+
+        <p><strong>{{ edition.meta.type }}</strong></p>
+
+        <p><i>{{ edition.priceInEther }} ETH</i></p>
+
+        <div v-if="!hideBuyButton">
+          <router-link
+            :to="{ name: 'purchaseEdition', params: { edition: edition.edition}}"
+            tag="button"
+            class="btn">
+            Buy
+          </router-link>
+        </div>
+
+      </div>
+    </a>
+    <!-- .card-content -->
+  </article>
+
 </template>
 
 <script>
@@ -71,14 +81,5 @@
 </script>
 
 <style scoped>
-  .edition-tile {
-    text-align: center;
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid gray;
-  }
 
-  .hide {
-    display: none;
-  }
 </style>

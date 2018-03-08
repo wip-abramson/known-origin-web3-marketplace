@@ -2,8 +2,13 @@
   <div id="gallery">
     <h1>{{ title }}</h1>
 
-    <div v-for="assetEdition in assetsByEditions" class="edition-wrap">
-      <edition :edition="assetEdition[0]" :gallery-view="true"></edition>
+    <div class="centered">
+      <section class="cards">
+          <edition
+            v-for="assetEdition in assetsByEditions" :edition="assetEdition[0]"
+            :gallery-view="true">
+          </edition>
+      </section>
     </div>
 
   </div>
@@ -31,7 +36,5 @@
 </script>
 
 <style scoped>
-  .edition-wrap {
-    padding-bottom: 20px;
-  }
+
 </style>

@@ -9,10 +9,12 @@
 
     <div id="featured-artists">
       <h2>Featured artists</h2>
-      <div v-for="artist in artists">
-        <artist :artist="artist"></artist>
+      <div class="centered">
+        <section class="cards">
+          <artist v-for="artist in artists" :artist="artist"></artist>
+        </section>
+        <p>More artists and workshops to be announced...</p>
       </div>
-      <p>More artists and workshops to be announced...</p>
     </div>
 
     <div id="quote">

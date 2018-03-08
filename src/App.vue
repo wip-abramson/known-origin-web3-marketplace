@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div id="header" class="header-branding">
-      KnownOrigin.io <current-network></current-network>
+      KnownOrigin.io
+      <current-network></current-network>
     </div>
 
     <span style="float: right"><router-link :to="{ name: 'account' }">Account</router-link></span>
@@ -11,10 +12,14 @@
     </div>
 
     <div id="links">
-      <router-link :to="{ name: 'dashboard' }">Dash</router-link> |
-      <router-link :to="{ name: 'artists' }">Artists</router-link> |
-      <router-link :to="{ name: 'gallery' }">Gallery</router-link> |
-      <router-link :to="{ name: 'license' }">License</router-link> |
+      <router-link :to="{ name: 'dashboard' }">Dash</router-link>
+      |
+      <router-link :to="{ name: 'artists' }">Artists</router-link>
+      |
+      <router-link :to="{ name: 'gallery' }">Gallery</router-link>
+      |
+      <router-link :to="{ name: 'license' }">License</router-link>
+      |
       <router-link :to="{ name: 'details' }">Contract details</router-link>
     </div>
 
@@ -24,7 +29,6 @@
       <p>(+44) 7715 86 28 33</p>
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
     </div>
-
   </div>
 </template>
 
@@ -32,7 +36,7 @@
   /* global web3:true */
 
   import Web3 from 'web3'
-  import {mapGetters, mapState} from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
   import * as actions from './store/actions'
   import * as mutations from './store/mutation-types'
   import CurrentNetwork from './components/CurrentNetwork'
@@ -101,9 +105,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    max-width: 600px;
-    margin: 0 auto !important;
-    float: none !important;
     background-color: #f2f2f2;
   }
 
@@ -140,5 +141,87 @@
     text-transform: none;
     color: #3e27d9;
   }
+
+  .centered {
+    margin: 0 auto;
+    padding: 0 1em;
+  }
+
+  @media screen and (min-width: 52em) {
+    .centered {
+      max-width: 52em;
+    }
+  }
+
+  /*--------------------------------------------------------------
+  Header styles minus menu
+  --------------------------------------------------------------*/
+
+  .card {
+    background: white;
+    margin-bottom: 2em;
+  }
+
+  .card a {
+    color: black;
+    text-decoration: none;
+  }
+
+  .card a:hover {
+    box-shadow: 3px 3px 8px hsl(0, 0%, 70%);
+  }
+
+  .card-content {
+    padding: 1.4em;
+  }
+
+  .card-content h2 {
+    margin-top: 0;
+    margin-bottom: .5em;
+    font-weight: normal;
+  }
+
+  .card-content p {
+    font-size: 95%;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Flexbox styles */
+  @media screen and (min-width: 40em) {
+    .cards {
+      margin-top: -1em;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      margin-bottom: 1em;
+      display: flex;
+      flex: 0 1 calc(50% - 0.5em);
+      /* width: calc(50% - 1em); */
+    }
+  }
+
+  /* mq 40em*/
+
+  @media screen and (min-width: 60em) {
+    .cards {
+      margin-top: inherit;
+    }
+
+    .card {
+      margin-bottom: 2em;
+      display: flex;
+      flex: 0 1 calc(33% - 0.5em);
+      /* width: calc(33% - 1em); */
+    }
+  }
+
+  /* mq 60em*/
 
 </style>
