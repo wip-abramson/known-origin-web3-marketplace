@@ -1,20 +1,18 @@
 <template>
-  <div id="account" class="centered">
+  <div id="account">
     <h1>{{ title }}</h1>
-    <p><i>{{ account }}</i></p>
-    <p><i>{{ accountBalance }} ETH</i></p>
-    <p><i>{{ assetsPurchasedByAccount.length }} Purchased</i></p>
+    <p><i>{{ account }}</i> {{ accountBalance }} ETH</p>
+    <p>{{ assetsPurchasedByAccount.length }} Purchased</p>
 
+    <h2>Purchased assets</h2>
 
-    <div id="purchased-assets">
-      <h2>Purchased assets</h2>
+    <div class="centered">
       <section class="cards">
-        <div v-for="tokenId in assetsPurchasedByAccount">
-          <edition :edition="assetById(tokenId)"
-                   :edition-is-purchased="true"
-                   :hide-buy-button="true">
-          </edition>
-        </div>
+        <edition v-for="tokenId in assetsPurchasedByAccount"
+                 :edition="assetById(tokenId)"
+                 edition-is-purchased="true"
+                 hide-buy-button="true">
+        </edition>
       </section>
     </div>
 
@@ -23,7 +21,7 @@
 
 <script>
 
-  import {mapGetters, mapState} from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
   import Artist from './Artist'
   import Gallery from './Gallery'
   import Edition from './Edition'
