@@ -14,6 +14,7 @@
       <router-link :to="{ name: 'dashboard' }">Dash</router-link> |
       <router-link :to="{ name: 'artists' }">Artists</router-link> |
       <router-link :to="{ name: 'gallery' }">Gallery</router-link> |
+      <router-link :to="{ name: 'license' }">License</router-link> |
       <router-link :to="{ name: 'details' }">Contract details</router-link>
     </div>
 

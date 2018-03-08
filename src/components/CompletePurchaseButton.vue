@@ -2,10 +2,11 @@
   <div class="complete_purchase_container">
     <form>
       <p>
-        <input type="checkbox"
-               :id="'confirm_terms'"
-               v-model="confirm_terms">
-        <label :for="'confirm_terms'">I confirm that I have read the T&C's blah blah blah blah</label>
+        <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
+        <label :for="'confirm_terms'">I agree with KODA license</label>
+      </p>
+      <p>
+        <router-link :to="{ name: 'license' }">Read license</router-link>
       </p>
       <p>
         <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">

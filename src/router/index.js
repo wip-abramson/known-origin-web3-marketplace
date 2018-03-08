@@ -5,6 +5,7 @@ import Artists from '@/components/Artists'
 import Details from '@/components/Details'
 import Gallery from '@/components/Gallery'
 import Account from '@/components/Account'
+import License from '@/components/License'
 import PurchaseEdition from '@/components/PurchaseEdition'
 
 Vue.use(Router);
@@ -37,6 +38,11 @@ export default new Router({
       path: '/account',
       name: 'account',
       component: Account
+    },
+    {
+      path: '/license',
+      name: 'license',
+      component: License
     },
     {
       path: '/edition/:edition',
