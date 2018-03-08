@@ -58,7 +58,7 @@
         this.$store.dispatch(actions.INIT_APP);
 
         // Find current network
-        this.$store.dispatch(actions.GET_CURRENT_NETOWKR);
+        this.$store.dispatch(actions.GET_CURRENT_NETWORK);
 
       } else {
         // TODO fire action - WEB_3_NOT_FOUND - show error banner

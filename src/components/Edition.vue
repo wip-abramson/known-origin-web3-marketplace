@@ -16,7 +16,7 @@
         params: {
           edition: edition.edition
         }
-      }" tag="button" class="btn">Buy Now
+      }" tag="button" class="btn">Buy
     </router-link>
   </div>
 </template>

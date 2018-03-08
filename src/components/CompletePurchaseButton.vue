@@ -10,7 +10,7 @@
       </p>
       <p>
         <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
-          Purchase with Ether
+          Confirm
         </button>
       </p>
     </form>

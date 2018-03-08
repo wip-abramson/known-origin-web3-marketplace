@@ -21,6 +21,7 @@ const store = new Vuex.Store({
     account: null,
     accountBalance: null,
     currentNetwork: null,
+    assetsPurchasedByAccount: [],
 
     // contract metadata
     contractName: '',
@@ -85,6 +86,11 @@ const store = new Vuex.Store({
     [mutations.SET_ARTISTS](state, {artists}) {
       state.artists = artists;
     },
+    [mutations.ADD_ASSET_PURCHASED_FROM_ACCOUNT](state, tokenId) {
+      if (!_.includes(state.assetsPurchasedByAccount, tokenId)) {
+        state.assetsPurchasedByAccount.push(tokenId);
+      }
+    },
     [mutations.SET_TOTAL_PURCHASED](state, {totalPurchaseValueInWei, totalNumberOfPurchases, totalPurchaseValueInEther}) {
       state.totalPurchaseValueInWei = totalPurchaseValueInWei;
       state.totalNumberOfPurchases = totalNumberOfPurchases;
@@ -98,13 +104,31 @@ const store = new Vuex.Store({
     [mutations.SET_ACCOUNT](state, {account, accountBalance}) {
       state.account = account;
       state.accountBalance = accountBalance;
+      store.dispatch(actions.SETUP_ACCOUNT_PURCHASED_LISTENER);
     },
     [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
       state.currentNetwork = currentNetwork
     },
   },
   actions: {
-    [actions.GET_CURRENT_NETOWKR]({commit, dispatch, state}) {
+    [actions.SETUP_ACCOUNT_PURCHASED_LISTENER]({commit, dispatch, state}) {
+      KnownOriginDigitalAsset.deployed()
+        .then((contract) => {
+
+          // start listening for purchased events
+          const accountPurchased = contract.PurchasedWithEther({_buyer: state.account}, {
+            fromBlock: 0,
+            toBlock: 'latest'
+          });
+
+          accountPurchased.watch(function (error, result) {
+            if (!error) {
+              commit(mutations.ADD_ASSET_PURCHASED_FROM_ACCOUNT, result.args._tokenId.toString(10));
+            }
+          });
+        });
+    },
+    [actions.GET_CURRENT_NETWORK]({commit, dispatch, state}) {
       getNetIdString()
         .then((currentNetwork) => {
           commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
@@ -227,7 +251,6 @@ const store = new Vuex.Store({
       // TODO Handle errors
       // TODO send event to disable UI when in play
       // TODO send event to re-enable UI once complete
-      // TODO why doesnt the state update on 2nd get all assets?
 
       const onSuccess = (res) => {
         Vue.$log.debug("SUCCESS", res);
