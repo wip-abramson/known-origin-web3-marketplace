@@ -43,6 +43,10 @@ export default new Router({
       name: 'purchaseEdition',
       component: PurchaseEdition,
       props: true
-    }
+    },
+    // {
+      // dashboard
+      // TODO setup event listener for all events of type PurchasedWithEther & PurchasedWithFiat regardless for account
+    // }
   ]
 })

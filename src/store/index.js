@@ -19,6 +19,7 @@ const store = new Vuex.Store({
   state: {
     // connectivity
     account: null,
+    accountBalance: null,
     currentNetwork: null,
 
     // contract metadata
@@ -94,9 +95,9 @@ const store = new Vuex.Store({
       state.contractSymbol = symbol;
       state.contractName = name;
     },
-    [mutations.SET_ACCOUNT](state, account) {
-      // TODO how to look up the balance of an account
-      state.account = account
+    [mutations.SET_ACCOUNT](state, {account, accountBalance}) {
+      state.account = account;
+      state.accountBalance = accountBalance;
     },
     [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
       state.currentNetwork = currentNetwork
@@ -114,11 +115,19 @@ const store = new Vuex.Store({
         .then((accounts) => {
           // TODO add refresh cycle / timeout
 
-          // store the account
-          commit(mutations.SET_ACCOUNT, accounts[0]);
+          let account = accounts[0];
 
           // init the KODA contract
           store.dispatch(actions.REFRESH_CONTRACT_DETAILS);
+
+          return web3.eth.getBalance(account)
+            .then((balance) => {
+
+              let accountBalance = Web3.utils.fromWei(balance);
+
+              // store the account details
+              commit(mutations.SET_ACCOUNT, {account, accountBalance});
+            });
         });
     },
     [actions.GET_ALL_ASSETS]({commit, dispatch, state}) {
@@ -195,7 +204,7 @@ const store = new Vuex.Store({
                 totalSupply: results[2].toString()
               });
 
-                // We require totalSupply to lookup all ASSETS
+              // We require totalSupply to lookup all ASSETS
               dispatch(actions.GET_ALL_ASSETS);
             });
 

@@ -2,6 +2,7 @@
   <div id="account">
     <h1>{{ title }}</h1>
     <p><i>{{ account }}</i></p>
+    <p><i>{{ accountBalance }} ETH</i></p>
 
     <h2>Purchased assets</h2>
   </div>
@@ -23,8 +24,12 @@
     },
     computed: {
       ...mapState([
-        'account'
+        'account',
+        'accountBalance'
       ])
+    },
+    mounted() {
+
     }
   }
 </script>
