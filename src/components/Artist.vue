@@ -19,5 +19,7 @@
     padding: 10px;
     margin: 5px;
     border: 1px solid gray;
+    max-width: 300px;
+    display: inline-block;
   }
 </style>
