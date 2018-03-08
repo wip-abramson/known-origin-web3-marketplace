@@ -76,9 +76,6 @@ const store = new Vuex.Store({
       state.contractDeveloperAddress = contractDeveloperAddress;
     },
     [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtists}) {
-      // state.assets = [...assets];
-      // state.assetsByEditions = assetsByEditions;
-      // state.assetsByArtists = assetsByArtists;
       Vue.set(state, 'assets', assets);
       Vue.set(state, 'assetsByEditions', assetsByEditions);
       Vue.set(state, 'assetsByArtists', assetsByArtists);
@@ -252,11 +249,6 @@ const store = new Vuex.Store({
       // TODO send event to disable UI when in play
       // TODO send event to re-enable UI once complete
 
-      const onSuccess = (res) => {
-        Vue.$log.debug("SUCCESS", res);
-        dispatch(actions.REFRESH_CONTRACT_DETAILS);
-      };
-
       if (assetToPurchase.meta.type === 'physical') {
 
         // TODO handle physical purchases
@@ -264,11 +256,31 @@ const store = new Vuex.Store({
       } else if (assetToPurchase.meta.type === 'digital') {
 
         KnownOriginDigitalAsset.deployed()
-          .then((contract) => contract.purchaseWithEther(assetToPurchase.id, {
-            from: state.account,
-            value: assetToPurchase.priceInWei
-          }))
-          .then((res) => onSuccess(res))
+          .then((contract) => {
+
+            let _buyer = state.account;
+            let _tokenId = assetToPurchase.id;
+
+            let individualPurchaseEvent = contract.PurchasedWithEther({_tokenId: _tokenId, _buyer: _buyer}, {
+              fromBlock: 0,
+              toBlock: 'latest'
+            });
+
+            individualPurchaseEvent.watch(function (error, result) {
+              if (!error) {
+                dispatch(actions.REFRESH_CONTRACT_DETAILS);
+                individualPurchaseEvent.stopWatching();
+              }
+            });
+
+            return contract.purchaseWithEther(_tokenId, {
+              from: _buyer,
+              value: assetToPurchase.priceInWei
+            });
+          })
+          .then((res) => (res) => {
+            Vue.$log.debug("SUCCESS", res);
+          })
           .catch((e) => Vue.$log.error)
 
       } else {
