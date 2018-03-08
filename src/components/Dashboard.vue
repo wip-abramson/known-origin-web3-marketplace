@@ -11,7 +11,9 @@
       <h2>Featured artists</h2>
       <div class="centered">
         <section class="cards">
-          <artist v-for="artist in artists" :artist="artist"></artist>
+          <div v-for="artist in artists" >
+            <artist :artist="artist"></artist>
+          </div>
         </section>
         <p>More artists and workshops to be announced...</p>
       </div>

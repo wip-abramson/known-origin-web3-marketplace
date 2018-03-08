@@ -89,7 +89,7 @@ const store = new Vuex.Store({
       return _.head(state.assets.filter((asset) => asset.edition === edition));
     },
     assetById: (state) => (tokenId) => {
-      return _.find(state.assets, (asset) => asset.id.toString() === tokenId);
+      return _.find(state.assets, (asset) => asset.id.toString() === tokenId.toString());
     },
   },
   mutations: {
@@ -106,10 +106,8 @@ const store = new Vuex.Store({
     [mutations.SET_ARTISTS](state, {artists}) {
       state.artists = artists;
     },
-    [mutations.ADD_ASSET_PURCHASED_FROM_ACCOUNT](state, tokenId) {
-      if (!_.includes(state.assetsPurchasedByAccount, tokenId)) {
-        state.assetsPurchasedByAccount.push(tokenId);
-      }
+    [mutations.SET_ASSETS_PURCHASED_FROM_ACCOUNT](state, tokens) {
+      Vue.set(state, 'assetsPurchasedByAccount', tokens);
     },
     [mutations.SET_TOTAL_PURCHASED](state, {totalPurchaseValueInWei, totalNumberOfPurchases, totalPurchaseValueInEther}) {
       state.totalPurchaseValueInWei = totalPurchaseValueInWei;
@@ -124,28 +122,20 @@ const store = new Vuex.Store({
     [mutations.SET_ACCOUNT](state, {account, accountBalance}) {
       state.account = account;
       state.accountBalance = accountBalance;
-      store.dispatch(actions.SETUP_ACCOUNT_PURCHASED_LISTENER);
+      store.dispatch(actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT);
     },
     [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
       state.currentNetwork = currentNetwork
     },
   },
   actions: {
-    [actions.SETUP_ACCOUNT_PURCHASED_LISTENER]({commit, dispatch, state}) {
+    [actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT]({commit, dispatch, state}) {
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
-
-          // start listening for purchased events
-          const accountPurchased = contract.PurchasedWithEther({_buyer: state.account}, {
-            fromBlock: 0,
-            toBlock: 'latest'
-          });
-
-          accountPurchased.watch(function (error, result) {
-            if (!error) {
-              commit(mutations.ADD_ASSET_PURCHASED_FROM_ACCOUNT, result.args._tokenId.toString(10));
-            }
-          });
+          return contract.getOwnerTokens(state.account)
+            .then((tokens) => {
+              commit(mutations.SET_ASSETS_PURCHASED_FROM_ACCOUNT, tokens);
+            });
         });
     },
     [actions.GET_CURRENT_NETWORK]({commit, dispatch, state}) {
@@ -292,6 +282,7 @@ const store = new Vuex.Store({
             individualPurchaseEvent.watch(function (error, result) {
               if (!error) {
                 dispatch(actions.REFRESH_CONTRACT_DETAILS);
+                dispatch(actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT);
                 individualPurchaseEvent.stopWatching();
               }
             });

@@ -4,10 +4,10 @@
 
     <div class="centered">
       <section class="cards">
-          <edition
-            v-for="assetEdition in assetsByEditions" :edition="assetEdition[0]"
-            :gallery-view="true">
-          </edition>
+          <div v-for="assetEdition in assetsByEditions">
+            <edition :edition="assetEdition[0]" :gallery-view="true">
+            </edition>
+          </div>
       </section>
     </div>
 
