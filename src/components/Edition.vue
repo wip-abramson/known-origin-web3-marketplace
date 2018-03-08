@@ -3,16 +3,16 @@
     <p>
       {{ edition.meta.artistName }} - <strong>{{ edition.meta.artworkName }}</strong>
 
-      <span v-if="!editionIsPurchased" style="float: right">
+      <span v-if="editionIsPurchased || galleryView" style="float: right">
         Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
         Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
       </span>
 
       <span v-if="editionIsPurchased" style="float: right">TOKEN ID {{edition.id}}</span>
     </p>
-    <p>{{ edition.edition }}</p>
+    <!--<p>{{ edition.edition }}</p>-->
     <img :src="edition.lowResImg" style="max-width: 400px"/>
-    <p>{{ edition.ipfsMeta.description }}</p>
+    <p v-if="!galleryView">{{ edition.ipfsMeta.description }}</p>
     <p><strong>{{ edition.meta.type }}</strong></p>
     <p><i>{{ edition.priceInEther }} ETH</i></p>
 
@@ -25,7 +25,7 @@
           params: {
             edition: edition.edition
           }
-        }" tag="button" class="btn">Buy
+        }" tag="button" class="btn">View Details
       </router-link>
     </div>
   </div>
@@ -44,6 +44,10 @@
         type: [Boolean]
       },
       editionIsPurchased: {
+        default: false,
+        type: [Boolean]
+      },
+      galleryView: {
         default: false,
         type: [Boolean]
       },

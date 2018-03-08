@@ -3,7 +3,7 @@
     <h1>{{ title }}</h1>
 
     <div v-for="assetEdition in assetsByEditions" class="edition-wrap">
-      <edition :edition="assetEdition[0]"></edition>
+      <edition :edition="assetEdition[0]" :gallery-view="true"></edition>
     </div>
 
   </div>
