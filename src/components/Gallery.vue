@@ -2,8 +2,13 @@
   <div id="gallery">
     <h1>{{ title }}</h1>
 
-    <div v-for="assetEdition in assetsByEditions" class="edition-wrap">
-      <edition :edition="assetEdition[0]"></edition>
+    <div class="centered">
+      <section class="cards">
+          <edition
+            v-for="assetEdition in assetsByEditions" :edition="assetEdition[0]"
+            :count="assetEdition.length">
+          </edition>
+      </section>
     </div>
 
   </div>

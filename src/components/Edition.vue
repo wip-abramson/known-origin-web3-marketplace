@@ -1,38 +1,39 @@
 <template>
-  <div class="edition-tile" v-if="edition">
-    <p>
-      {{ edition.meta.artistName }} - <strong>{{ edition.meta.artworkName }}</strong>
-
-      <span v-if="!editionIsPurchased" style="float: right">
+  <article class="card" v-if="edition">
+    <a href="#">
+      <figure class="thumbnail">
+        <img :src="edition.lowResImg"/>
+      </figure>
+      <div class="card-content">
+        <h2>{{ edition.meta.artworkName }}</h2>
+        <span v-if="!editionIsPurchased">
         Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
         Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
-      </span>
+        </span>
+        <span v-if="editionIsPurchased">TOKEN ID {{edition.id}}</span>
+        <p>{{ edition.edition }}</p>
 
-      <span v-if="editionIsPurchased" style="float: right">TOKEN ID {{edition.id}}</span>
-    </p>
-    <p>{{ edition.edition }}</p>
-    <img :src="edition.lowResImg" style="max-width: 400px"/>
-    <p>{{ edition.ipfsMeta.description }}</p>
-    <p><strong>{{ edition.meta.type }}</strong></p>
-    <p><i>{{ edition.priceInEther }} ETH</i></p>
+        <p v-if="editionIsPurchased">Owner: {{ edition.owner }}</p>
 
-    <p v-if="editionIsPurchased">Owner: {{ edition.owner }}</p>
-
-    <div v-if="!hideBuyButton">
-      <router-link
-        :to="{
-          name: 'purchaseEdition',
-          params: {
-            edition: edition.edition
-          }
-        }" tag="button" class="btn">Buy
-      </router-link>
-    </div>
-  </div>
+        <p>{{ edition.ipfsMeta.description }}</p>
+        <p><strong>{{ edition.meta.type }}</strong></p>
+        <p><i>{{ edition.priceInEther }} ETH</i></p>
+        <!-- TODO is this the correct way to hide stuff? -->
+        <router-link
+          :class="{'hide' : hideBuyButton }"
+          :to="{ name: 'purchaseEdition', params: { edition: edition.edition}}"
+          tag="button"
+          class="btn">
+          Buy
+        </router-link>
+      </div>
+    </a>
+    <!-- .card-content -->
+  </article>
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
 
   export default {
     name: 'edition',
@@ -67,13 +68,6 @@
 </script>
 
 <style scoped>
-  .edition-tile {
-    text-align: center;
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid gray;
-  }
-
   .hide {
     display: none;
   }

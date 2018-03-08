@@ -2,7 +2,7 @@
   <div class="assets_to_buy">
     <h1>{{ title }}</h1>
 
-    <div>
+    <div class="centered">
       <p>
         Available {{ countAvailable(assetsForEdition($route.params.edition)).length }} |
         Purchased {{ countPurchased(assetsForEdition($route.params.edition)).length }}
