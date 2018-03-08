@@ -1,9 +1,16 @@
 <template>
-  <div class="artist-tile">
-    <h3>{{ artist.name }}</h3>
-    <img :src="artist.img"/>
-    <p>{{ artist.bio }}</p>
-  </div>
+  <article class="card" v-if="artist">
+    <a href="#">
+      <figure class="thumbnail">
+        <img :src="artist.img"/>
+      </figure>
+      <div class="card-content">
+        <h2>{{ artist.name }}</h2>
+        <p>{{ artist.bio }}</p>
+      </div>
+    </a>
+    <!-- .card-content -->
+  </article>
 </template>
 
 <script>
@@ -14,12 +21,4 @@
 </script>
 
 <style scoped>
-  .artist-tile {
-    text-align: center;
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid gray;
-    max-width: 300px;
-    display: inline-block;
-  }
 </style>
