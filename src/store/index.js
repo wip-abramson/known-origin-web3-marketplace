@@ -252,15 +252,9 @@ const store = new Vuex.Store({
             });
         });
     },
-    [actions.PURCHASE_ASSET]({commit, dispatch, state}, assetToPurchase) {
+    [actions.PURCHASE_ASSET]: function ({commit, dispatch, state}, assetToPurchase) {
       console.log('assetToPurchase', assetToPurchase);
       Vue.$log.debug(`Attempting purchase of ${assetToPurchase.meta.type} asset - ID ${assetToPurchase.id}`);
-
-      // TODO do we need to double check asset still available before submitting a transaction?
-      // TODO do we need to validate account balances and account set?
-      // TODO Handle errors
-      // TODO send event to disable UI when in play
-      // TODO send event to re-enable UI once complete
 
       if (assetToPurchase.meta.type === 'physical') {
 
@@ -275,8 +269,8 @@ const store = new Vuex.Store({
             let _tokenId = assetToPurchase.id;
 
             let individualPurchaseEvent = contract.PurchasedWithEther({_tokenId: _tokenId, _buyer: _buyer}, {
-              fromBlock: 0,
-              toBlock: 'latest'
+              fromBlock: web3.eth.blockNumber, // start from current block before transaction committed (TODO - does this work?)
+              toBlock: 'latest' // wait until event comes through
             });
 
             individualPurchaseEvent.watch(function (error, result) {
@@ -285,17 +279,27 @@ const store = new Vuex.Store({
                 dispatch(actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT);
                 individualPurchaseEvent.stopWatching();
               }
+              // TODO re-enable UI
             });
 
+            // TODO disable UI
+
+            // TODO handle rejections e.g. invalid amount supplied
+            // TODO handle rejections e.g already been purchased
             return contract.purchaseWithEther(_tokenId, {
               from: _buyer,
-              value: assetToPurchase.priceInWei
+              // value: assetToPurchase.priceInWei
+              value: 5
             });
           })
           .then((res) => (res) => {
             Vue.$log.debug("SUCCESS", res);
           })
-          .catch((e) => Vue.$log.error)
+          .catch((e) => {
+            // TODO re-enable UI on error
+            // TODO Handle errors
+            Vue.$log.error(e)
+          })
 
       } else {
         Vue.$log.error(`Unknown meta type ${assetToPurchase.meta.type}`);
