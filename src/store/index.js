@@ -136,6 +136,10 @@ const store = new Vuex.Store({
             .then((tokens) => {
               commit(mutations.SET_ASSETS_PURCHASED_FROM_ACCOUNT, tokens);
             });
+        })
+        .catch((e) => {
+          console.error(e);
+          // TODO handle errors
         });
     },
     [actions.GET_CURRENT_NETWORK]({commit, dispatch, state}) {
@@ -269,7 +273,8 @@ const store = new Vuex.Store({
             let _tokenId = assetToPurchase.id;
 
             let individualPurchaseEvent = contract.PurchasedWithEther({_tokenId: _tokenId, _buyer: _buyer}, {
-              fromBlock: web3.eth.blockNumber, // start from current block before transaction committed (TODO - does this work?)
+              // TODO - does this work? - web3.eth.blockNumber ?
+              fromBlock: 0,
               toBlock: 'latest' // wait until event comes through
             });
 
@@ -284,22 +289,22 @@ const store = new Vuex.Store({
 
             // TODO disable UI
 
-            // TODO handle rejections e.g. invalid amount supplied
-            // TODO handle rejections e.g already been purchased
+            // TODO how to handle rejections e.g. invalid amount supplied
+            // TODO how to handle rejections e.g already been purchased
+
             return contract.purchaseWithEther(_tokenId, {
               from: _buyer,
-              // value: assetToPurchase.priceInWei
-              value: 5
+              value: assetToPurchase.priceInWei
             });
           })
           .then((res) => (res) => {
-            Vue.$log.debug("SUCCESS", res);
+            console.log("Success", res);
           })
           .catch((e) => {
             // TODO re-enable UI on error
             // TODO Handle errors
-            Vue.$log.error(e)
-          })
+            console.error("Failure", e);
+          });
 
       } else {
         Vue.$log.error(`Unknown meta type ${assetToPurchase.meta.type}`);
