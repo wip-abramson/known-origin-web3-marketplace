@@ -8,12 +8,12 @@
 
         <h2>{{ edition.meta.artworkName }}</h2>
 
-        <span v-if="!editionIsPurchased">
+        <p v-if="!editionIsPurchased">
           Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
           Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
-        </span>
+        </p>
 
-        <span v-if="editionIsPurchased">TOKEN ID {{edition.id}}</span>
+        <p v-if="editionIsPurchased">TOKEN ID {{edition.id}}</p>
 
         <p>{{ edition.edition }}</p>
 

@@ -3,15 +3,9 @@
     <h1>{{ title }}</h1>
 
     <div class="centered">
-      <p>
-        Available {{ countAvailable(assetsForEdition($route.params.edition)).length }} |
-        Purchased {{ countPurchased(assetsForEdition($route.params.edition)).length }}
-      </p>
-
-      <!-- edition overview -->
-      <edition :edition="firstAssetForEdition($route.params.edition)"
-               :hide-buy-button="true">
-      </edition>
+      <section>
+        <edition :edition="firstAssetForEdition($route.params.edition)" hide-buy-button="true"></edition>
+      </section>
 
       <!-- the final purchase button -->
       <complete-purchase-button :editions="assetsForEdition($route.params.edition)"></complete-purchase-button>

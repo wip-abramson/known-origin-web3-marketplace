@@ -3,7 +3,7 @@
 
     <div id="splash">
       <h1>{{ title }}</h1>
-      <p>Buy original artwork and rare digital assets</p>
+      <h2>Buy original artwork and rare digital assets</h2>
       <router-link :to="{ name: 'gallery' }" tag="button" class="btn">View gallery</router-link>
     </div>
 
@@ -11,11 +11,9 @@
       <h2>Featured artists</h2>
       <div class="centered">
         <section class="cards">
-          <div v-for="artist in artists" >
-            <artist :artist="artist"></artist>
-          </div>
+            <artist v-for="artist in artists" :artist="artist"></artist>
         </section>
-        <p>More artists and workshops to be announced...</p>
+        <h3>More artists and workshops to be announced...</h3>
       </div>
     </div>
 
