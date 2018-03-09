@@ -7,6 +7,9 @@
       <div class="card-content">
         <h2>{{ artist.name }}</h2>
         <p>{{ artist.bio }}</p>
+        <p v-if="artist.twitter">
+          <a :href="'http://twitter.com/' + artist.twitter" target="_blank">{{artist.twitter}}</a>
+        </p>
       </div>
     </a>
     <!-- .card-content -->
