@@ -2,10 +2,10 @@
   <div class="artists">
     <h1>{{ title }}</h1>
 
-    <!--{{assets}}-->
-
-    <div v-for="artist in artists">
-      <artist :artist="artist"></artist>
+    <div class="centered">
+      <section class="cards">
+        <artist v-for="artist in artists" :key="artist.name" :artist="artist"></artist>
+      </section>
     </div>
 
   </div>
