@@ -4,7 +4,7 @@
 
     <div class="centered">
       <section>
-        <edition :edition="firstAssetForEdition($route.params.edition)" hide-buy-button="true"></edition>
+        <edition :edition="firstAssetForEdition($route.params.edition)" :hide-buy-button="true"></edition>
       </section>
 
       <!-- the final purchase button -->

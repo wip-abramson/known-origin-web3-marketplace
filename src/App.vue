@@ -2,13 +2,6 @@
   <div id="app">
     <div id="header" class="header-branding">
       KnownOrigin.io
-      <current-network></current-network>
-    </div>
-
-    <span style="float: right"><router-link :to="{ name: 'account' }">Account</router-link></span>
-
-    <div id="content">
-      <router-view></router-view>
     </div>
 
     <div id="links">
@@ -21,9 +14,18 @@
       <router-link :to="{ name: 'license' }">License</router-link>
       |
       <router-link :to="{ name: 'details' }">Contract details</router-link>
+      |
+      <router-link :to="{ name: 'account' }">Account</router-link>
     </div>
 
+    <div id="content">
+      <router-view></router-view>
+    </div>
+
+
+
     <div id="footer">
+      <current-network style="float: right"></current-network>
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
       <p>(+44) 7715 86 28 33</p>
@@ -194,6 +196,10 @@
 
   #footer a {
     color: #f2f2f2;
+  }
+
+  #links {
+    margin: 30px;
   }
 
   .header-branding {
