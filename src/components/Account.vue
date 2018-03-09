@@ -8,10 +8,11 @@
 
     <div class="centered">
       <section class="cards">
-        <edition v-for="tokenId in assetsPurchasedByAccount"
+        <edition v-for="tokenId, key in assetsPurchasedByAccount"
                  :edition="assetById(tokenId)"
-                 edition-is-purchased="true"
-                 hide-buy-button="true">
+                 :edition-is-purchased="true"
+                 :hide-buy-button="true"
+                 :key="key" >
         </edition>
       </section>
     </div>

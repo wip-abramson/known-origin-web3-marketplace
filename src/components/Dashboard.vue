@@ -11,7 +11,7 @@
       <h2>Featured artists</h2>
       <div class="centered">
         <section class="cards">
-            <artist v-for="artist in artists" :artist="artist"></artist>
+            <artist v-for="artist in artists" :artist="artist" :key="artist.name"></artist>
         </section>
         <h3>More artists and workshops to be announced...</h3>
       </div>
@@ -55,7 +55,7 @@
     color: #42b983;
   }
 
-  #splash, #featured-artists, #partners, #quote {
+  #splash, #partners, #quote {
     text-align: center;
     padding: 10px;
     margin: 5px;
