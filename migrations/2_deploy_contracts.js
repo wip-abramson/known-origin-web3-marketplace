@@ -40,6 +40,7 @@ const loadSeedData = (instance, _curatorAccount) => {
     return ipfsUploader.uploadMetaData(insert)
       .then((res) => {
 
+        // TODO replace this just the IPFS hash
         // on success add ipfsHash
         insert.metaData.ipfsHash = res.hash;
 
@@ -49,6 +50,7 @@ const loadSeedData = (instance, _curatorAccount) => {
         return instance.mintEdition(
           metaData,
           insert.edition,
+          // TODO add artwork name and artist into contract maps
           insert.numberOfEditions,
           insert.costInWei.toString(10),
           insert.auctionStartDate,
