@@ -51,13 +51,8 @@
 </script>
 
 <style scoped>
-  a {
-    color: #42b983;
-  }
-
   #splash, #partners, #quote {
     text-align: center;
-    padding: 10px;
     margin: 5px;
   }
 
@@ -65,7 +60,6 @@
     text-align: left;
     font-size: 18px;
     font-weight: bold;
-    padding: 10px;
-    margin: 50px;
+    padding: 25px;
   }
 </style>

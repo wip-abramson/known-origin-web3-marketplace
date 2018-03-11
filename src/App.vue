@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <div id="header" class="header-branding">
-      KnownOrigin.io
-    </div>
 
-    <div id="links">
+    <header id="header" class="centered">
+      <div class="header-branding ">KnownOrigin.io</div>
+    </header>
+
+    <div class="centered pad-top">
       <router-link :to="{ name: 'dashboard' }">Dash</router-link>
       |
       <router-link :to="{ name: 'artists' }">Artists</router-link>
@@ -18,19 +19,17 @@
       <router-link :to="{ name: 'account' }">Account</router-link>
     </div>
 
-    <div id="content">
+    <div class="centered">
       <router-view></router-view>
     </div>
 
-
-
-    <div id="footer">
+    <footer id="footer" class="centered">
       <current-network style="float: right"></current-network>
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
       <p>(+44) 7715 86 28 33</p>
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -133,13 +132,15 @@
   h1 {
     display: block;
     font-size: 38px;
-    padding: 10px;
+    margin-top: 35px;
+    margin-bottom: 35px;
   }
 
   h2 {
     display: block;
     font-size: 24px;
-    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
   }
 
   p {
@@ -174,10 +175,6 @@
     margin: 0;
   }
 
-  #content {
-    margin: 20px;
-  }
-
   a {
     color: #3e27d9;
   }
@@ -198,10 +195,6 @@
     color: #f2f2f2;
   }
 
-  #links {
-    margin: 30px;
-  }
-
   .header-branding {
     font-weight: 600;
     font-style: normal;
@@ -215,6 +208,14 @@
   .centered {
     margin: 0 auto;
     padding: 0 1em;
+  }
+
+  .pad-top {
+    padding-top: 20px;
+  }
+
+  .pad-bottom {
+    padding-bottom: 20px;
   }
 
   @media screen and (min-width: 52em) {
