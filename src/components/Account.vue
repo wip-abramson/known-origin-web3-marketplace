@@ -1,10 +1,11 @@
 <template>
   <div id="account">
     <h1>{{ title }}</h1>
-    <p><i>{{ account }}</i> {{ accountBalance }} ETH</p>
-    <p>{{ assetsPurchasedByAccount.length }} Purchased</p>
+    <p>{{ account }}<br/> {{ accountBalance }} ETH</p>
 
     <h2>Purchased assets</h2>
+
+    <p>{{ assetsPurchasedByAccount.length }} Purchased</p>
 
     <div class="centered">
       <section class="cards">

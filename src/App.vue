@@ -166,6 +166,10 @@
     text-decoration: none;
   }
 
+  .router-link-exact-active {
+    font-weight: bold;
+  }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

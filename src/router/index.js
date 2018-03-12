@@ -7,6 +7,7 @@ import Gallery from '@/components/Gallery'
 import Account from '@/components/Account'
 import License from '@/components/License'
 import PurchaseEdition from '@/components/PurchaseEdition'
+import ArtistPage from '@/components/ArtistPage'
 
 Vue.use(Router);
 
@@ -23,6 +24,12 @@ export default new Router({
       path: '/artists',
       name: 'artists',
       component: Artists
+    },
+    {
+      path: '/artist',
+      name: 'artist',
+      component: ArtistPage,
+      props: true
     },
     {
       path: '/details',
