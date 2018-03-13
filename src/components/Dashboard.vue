@@ -11,7 +11,7 @@
       <h2>Featured artists</h2>
       <div class="centered">
         <section class="cards">
-            <artist v-for="artist in artists" :artist="artist" :key="artist.name"></artist>
+            <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
         </section>
         <h3>More artists and workshops to be announced...</h3>
       </div>
@@ -43,8 +43,8 @@
       }
     },
     computed: {
-      ...mapState([
-        'artists'
+      ...mapGetters([
+        'featuredArtists'
       ])
     }
   }

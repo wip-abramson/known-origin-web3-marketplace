@@ -55,6 +55,9 @@ const store = new Vuex.Store({
     assetById: (state) => (tokenId) => {
       return _.find(state.assets, (asset) => asset.id.toString() === tokenId.toString());
     },
+    featuredArtists: (state) => {
+      return state.artists.filter((a) => a.featured);
+    }
   },
   mutations: {
     [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, commissionAddress, contractDeveloperAddress}) {

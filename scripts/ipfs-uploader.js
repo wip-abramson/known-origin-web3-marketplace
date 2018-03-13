@@ -8,9 +8,6 @@ const ipfs = IPFS('ipfs.infura.io', '5001', {protocol: 'https'});
 // Reset this cache file to { } to push fresh data to IPFS
 const CACHE_FILE = './config/data/ipfs_data/cache.json';
 
-const tmp = require('tmp-promise');
-
-
 //IPFS meta contract based on https://github.com/ethereum/eips/issues/721
 
 /*

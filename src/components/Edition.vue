@@ -43,6 +43,7 @@
 
 <script>
   import {mapGetters, mapState} from 'vuex'
+  import _ from 'lodash'
 
   export default {
     name: 'edition',
