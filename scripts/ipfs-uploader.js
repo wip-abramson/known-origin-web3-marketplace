@@ -1,16 +1,19 @@
 const IPFS = require('ipfs-api');
 const fs = require('fs');
+const streams = require('memory-streams');
+const _ = require('lodash');
 
 const ipfs = IPFS('ipfs.infura.io', '5001', {protocol: 'https'});
 
 // Reset this cache file to { } to push fresh data to IPFS
 const CACHE_FILE = './config/data/ipfs_data/cache.json';
 
+const tmp = require('tmp-promise');
 
-//TODO update IPFS meta contract based on https://github.com/ethereum/eips/issues/721
+
+//IPFS meta contract based on https://github.com/ethereum/eips/issues/721
 
 /*
-
 - meta upload should return full IPFS hash with corresponding subpaths in this format https://github.com/multiformats/multiaddr
 - e.g. /ipfs/127.0.0.1/udp/1234
 - example of specification https://ipfs.io/ipfs/QmZU8bKEG8fhcQwKoLHfjtJoKBzvUT5LFR3f8dEz86WdVeTransfer
@@ -20,9 +23,7 @@ const CACHE_FILE = './config/data/ipfs_data/cache.json';
 /image        -> (optional) - it MUST contain a PNG, JPEG, or SVG image with at least 300 pixels of detail in each dimension
 /description  -> (optional) - The description SHOULD be 1500 characters or less.
 /other meta   -> (optional) - A contract MAY choose to include any number of additional subpaths
-
  */
-
 
 const uploadMetaData = ({ipfsPath}) => {
   console.log(`Attempting to upload files in [${ipfsPath}]`);
@@ -34,14 +35,32 @@ const uploadMetaData = ({ipfsPath}) => {
     return Promise.resolve({hash: cachedIpfsHash})
   }
 
+  let meta = require(`../config/data/ipfs_data/${ipfsPath}/meta.json`);
+
+  // Load in either a gif or a jpeg
+  let image;
+  if (fs.existsSync(`./config/data/ipfs_data/${ipfsPath}/low_res.gif`)) {
+    image = fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/low_res.gif`);
+  } else {
+    image = fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/low_res.jpeg`)
+  }
+
   return ipfs.add([
       {
-        path: `${ipfsPath}/low_res.jpeg`,
-        content: fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/low_res.jpeg`)
+        path: `${ipfsPath}/name`,
+        content: new streams.ReadableStream(`${meta.artworkName} - ${meta.artist}`).read(),
       },
       {
-        path: `${ipfsPath}/meta.json`,
-        content: fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/meta.json`)
+        path: `${ipfsPath}/image`,
+        content: image,
+      },
+      {
+        path: `${ipfsPath}/description`,
+        content: new streams.ReadableStream(`${meta.description}`).read(),
+      },
+      {
+        path: `${ipfsPath}/other`,
+        content: fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/meta.json`),
       }
     ], {recursive: false}
   )
@@ -49,10 +68,9 @@ const uploadMetaData = ({ipfsPath}) => {
       console.log('Uploaded file to IPFS', res);
       let rootHash = _.last(res);
 
-      cacheIpfsHashes(ipfsPath, rootHash);
+      // TODO convert to multi address support https://github.com/multiformats/multiaddr
 
-      // web url= http://localhost:5001/ipfs/QmPhnvn747LqwPYMJmQVorMaGbMSgA7mRRoyyZYz3DoZRQ/#/
-      // http lookup url = http://127.0.0.1:8080/ipfs/QmYQHraKUAhpbqoTUEzojoZjtuufmfdXpta1wPTM2A7QFm
+      cacheIpfsHashes(ipfsPath, rootHash);
 
       return rootHash;
     });

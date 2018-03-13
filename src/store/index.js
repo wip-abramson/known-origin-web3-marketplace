@@ -134,56 +134,80 @@ const store = new Vuex.Store({
     },
     [actions.GET_ALL_ASSETS]({commit, dispatch, state}) {
 
-      const lookupIpfsMeta = (hash) => {
-        return axios.get(`https://ipfs.infura.io/ipfs/${hash}/meta.json`)
-          .then((result) => result.data);
+      const lookupIPFSData = (hash) => {
+        // TODO handle multiaddress meta
+
+        // Conforms to existing IPFS meta structure
+        let name = axios.get(`https://ipfs.infura.io/ipfs/${hash}/name`);
+        let description = axios.get(`https://ipfs.infura.io/ipfs/${hash}/description`);
+        let otherMeta = axios.get(`https://ipfs.infura.io/ipfs/${hash}/other`);
+        let lowResImg = `https://ipfs.infura.io/ipfs/${hash}/image`;
+
+        return Promise.all([name, description, otherMeta])
+          .then((results) => {
+            return {
+              name: results[0].data,
+              description: results[1].data,
+              otherMeta: results[2].data,
+              lowResImg: lowResImg
+            }
+          });
+      };
+
+      const lookupAssetInfo = (contract, index) => {
+        return Promise.all([
+          contract.assetInfo(index),
+          contract.editionInfo(index)
+        ])
+          .then((results) => {
+            let assetInfo = results[0];
+            let editionInfo = results[1];
+
+            let rawMeta = editionInfo[6];
+
+            let fullAssetDetails = {
+              id: assetInfo[0].toNumber(),
+              owner: assetInfo[1].toString(),
+              purchased: assetInfo[2].toNumber(),
+              priceInWei: assetInfo[3].toString(),
+              priceInEther: Web3.utils.fromWei(assetInfo[3].toString(), 'ether').valueOf(),
+              auctionStartDate: assetInfo[4], // TODO handle auction start date
+
+              type: editionInfo[1].toString(),
+              edition: editionInfo[2].toString(),
+              editionName: editionInfo[3].toString(),
+              editionNumber: editionInfo[4].toNumber(),
+              artist: editionInfo[5].toString(),
+              rawMeta: rawMeta
+            };
+
+            return lookupIPFSData(rawMeta).then((ipfsMeata) => {
+              // set IPFS lookup back on object
+              _.set(fullAssetDetails, 'otherMeta', ipfsMeata.otherMeta);
+              _.set(fullAssetDetails, 'description', ipfsMeata.description);
+              _.set(fullAssetDetails, 'lowResImg', ipfsMeata.lowResImg);
+              return fullAssetDetails;
+            })
+          })
       };
 
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
           let supply = _.range(0, state.totalSupply);
 
-          return Promise.all(_.map(supply, (index) => contract.assetInfo(index)))
-            .then((results) => {
+          return Promise.all(_.map(supply, (index) => lookupAssetInfo(contract, index)))
+            .then((assets) => {
 
-              let flatMappedAssets = _.map(results, (result) => {
+              let assetsByEditions = _.groupBy(assets, 'edition');
+              let assetsByArtists = _.groupBy(assets, 'artistName');
 
-                let meta = utils.safeFromJson(result[2]);
-
-                let lowResImg = `https://ipfs.infura.io/ipfs/${meta.ipfsHash}/low_res.jpeg`;
-
-                const decorateIpfsData = (ipfsMetaData) => {
-                  return {
-                    id: result[0].toNumber(),
-                    owner: result[1].toString(),
-                    meta: meta,
-                    lowResImg: lowResImg,
-                    ipfsMeta: ipfsMetaData,
-                    edition: result[3].toString(),
-                    editionNumber: result[4].toNumber(),
-                    purchased: result[5].toNumber(),
-                    priceInWei: result[6].toString(),
-                    priceInEther: Web3.utils.fromWei(result[6].toString(), 'ether').valueOf()
-                  }
-                };
-
-                return lookupIpfsMeta(meta.ipfsHash).then(decorateIpfsData);
-              });
-
-              Promise.all(flatMappedAssets)
-                .then((assets) => {
-
-                  let assetsByEditions = _.groupBy(assets, 'edition');
-                  let assetsByArtists = _.groupBy(assets, 'meta.artistName');
-
-                  commit(mutations.SET_ASSETS, {
-                    assets: assets,
-                    assetsByEditions: assetsByEditions,
-                    assetsByArtists: assetsByArtists,
-                  })
-                });
-            })
-        })
+              commit(mutations.SET_ASSETS, {
+                assets: assets,
+                assetsByEditions: assetsByEditions,
+                assetsByArtists: assetsByArtists,
+              })
+            });
+        });
     },
     [actions.REFRESH_CONTRACT_DETAILS]({commit, dispatch, state}) {
       KnownOriginDigitalAsset.deployed()
@@ -222,13 +246,14 @@ const store = new Vuex.Store({
     },
     [actions.PURCHASE_ASSET]: function ({commit, dispatch, state}, assetToPurchase) {
       console.log('assetToPurchase', assetToPurchase);
-      Vue.$log.debug(`Attempting purchase of ${assetToPurchase.meta.type} asset - ID ${assetToPurchase.id}`);
 
-      if (assetToPurchase.meta.type === 'physical') {
+      Vue.$log.debug(`Attempting purchase of ${assetToPurchase.type} asset - ID ${assetToPurchase.id}`);
+
+      if (assetToPurchase.type === 'physical') {
 
         // TODO handle physical purchases
 
-      } else if (assetToPurchase.meta.type === 'digital') {
+      } else if (assetToPurchase.type === 'digital') {
 
         KnownOriginDigitalAsset.deployed()
           .then((contract) => {
@@ -272,7 +297,7 @@ const store = new Vuex.Store({
           });
 
       } else {
-        Vue.$log.error(`Unknown meta type ${assetToPurchase.meta.type}`);
+        Vue.$log.error(`Unknown meta type ${assetToPurchase.type}`);
       }
     }
   }

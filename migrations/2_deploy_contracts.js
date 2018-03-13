@@ -40,17 +40,13 @@ const loadSeedData = (instance, _curatorAccount) => {
     return ipfsUploader.uploadMetaData(insert)
       .then((res) => {
 
-        // TODO replace this just the IPFS hash
-        // on success add ipfsHash
-        insert.metaData.ipfsHash = res.hash;
-
-        let metaData = JSON.stringify(insert.metaData);
-
         // mint edition
         return instance.mintEdition(
-          metaData,
+          res.hash,
           insert.edition,
-          // TODO add artwork name and artist into contract maps
+          insert.artistName,
+          insert.artworkName,
+          insert.type,
           insert.numberOfEditions,
           insert.costInWei.toString(10),
           insert.auctionStartDate,
@@ -59,7 +55,7 @@ const loadSeedData = (instance, _curatorAccount) => {
           }
         )
       })
-  }))
+  }));
 };
 
 const flattenTestData = () => {
@@ -67,23 +63,20 @@ const flattenTestData = () => {
 
   _.forEach(gallery_data.artists, (artist) => {
 
+    let artistName = artist.name;
+
     _.forEach(artist.artworks, (artwork) => {
 
       let artworkName = artwork.artworkName;
       let ipfsPath = artwork.ipfsPath;
 
       let type = artwork.type;
+
       let numberOfEditions = artwork.numberOfEditions;
       let edition = artwork.edition;
 
       let fiatCost = artwork.fiatCost;
       let costInWei = Eth.toWei(artwork.costInEth, 'ether');
-
-      let metaData = {
-        type: type,
-        artistName: artist.name,
-        artworkName: artworkName
-      };
 
       let auctionStartDate = 123; // TODO ability to convert start date to timestamp
 
@@ -93,9 +86,10 @@ const flattenTestData = () => {
         fiatCost,
         costInWei,
         auctionStartDate,
-        metaData,
         ipfsPath,
-        edition
+        edition,
+        type,
+        artistName
       })
 
     })
@@ -111,16 +105,4 @@ const flattenTestData = () => {
  "address": "0x345ca3e014aaf5dca488057592ee47305d9b3e10",
  "transactionHash": "0x5494484f9242d926c550fa95e4b03ee3e961fb5350b44f329aad7f1274fe561c"
  }
- */
-
-/*
- "5777": {
- "events": {},
- "links": {},
- "address": "0x194bafbf8eb2096e63c5d9296363d6dacdb32527",
- "transactionHash": "0x7114c1dc7536d50bed35b3eb1485c070092285445b9163ff7bac0e2f27cca640"
- }
-
- 0x475dbb369951509545c229ff6b3e18cd258d595a
- 0x194bafbf8eb2096e63c5d9296363d6dacdb32527
  */

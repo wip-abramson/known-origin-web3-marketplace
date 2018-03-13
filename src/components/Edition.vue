@@ -6,7 +6,7 @@
       </figure>
       <div class="card-content">
 
-        <h2>{{ edition.meta.artworkName }}</h2>
+        <h2>{{ edition.editionName }}</h2>
 
         <p v-if="!editionIsPurchased">
           Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
@@ -19,9 +19,9 @@
 
         <p v-if="editionIsPurchased">Owner: {{ edition.owner }}</p>
 
-        <p>{{ edition.ipfsMeta.description }}</p>
+        <p>{{ edition.otherMeta.description }}</p>
 
-        <p><strong>{{ edition.meta.type }}</strong></p>
+        <p><strong>{{ edition.type }}</strong></p>
 
         <p><i>{{ edition.priceInEther }} ETH</i></p>
 

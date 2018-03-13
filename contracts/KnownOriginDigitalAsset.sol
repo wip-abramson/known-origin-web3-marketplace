@@ -26,6 +26,9 @@ contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
     mapping(uint => PurchaseState) internal tokenIdToPurchased;
     mapping(uint => string) internal tokenIdToEdition;
     mapping(uint => uint8) internal tokenIdToEditionNumber;
+    mapping(uint => string) internal tokenIdToEditionName;
+    mapping(uint => string) internal tokenIdToArtist;
+    mapping(uint => string) internal tokenIdToType;
     mapping(uint => uint256) internal tokenIdToPriceInWei;
     mapping(uint => uint256) internal tokenIdToBuyFromDate;
 
@@ -61,7 +64,7 @@ contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
         symbol = "KODA";
     }
 
-    function mintEdition(string _metadata, string _edition, uint8 _totalEdition, uint256 _priceInWei, uint _auctionStartDate)
+    function mintEdition(string _metadata, string _edition, string _artist, string _editionName, string _type, uint8 _totalEdition, uint256 _priceInWei, uint _auctionStartDate)
     public
     onlyCurator {
 
@@ -70,23 +73,39 @@ contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
             uint _tokenId = offset + i;
             require(tokenIdToOwner[_tokenId] == address(0));
             _mint(msg.sender, _tokenId, _metadata);
+
+            // TODO remove duplicate artist names
+            // TODO remove duplicate edition name
+            // TODO remove duplicate type
+            // TODO refactor into common setup method
             tokenIdToEdition[_tokenId] = _edition;
             tokenIdToEditionNumber[_tokenId] = i + 1;
             tokenIdToPriceInWei[_tokenId] = _priceInWei;
             tokenIdToBuyFromDate[_tokenId] = _auctionStartDate;
+            tokenIdToType[_tokenId] = _type;
+            tokenIdToArtist[_tokenId] = _artist;
+            tokenIdToEditionName[_tokenId] = _editionName;
         }
     }
 
-    function mint(string _metadata, string _edition, uint256 _priceInWei, uint _auctionStartDate)
+    function mint(string _metadata, string _edition, string _artist, string _editionName, string _type, uint256 _priceInWei, uint _auctionStartDate)
     public
     onlyCurator {
         uint _tokenId = numTokensTotal;
         require(tokenIdToOwner[_tokenId] == address(0));
         _mint(msg.sender, _tokenId, _metadata);
+
+        // TODO remove duplicate artist names
+        // TODO remove duplicate edition name
+        // TODO remove duplicate type
+        // TODO refactor into common setup method
         tokenIdToEdition[_tokenId] = _edition;
         tokenIdToEditionNumber[_tokenId] = 1;
         tokenIdToPriceInWei[_tokenId] = _priceInWei;
         tokenIdToBuyFromDate[_tokenId] = _auctionStartDate;
+        tokenIdToType[_tokenId] = _type;
+        tokenIdToArtist[_tokenId] = _artist;
+        tokenIdToEditionName[_tokenId] = _editionName;
     }
 
     function isPurchased(uint256 _tokenId)
@@ -107,7 +126,7 @@ contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
     public
     view
     returns (bool) {
-        return tokenIdToBuyFromDate[_tokenId] <= block.timestamp;
+        return tokenIdToBuyFromDate[_tokenId] <= block.timestamp; // TODO should we use `now` for this check?
     }
 
     function tokenAuctionOpenDate(uint _tokenId)
@@ -204,27 +223,45 @@ contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
         return true;
     }
 
-    // Start date not added to avoid "stack to deep" errors - see tokenAuctionOpenDate() for accessor
     function assetInfo(uint _tokenId)
     public
     view
     returns (
     uint256 _tokId,
     address _owner,
-    string _metadata,
-    string _edition,
-    uint8 _editionNo,
     PurchaseState _purchaseState,
-    uint256 _priceInWei
+    uint256 _priceInWei,
+    uint _auctionStartDate
     ) {
         return (
         _tokenId,
         tokenIdToOwner[_tokenId],
-        tokenIdToMetadata[_tokenId],
-        tokenIdToEdition[_tokenId],
-        tokenIdToEditionNumber[_tokenId],
         tokenIdToPurchased[_tokenId],
-        tokenIdToPriceInWei[_tokenId]
+        tokenIdToPriceInWei[_tokenId],
+        tokenIdToBuyFromDate[_tokenId]
+        );
+    }
+
+    function editionInfo(uint _tokenId)
+    public
+    view
+    returns (
+      uint256 _tokId,
+      string _type,
+      string _edition,
+      string _editionName,
+      uint8 _editionNumber,
+      string _artist,
+      string _metadata
+    ) {
+        return (
+        _tokenId,
+        tokenIdToType[_tokenId],
+        tokenIdToEdition[_tokenId],
+        tokenIdToEditionName[_tokenId],
+        tokenIdToEditionNumber[_tokenId],
+        tokenIdToArtist[_tokenId],
+        tokenIdToMetadata[_tokenId]
         );
     }
 }

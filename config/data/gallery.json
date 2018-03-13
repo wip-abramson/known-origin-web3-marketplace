@@ -46,7 +46,7 @@
       "artworks": [
         {
           "artworkName": "Start me up",
-          "ipfsPath": "start_me_up_physical",
+          "ipfsPath": "start_me_up",
           "edition": "BJDSMUP01PHY",
           "type": "physical",
           "numberOfEditions": 1,
@@ -54,13 +54,31 @@
           "costInEth": 1.57
         },
         {
-          "artworkName": "Start me up",
-          "ipfsPath": "start_me_up_digital",
-          "edition": "BJDSMU01DIG",
-          "type": "digital",
-          "numberOfEditions": 3,
-          "fiatCost": 100,
-          "costInEth": 0.43
+          "artworkName": "Poker Face",
+          "ipfsPath": "poker_face",
+          "edition": "BJDPF01PHY",
+          "type": "physical",
+          "numberOfEditions": 1,
+          "fiatCost": 1000,
+          "costInEth": 1.57
+        },
+        {
+          "artworkName": "Acid Rain Tuesday",
+          "ipfsPath": "acid_rain_tuesday",
+          "edition": "BJDART01PHY",
+          "type": "physical",
+          "numberOfEditions": 1,
+          "fiatCost": 1000,
+          "costInEth": 1.57
+        },
+        {
+          "artworkName": "Loose Tapestries",
+          "ipfsPath": "loose_tapestries",
+          "edition": "BJDLT01PHY",
+          "type": "physical",
+          "numberOfEditions": 1,
+          "fiatCost": 1000,
+          "costInEth": 1.57
         }
       ]
     },
@@ -75,6 +93,33 @@
           "numberOfEditions": 1,
           "fiatCost": 70,
           "costInEth": 0.11
+        },
+        {
+          "artworkName": "Pace of Life",
+          "ipfsPath": "pace_of_life",
+          "edition": "JOCPOL01DIG",
+          "type": "digital",
+          "numberOfEditions": 10,
+          "fiatCost": 25,
+          "costInEth": 0.001989
+        },
+        {
+          "artworkName": "Family tree",
+          "ipfsPath": "family_tree",
+          "edition": "JOCFMT01DIG",
+          "type": "digital",
+          "numberOfEditions": 10,
+          "fiatCost": 25,
+          "costInEth": 0.001989
+        },
+        {
+          "artworkName": "Boo!",
+          "ipfsPath": "boo",
+          "edition": "JOCBOO01DIG",
+          "type": "digital",
+          "numberOfEditions": 10,
+          "fiatCost": 25,
+          "costInEth": 0.001989
         }
       ]
     }
