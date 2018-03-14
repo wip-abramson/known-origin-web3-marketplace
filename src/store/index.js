@@ -57,6 +57,13 @@ const store = new Vuex.Store({
     },
     featuredArtists: (state) => {
       return state.artists.filter((a) => a.featured);
+    },
+    isCurator: (state) => {
+      if (state.curatorAddress && state.account) {
+        return state.curatorAddress.toLowerCase() === state.account.toLowerCase()
+      }
+
+      return false;
     }
   },
   mutations: {

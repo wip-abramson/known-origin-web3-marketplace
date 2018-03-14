@@ -12,6 +12,10 @@
         <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
           Confirm
         </button>
+
+        <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator">
+          FIAT Purchase
+        </button>
       </p>
     </form>
   </div>
@@ -31,13 +35,16 @@
         type: Array
       },
     },
+    computed: {
+      ...mapGetters(['isCurator']),
+    },
     data() {
       return {
         confirm_terms: false
       }
     },
     methods: {
-      completePurchase: function () {
+      completePurchase: () => {
 
         let nextAssetToPurchase = _.chain(this.editions)
           .orderBy('editionNumber')
@@ -49,6 +56,9 @@
         console.log(nextAssetToPurchase);
 
         this.$store.dispatch(actions.PURCHASE_ASSET, nextAssetToPurchase)
+      },
+      completeFiatPurchase: () => {
+        console.log('FIAT Purchase');
       }
     }
   }
@@ -56,4 +66,7 @@
 
 <style scoped>
 
+  .btn-warning {
+    background-color: darkorange;
+  }
 </style>
