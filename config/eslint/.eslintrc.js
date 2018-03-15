@@ -18,7 +18,7 @@ module.exports = {
   // add your custom rules here
   'rules': {
     // Disable semi colon checking
-    "semi": 0,
+    "semi": [2, "always"],
     // allow paren-less arrow functions
     'arrow-parens': 0,
 

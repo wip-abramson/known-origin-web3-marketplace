@@ -44,7 +44,7 @@
       }
     },
     methods: {
-      completePurchase: () => {
+      completePurchase: function () {
 
         let nextAssetToPurchase = _.chain(this.editions)
           .orderBy('editionNumber')
@@ -57,8 +57,8 @@
 
         this.$store.dispatch(actions.PURCHASE_ASSET, nextAssetToPurchase)
       },
-      completeFiatPurchase: () => {
-        
+      completeFiatPurchase: function () {
+
         let nextAssetToPurchase = _.chain(this.editions)
           .orderBy('editionNumber')
           .filter({purchased: 0})
