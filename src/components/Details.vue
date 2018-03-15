@@ -7,12 +7,14 @@
         <p>Addresses: </p>
       </div>
       <div class="message-body">
-        curatorAddress = {{ curatorAddress }} commissionAddress = {{ commissionAddress }} contractDeveloperAddress = {{ contractDeveloperAddress }}
+        curatorAddress = {{ curatorAddress }} <br/>
+        commissionAddress = {{ commissionAddress }} <br/>
+        contractDeveloperAddress = {{ contractDeveloperAddress }}
       </div>
     </div>
     <div v-if="totalSupply" class="message is-primary">
       <div class="message-header">
-        <p>totalSupply:</p>
+        <p>Total Supply:</p>
       </div>
       <div class="message-body">
         {{ totalSupply }}
@@ -20,7 +22,7 @@
     </div>
     <div v-if="totalPurchaseValueInWei && totalNumberOfPurchases && totalPurchaseValueInEther" class="message is-primary">
       <div class="message-header">
-        <p>totals:</p>
+        <p>Totals:</p>
       </div>
       <div class="message-body">
         totalPurchaseValueInWei = {{ totalPurchaseValueInWei }} |
@@ -30,10 +32,10 @@
     </div>
     <div v-if="contractName && contractSymbol" class="message is-primary">
       <div class="message-header">
-        <p>totals:</p>
+        <p>Info:</p>
       </div>
       <div class="message-body">
-        contractName = {{ contractName }} | contractSymbol = {{ contractSymbol }}
+        contractName = {{ contractName }} <br/> contractSymbol = {{ contractSymbol }}
       </div>
     </div>
   </div>
@@ -67,7 +69,11 @@
 </script>
 
 <style scoped>
-  a {
-    color: #42b983;
+  .message-header {
+    font-weight: bold;
+  }
+
+  .message-body {
+    line-height: 1.5;
   }
 </style>
