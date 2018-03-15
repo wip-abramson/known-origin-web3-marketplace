@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
-import Artists from '@/components/Artists'
-import Details from '@/components/Details'
-import Gallery from '@/components/Gallery'
-import Account from '@/components/Account'
-import License from '@/components/License'
-import PurchaseEdition from '@/components/PurchaseEdition'
-import ArtistPage from '@/components/ArtistPage'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Dashboard from '@/components/Dashboard';
+import Artists from '@/components/Artists';
+import Details from '@/components/Details';
+import Gallery from '@/components/Gallery';
+import Account from '@/components/Account';
+import License from '@/components/License';
+import PurchaseEdition from '@/components/PurchaseEdition';
+import ArtistPage from '@/components/ArtistPage';
 
 Vue.use(Router);
 
@@ -62,4 +62,4 @@ export default new Router({
       // TODO setup event listener for all events of type PurchasedWithEther & PurchasedWithFiat regardless for account
     // }
   ]
-})
+});

@@ -22,9 +22,9 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex'
-  import _ from 'lodash'
-  import * as actions from '../store/actions'
+  import {mapGetters, mapState} from 'vuex';
+  import _ from 'lodash';
+  import * as actions from '../store/actions';
 
   export default {
     name: 'completePurchaseButton',
@@ -41,7 +41,7 @@
     data() {
       return {
         confirm_terms: false
-      }
+      };
     },
     methods: {
       completePurchase: function () {
@@ -55,7 +55,7 @@
         console.log("Completing purchase");
         console.log(nextAssetToPurchase);
 
-        this.$store.dispatch(actions.PURCHASE_ASSET, nextAssetToPurchase)
+        this.$store.dispatch(actions.PURCHASE_ASSET, nextAssetToPurchase);
       },
       completeFiatPurchase: function () {
 
@@ -68,10 +68,10 @@
         console.log("Completing FIAT purchase");
         console.log(nextAssetToPurchase);
 
-        this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, nextAssetToPurchase)
+        this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, nextAssetToPurchase);
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

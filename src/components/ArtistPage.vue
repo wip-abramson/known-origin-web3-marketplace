@@ -6,7 +6,7 @@
   export default {
     name: 'artistPage',
     props: ['artist'],
-  }
+  };
 </script>
 
 <style scoped>

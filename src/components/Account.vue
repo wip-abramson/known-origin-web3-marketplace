@@ -23,10 +23,10 @@
 
 <script>
 
-  import { mapGetters, mapState } from 'vuex'
-  import Artist from './Artist'
-  import Gallery from './Gallery'
-  import Edition from './Edition'
+  import { mapGetters, mapState } from 'vuex';
+  import Artist from './Artist';
+  import Gallery from './Gallery';
+  import Edition from './Edition';
 
   export default {
     name: 'dashboard',
@@ -34,7 +34,7 @@
     data() {
       return {
         title: 'Account',
-      }
+      };
     },
     computed: {
       ...mapState([
@@ -49,7 +49,7 @@
     mounted() {
 
     }
-  }
+  };
 </script>
 
 <style scoped>

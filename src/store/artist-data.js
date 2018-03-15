@@ -38,4 +38,4 @@ export default [
     bio: 'Jane Bowyer is an independent graphic designer and illustrator based in Manchester.',
     img: 'https://static1.squarespace.com/static/5a8b2af5692ebefdc3fc957a/t/5a94896c0d929738ef116393/1519683968371/JamesO_profile.png'
   }
-]
+];

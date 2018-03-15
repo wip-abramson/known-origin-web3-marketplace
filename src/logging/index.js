@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import VueLogger from 'vuejs-logger'
+import Vue from 'vue';
+import VueLogger from 'vuejs-logger';
 
 let loggingConfig = {
   logLevel: 'debug', // required ['debug', 'info', 'warn', 'error', 'fatal']

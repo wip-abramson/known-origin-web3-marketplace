@@ -17,8 +17,8 @@
 
 <script>
 
-  import {mapGetters, mapState} from 'vuex'
-  import Edition from './Edition'
+  import {mapGetters, mapState} from 'vuex';
+  import Edition from './Edition';
 
   export default {
     name: 'gallery',
@@ -26,14 +26,14 @@
     data() {
       return {
         title: 'Gallery',
-      }
+      };
     },
     computed: {
       ...mapState([
         'assetsByEditions'
       ])
     }
-  }
+  };
 </script>
 
 <style scoped>

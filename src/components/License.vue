@@ -146,9 +146,9 @@
 
 <script>
 
-  import {mapGetters, mapState} from 'vuex'
-  import Artist from './Artist'
-  import Gallery from './Gallery'
+  import {mapGetters, mapState} from 'vuex';
+  import Artist from './Artist';
+  import Gallery from './Gallery';
 
   export default {
     name: 'dashboard',
@@ -156,7 +156,7 @@
     data() {
       return {
         title: 'License / terms of use',
-      }
+      };
     },
     computed: {
       ...mapState([
@@ -167,7 +167,7 @@
     mounted() {
 
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -30,9 +30,9 @@
 
 <script>
 
-  import {mapGetters, mapState} from 'vuex'
-  import Artist from './Artist'
-  import Gallery from './Gallery'
+  import {mapGetters, mapState} from 'vuex';
+  import Artist from './Artist';
+  import Gallery from './Gallery';
 
   export default {
     name: 'dashboard',
@@ -40,14 +40,14 @@
     data() {
       return {
         title: 'Be original. Buy original.',
-      }
+      };
     },
     computed: {
       ...mapGetters([
         'featuredArtists'
       ])
     }
-  }
+  };
 </script>
 
 <style scoped>

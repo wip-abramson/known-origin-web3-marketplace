@@ -20,7 +20,7 @@
   export default {
     name: 'artist',
     props: ['artist'],
-  }
+  };
 </script>
 
 <style scoped>

@@ -44,8 +44,8 @@
 </template>
 
 <script>
-  import { mapGetters, mapState } from 'vuex'
-  import _ from 'lodash'
+  import { mapGetters, mapState } from 'vuex';
+  import _ from 'lodash';
 
   export default {
     name: 'edition',
@@ -74,25 +74,13 @@
       countPurchased: (assets) => {
         return _.filter(assets, (val) => {
           return val.purchased === 1 || val.purchased === 2;
-        })
+        });
       },
       countAvailable: (assets) => {
-        return _.filter(assets, {'purchased': 0})
+        return _.filter(assets, {'purchased': 0});
       },
-      purchasedState: (purchasedId) => {
-        switch (purchasedId) {
-          case 0:
-            return 'AVAILABLE'
-          case 1:
-            return 'SOLD CRYPTO'
-          case 2:
-            return 'SOLD FIAT'
-          default:
-            return 'ERRRR...'
-        }
-      }
     }
-  }
+  };
 </script>
 
 <style scoped>

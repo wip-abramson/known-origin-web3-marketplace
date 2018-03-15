@@ -12,8 +12,8 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex'
-  import Artist from './Artist'
+  import {mapGetters, mapState} from 'vuex';
+  import Artist from './Artist';
 
   export default {
     name: 'artists',
@@ -21,7 +21,7 @@
     data() {
       return {
         title: 'Artists',
-      }
+      };
     },
     computed: {
       ...mapState([
@@ -32,7 +32,7 @@
     mounted() {
 
     },
-  }
+  };
 </script>
 
 <style scoped>
