@@ -10,7 +10,7 @@
       </p>
       <p>
         <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
-          Confirm
+          Purchase
         </button>
 
         <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator">
@@ -22,53 +22,37 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
+  import { mapGetters, mapState } from 'vuex';
   import _ from 'lodash';
-  import * as actions from '../store/actions';
+  import * as actions from '../../store/actions';
 
   export default {
     name: 'completePurchaseButton',
     components: {},
     props: {
-      editions: {
+      asset: {
         required: true,
-        type: Array
+        type: Object
       },
     },
     computed: {
       ...mapGetters(['isCurator']),
     },
-    data() {
+    data () {
       return {
         confirm_terms: false
       };
     },
     methods: {
       completePurchase: function () {
-
-        let nextAssetToPurchase = _.chain(this.editions)
-          .orderBy('editionNumber')
-          .filter({purchased: 0})
-          .head()
-          .value();
-
-        console.log("Completing purchase");
-        console.log(nextAssetToPurchase);
-
-        this.$store.dispatch(actions.PURCHASE_ASSET, nextAssetToPurchase);
+        console.log('Completing purchase');
+        console.log(this.asset);
+        this.$store.dispatch(actions.PURCHASE_ASSET, this.asset);
       },
       completeFiatPurchase: function () {
-
-        let nextAssetToPurchase = _.chain(this.editions)
-          .orderBy('editionNumber')
-          .filter({purchased: 0})
-          .head()
-          .value();
-
-        console.log("Completing FIAT purchase");
-        console.log(nextAssetToPurchase);
-
-        this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, nextAssetToPurchase);
+        console.log('Completing FIAT purchase');
+        console.log(this.asset);
+        this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, this.asset);
       }
     }
   };

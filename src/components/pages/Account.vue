@@ -9,12 +9,10 @@
 
     <div class="centered">
       <section class="cards">
-        <edition v-for="tokenId, key in assetsPurchasedByAccount"
-                 :edition="assetById(tokenId)"
-                 :edition-is-purchased="true"
-                 :hide-buy-button="true"
-                 :key="key" >
-        </edition>
+        <Asset v-for="tokenId, key in assetsPurchasedByAccount"
+               :asset="assetById(tokenId)"
+               :key="key">
+        </Asset>
       </section>
     </div>
 
@@ -24,14 +22,14 @@
 <script>
 
   import { mapGetters, mapState } from 'vuex';
-  import Artist from './Artist';
+  import Artist from '../Artist';
   import Gallery from './Gallery';
-  import Edition from './Edition';
+  import Asset from '../Asset';
 
   export default {
     name: 'dashboard',
-    components: {Edition},
-    data() {
+    components: {Asset},
+    data () {
       return {
         title: 'Account',
       };
@@ -46,7 +44,7 @@
         'assetById',
       ])
     },
-    mounted() {
+    mounted () {
 
     }
   };

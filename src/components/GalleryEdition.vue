@@ -8,11 +8,6 @@
 
         <h2>{{ edition.editionName }}</h2>
 
-        <p>
-          Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
-          Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
-        </p>
-
         <p>{{ edition.edition }}</p>
 
         <p>{{ edition.otherMeta.description }}</p>
@@ -20,6 +15,12 @@
         <p><strong>{{ edition.type }}</strong></p>
 
         <p><i>{{ edition.priceInEther }} ETH</i></p>
+
+        <router-link
+          :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
+          tag="button" class="btn">
+          Buy
+        </router-link>
 
       </div>
     </a>
@@ -33,7 +34,7 @@
   import _ from 'lodash';
 
   export default {
-    name: 'edition',
+    name: 'galleryEdition',
     props: {
       edition: {
         required: true,

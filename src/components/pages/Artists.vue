@@ -13,7 +13,7 @@
 
 <script>
   import {mapGetters, mapState} from 'vuex';
-  import Artist from './Artist';
+  import Artist from '../Artist';
 
   export default {
     name: 'artists',

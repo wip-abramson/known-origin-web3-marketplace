@@ -23,7 +23,7 @@
 
     <div id="partners">
       <h2>Our partners</h2>
-      <img src="../assets/Partner_Footer2.png" style="max-width: 100%"/>
+      <img src="../../assets/Partner_Footer2.png" style="max-width: 100%"/>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@
 <script>
 
   import {mapGetters, mapState} from 'vuex';
-  import Artist from './Artist';
+  import Artist from '../Artist';
   import Gallery from './Gallery';
 
   export default {

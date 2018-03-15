@@ -4,11 +4,11 @@
 
     <div class="centered">
       <section class="cards">
-        <edition
+        <galleryEdition
           v-for="assetEdition, key in assetsByEditions"
           :edition="assetEdition[0]"
-          :gallery-view="true"
-          :key="key"></edition>
+          :key="key">
+        </galleryEdition>
       </section>
     </div>
 
@@ -18,11 +18,11 @@
 <script>
 
   import {mapGetters, mapState} from 'vuex';
-  import Edition from './Edition';
+  import GalleryEdition from '../GalleryEdition';
 
   export default {
     name: 'gallery',
-    components: {Edition},
+    components: {GalleryEdition},
     data() {
       return {
         title: 'Gallery',

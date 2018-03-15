@@ -1,13 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashboard from '@/components/Dashboard';
-import Artists from '@/components/Artists';
-import Details from '@/components/Details';
-import Gallery from '@/components/Gallery';
-import Account from '@/components/Account';
-import License from '@/components/License';
-import PurchaseEdition from '@/components/PurchaseEdition';
-import ArtistPage from '@/components/ArtistPage';
+import Dashboard from '@/components/pages/Dashboard';
+import Artists from '@/components/pages/Artists';
+import Details from '@/components/pages/Details';
+import Gallery from '@/components/pages/Gallery';
+import Account from '@/components/pages/Account';
+import License from '@/components/pages/License';
+import ConfirmPurchase from '@/components/pages/ConfirmPurchase';
+import ArtistPage from '@/components/pages/ArtistPage';
+import CompletePurchase from '@/components/pages/CompletePurchase';
 
 Vue.use(Router);
 
@@ -53,13 +54,15 @@ export default new Router({
     },
     {
       path: '/edition/:edition',
-      name: 'purchaseEdition',
-      component: PurchaseEdition,
+      name: 'confirmPurchase',
+      component: ConfirmPurchase,
       props: true
     },
-    // {
-      // dashboard
-      // TODO setup event listener for all events of type PurchasedWithEther & PurchasedWithFiat regardless for account
-    // }
+    {
+      path: '/edition/:edition/:tokenId',
+      name: 'completePurchase',
+      component: CompletePurchase,
+      props: true
+    },
   ]
 });
