@@ -10,16 +10,17 @@
 
         <p>{{ edition.edition }}</p>
 
-        <p>{{ edition.otherMeta.description }}</p>
-
         <p><strong>{{ edition.type }}</strong></p>
 
         <p><i>{{ edition.priceInEther }} ETH</i></p>
 
+        <p>TODO - 1 of 10</p>
+        <p>TODO - 6 available</p>
+
         <router-link
           :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
           tag="button" class="btn">
-          Buy
+          View Details
         </router-link>
 
       </div>

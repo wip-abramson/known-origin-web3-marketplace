@@ -1,19 +1,17 @@
 <template>
-  <div class="complete_purchase_container">
-    <form>
+  <div class="confirm_purchase_container">
+    <form v-if="findNextAssetToPurchase(edition)">
       <p>
-        <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
-        <label :for="'confirm_terms'">I agree with KODA license</label>
-      </p>
-      <p>
-        <router-link :to="{ name: 'license' }">Read license</router-link>
-      </p>
-      <p>
-        <button type="button" :disabled="!confirm_terms" v-on:click="confirmPurchase" class="btn">
-          Confirm
+        <button type="button" v-on:click="confirmPurchase" class="btn">
+          Buy Now
         </button>
       </p>
     </form>
+
+    <div  v-if="!findNextAssetToPurchase(edition)">
+        ASSET has sold out, no more items left to sell
+    </div>
+
   </div>
 </template>
 
@@ -32,7 +30,7 @@
       },
     },
     computed: {
-      ...mapGetters(['isCurator']),
+      ...mapGetters(['isCurator', 'findNextAssetToPurchase']),
     },
     data () {
       return {
@@ -41,14 +39,7 @@
     },
     methods: {
       confirmPurchase: function () {
-
-        let editions = this.$store.getters.assetsForEdition(this.edition.edition);
-
-        let nextAssetToPurchase = _.chain(editions)
-          .orderBy('editionNumber')
-          .filter({purchased: 0})
-          .head()
-          .value();
+        let nextAssetToPurchase = this.$store.getters.findNextAssetToPurchase(this.edition);
 
         console.log('confirming purchase');
         console.log(nextAssetToPurchase);

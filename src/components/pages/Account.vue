@@ -1,9 +1,12 @@
 <template>
   <div id="account">
     <h1>{{ title }}</h1>
-    <p>{{ account }}<br/> {{ accountBalance }} ETH</p>
 
-    <h2>Purchased assets</h2>
+    <p>My address: {{ account }}</p>
+
+    <p>{{ accountBalance }} ETH</p>
+
+    <h2>My Collection</h2>
 
     <p>{{ assetsPurchasedByAccount.length }} Purchased</p>
 
@@ -31,7 +34,7 @@
     components: {Asset},
     data () {
       return {
-        title: 'Account',
+        title: 'My Account',
       };
     },
     computed: {

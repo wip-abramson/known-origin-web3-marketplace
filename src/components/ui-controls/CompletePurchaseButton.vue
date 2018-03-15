@@ -10,12 +10,17 @@
       </p>
       <p>
         <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
-          Purchase
+          Confirm Buy
         </button>
 
-        <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator">
+        <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator && !soldAsFiat">
           FIAT Purchase
         </button>
+
+        <button type="button" v-on:click="reverseFiatPurchase" class="btn btn-danger" v-if="isCurator && soldAsFiat">
+          Reverse FIAT Purchase
+        </button>
+
       </p>
     </form>
   </div>
@@ -37,6 +42,9 @@
     },
     computed: {
       ...mapGetters(['isCurator']),
+      soldAsFiat: function () {
+        return this.asset.purchased === 2;
+      }
     },
     data () {
       return {
@@ -53,6 +61,11 @@
         console.log('Completing FIAT purchase');
         console.log(this.asset);
         this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, this.asset);
+      },
+      reverseFiatPurchase: function() {
+        console.log('Reverse FIAT purchase');
+        console.log(this.asset);
+        this.$store.dispatch(actions.REVERSE_PURCHASE_ASSET_WITH_FIAT, this.asset);
       }
     }
   };
@@ -62,5 +75,8 @@
 
   .btn-warning {
     background-color: darkorange;
+  }
+  .btn-danger {
+    background-color: darkred;
   }
 </style>

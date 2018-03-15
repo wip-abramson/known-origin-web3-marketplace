@@ -6,15 +6,11 @@
       </figure>
       <div class="card-content">
 
-        <h2>{{ edition.editionName }}</h2>
+        <h2>By {{ edition.artist }}</h2>
 
-        <p>
-          Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
-          Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
-        </p>
+        <p>TODO - 6 available</p>
 
-        <p>{{ edition.edition }}</p>
-
+        <h4>Description</h4>
         <p>{{ edition.otherMeta.description }}</p>
 
         <p><strong>{{ edition.type }}</strong></p>

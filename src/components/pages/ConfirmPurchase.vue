@@ -30,12 +30,12 @@
       ...mapGetters([
         'firstAssetForEdition'
       ]),
-      title: function () {
-        return `Buying Edition ${this.$route.params.edition}`;
-      },
       edition: function () {
         return this.firstAssetForEdition(this.$route.params.edition);
-      }
+      },
+      title: function () {
+        return `${this.edition.editionName} #${this.edition.edition}`;
+      },
     },
     methods: {
       countPurchased: (assets) => {

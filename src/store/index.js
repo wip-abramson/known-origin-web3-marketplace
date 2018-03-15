@@ -7,9 +7,9 @@ import Web3 from 'web3';
 import axios from 'axios';
 import artistData from './artist-data';
 import createLogger from 'vuex/dist/logger';
-import {getNetIdString} from '../utils';
+import { getNetIdString } from '../utils';
 
-import {KnownOriginDigitalAsset} from '../contracts/index';
+import { KnownOriginDigitalAsset } from '../contracts/index';
 
 const utils = require('../utils');
 
@@ -52,6 +52,14 @@ const store = new Vuex.Store({
     firstAssetForEdition: (state) => (edition) => {
       return _.head(state.assets.filter((asset) => asset.edition === edition));
     },
+    findNextAssetToPurchase: (state, getters) => (edition) => {
+      let editions = getters.assetsForEdition(edition.edition);
+      return _.chain(editions)
+        .orderBy('editionNumber')
+        .filter({purchased: 0})
+        .head()
+        .value();
+    },
     assetById: (state) => (tokenId) => {
       return _.find(state.assets, (asset) => asset.id.toString() === tokenId.toString());
     },
@@ -66,43 +74,43 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, commissionAddress, contractDeveloperAddress}) {
+    [mutations.SET_COMMISSION_ADDRESSES] (state, {curatorAddress, commissionAddress, contractDeveloperAddress}) {
       state.curatorAddress = curatorAddress;
       state.commissionAddress = commissionAddress;
       state.contractDeveloperAddress = contractDeveloperAddress;
     },
-    [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtists}) {
+    [mutations.SET_ASSETS] (state, {assets, assetsByEditions, assetsByArtists}) {
       Vue.set(state, 'assets', assets);
       Vue.set(state, 'assetsByEditions', assetsByEditions);
       Vue.set(state, 'assetsByArtists', assetsByArtists);
     },
-    [mutations.SET_ARTISTS](state, {artists}) {
+    [mutations.SET_ARTISTS] (state, {artists}) {
       state.artists = artists;
     },
-    [mutations.SET_ASSETS_PURCHASED_FROM_ACCOUNT](state, tokens) {
+    [mutations.SET_ASSETS_PURCHASED_FROM_ACCOUNT] (state, tokens) {
       Vue.set(state, 'assetsPurchasedByAccount', tokens);
     },
-    [mutations.SET_TOTAL_PURCHASED](state, {totalPurchaseValueInWei, totalNumberOfPurchases, totalPurchaseValueInEther}) {
+    [mutations.SET_TOTAL_PURCHASED] (state, {totalPurchaseValueInWei, totalNumberOfPurchases, totalPurchaseValueInEther}) {
       state.totalPurchaseValueInWei = totalPurchaseValueInWei;
       state.totalNumberOfPurchases = totalNumberOfPurchases;
       state.totalPurchaseValueInEther = totalPurchaseValueInEther;
     },
-    [mutations.SET_CONTRACT_DETAILS](state, {name, symbol, totalSupply}) {
+    [mutations.SET_CONTRACT_DETAILS] (state, {name, symbol, totalSupply}) {
       state.totalSupply = totalSupply;
       state.contractSymbol = symbol;
       state.contractName = name;
     },
-    [mutations.SET_ACCOUNT](state, {account, accountBalance}) {
+    [mutations.SET_ACCOUNT] (state, {account, accountBalance}) {
       state.account = account;
       state.accountBalance = accountBalance;
       store.dispatch(actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT);
     },
-    [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
+    [mutations.SET_CURRENT_NETWORK] (state, currentNetwork) {
       state.currentNetwork = currentNetwork;
     },
   },
   actions: {
-    [actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT]({commit, dispatch, state}) {
+    [actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT] ({commit, dispatch, state}) {
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
           return contract.getOwnerTokens(state.account)
@@ -115,13 +123,13 @@ const store = new Vuex.Store({
           // TODO handle errors
         });
     },
-    [actions.GET_CURRENT_NETWORK]({commit, dispatch, state}) {
+    [actions.GET_CURRENT_NETWORK] ({commit, dispatch, state}) {
       getNetIdString()
         .then((currentNetwork) => {
           commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
         });
     },
-    [actions.INIT_APP]({commit, dispatch, state}, account) {
+    [actions.INIT_APP] ({commit, dispatch, state}, account) {
       web3.eth.getAccounts()
         .then((accounts) => {
           // TODO add refresh cycle / timeout
@@ -141,7 +149,7 @@ const store = new Vuex.Store({
             });
         });
     },
-    [actions.GET_ALL_ASSETS]({commit, dispatch, state}) {
+    [actions.GET_ALL_ASSETS] ({commit, dispatch, state}) {
 
       const lookupIPFSData = (hash) => {
         // TODO handle multiaddress meta
@@ -218,7 +226,7 @@ const store = new Vuex.Store({
             });
         });
     },
-    [actions.REFRESH_CONTRACT_DETAILS]({commit, dispatch, state}) {
+    [actions.REFRESH_CONTRACT_DETAILS] ({commit, dispatch, state}) {
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
 
@@ -299,7 +307,7 @@ const store = new Vuex.Store({
           console.error('Failure', e);
         });
     },
-    [actions.PURCHASE_ASSET_WITH_FIAT]({commit, dispatch, state}, assetToPurchase) {
+    [actions.PURCHASE_ASSET_WITH_FIAT] ({commit, dispatch, state}, assetToPurchase) {
 
       let _buyer = state.account;
       let _tokenId = assetToPurchase.id;
@@ -327,6 +335,9 @@ const store = new Vuex.Store({
             from: _buyer
           });
         });
+    },
+    [actions.REVERSE_PURCHASE_ASSET_WITH_FIAT] ({commit, dispatch, state}, assetToPurchase) {
+      // TODO call contract method
     }
   }
 });
