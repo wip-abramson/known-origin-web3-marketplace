@@ -58,7 +58,17 @@
         this.$store.dispatch(actions.PURCHASE_ASSET, nextAssetToPurchase)
       },
       completeFiatPurchase: () => {
-        console.log('FIAT Purchase');
+        
+        let nextAssetToPurchase = _.chain(this.editions)
+          .orderBy('editionNumber')
+          .filter({purchased: 0})
+          .head()
+          .value();
+
+        console.log("Completing FIAT purchase");
+        console.log(nextAssetToPurchase);
+
+        this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, nextAssetToPurchase)
       }
     }
   }

@@ -8,6 +8,8 @@
 
         <h2>{{ edition.editionName }}</h2>
 
+        <p class="purchased" v-if="editionIsPurchased">{{ purchasedState(edition.purchased) }}</p>
+
         <p v-if="!editionIsPurchased">
           Available {{ countAvailable(assetsForEdition(edition.edition)).length }} |
           Purchased {{ countPurchased(assetsForEdition(edition.edition)).length }}
@@ -42,7 +44,7 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
   import _ from 'lodash'
 
   export default {
@@ -76,11 +78,25 @@
       },
       countAvailable: (assets) => {
         return _.filter(assets, {'purchased': 0})
+      },
+      purchasedState: (purchasedId) => {
+        switch (purchasedId) {
+          case 0:
+            return 'AVAILABLE'
+          case 1:
+            return 'SOLD CRYPTO'
+          case 2:
+            return 'SOLD FIAT'
+          default:
+            return 'ERRRR...'
+        }
       }
     }
   }
 </script>
 
 <style scoped>
-
+  .purchased {
+    background-color: cornflowerblue;
+  }
 </style>
