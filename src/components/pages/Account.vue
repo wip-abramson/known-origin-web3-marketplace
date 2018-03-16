@@ -6,7 +6,7 @@
 
     <p>{{ accountBalance }} ETH</p>
 
-    <h2>My Collection</h2>
+    <h2>My Collection (total: {{assetsPurchasedByAccount.length}})</h2>
 
     <p>{{ assetsPurchasedByAccount.length }} Purchased</p>
 

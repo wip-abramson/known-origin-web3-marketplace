@@ -49,6 +49,10 @@ const store = new Vuex.Store({
     assetsForEdition: (state) => (edition) => {
       return state.assets.filter((asset) => asset.edition === edition);
     },
+    availableAssetsForEdition: (state, getters) => (edition) => {
+      let editions = getters.assetsForEdition(edition);
+      return _.filter(editions, {purchased: 0});
+    },
     firstAssetForEdition: (state) => (edition) => {
       return _.head(state.assets.filter((asset) => asset.edition === edition));
     },

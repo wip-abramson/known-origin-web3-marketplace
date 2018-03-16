@@ -8,7 +8,7 @@
 
         <h2>By {{ edition.artist }}</h2>
 
-        <p>TODO - 6 available</p>
+        <p>{{availableAssetsForEdition(edition.edition).length}} available</p>
 
         <h4>Description</h4>
         <p>{{ edition.otherMeta.description }}</p>
@@ -38,7 +38,7 @@
     },
     computed: {
       ...mapGetters([
-        'assetsForEdition',
+        'availableAssetsForEdition',
       ]),
     },
     methods: {

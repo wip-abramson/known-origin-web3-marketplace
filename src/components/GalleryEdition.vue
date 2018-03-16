@@ -14,8 +14,8 @@
 
         <p><i>{{ edition.priceInEther }} ETH</i></p>
 
-        <p>TODO - 1 of 10</p>
-        <p>TODO - 6 available</p>
+        <p>1 of {{assetsForEdition(edition.edition).length}}</p>
+        <p>{{availableAssetsForEdition(edition.edition).length}} available</p>
 
         <router-link
           :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
@@ -45,6 +45,7 @@
     computed: {
       ...mapGetters([
         'assetsForEdition',
+        'availableAssetsForEdition',
       ]),
     },
     methods: {
