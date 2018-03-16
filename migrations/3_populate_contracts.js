@@ -5,7 +5,7 @@ const KnownOriginDigitalAsset = artifacts.require('KnownOriginDigitalAsset');
 
 const ipfsUploader = require('../scripts/ipfs-uploader');
 
-const gallery_data = require('../config/data/gallery.json');
+const galleryData = require('../config/data/gallery.json');
 
 module.exports = function (deployer, network, accounts) {
 
@@ -17,11 +17,13 @@ module.exports = function (deployer, network, accounts) {
 
       console.log(`Deployed contract to address = [${instance.address}] to network [${network}]`);
 
-      if (network === 'development') {
+      if (network === 'development' || network === 'ropsten' || network === 'rinkeby') {
+        console.log(`Loading in seed data`);
         return loadSeedData(instance, _curatorAccount);
       }
-      return instance
-    })
+
+      return instance;
+    });
 
 };
 
@@ -48,15 +50,15 @@ const loadSeedData = (instance, _curatorAccount) => {
           {
             from: _curatorAccount,
           }
-        )
-      })
+        );
+      });
   }));
 };
 
 const flattenTestData = () => {
   let flatInserts = [];
 
-  _.forEach(gallery_data.artists, (artist) => {
+  _.forEach(galleryData.artists, (artist) => {
 
     let artistName = artist.name;
 
@@ -85,12 +87,12 @@ const flattenTestData = () => {
         edition,
         type,
         artistName
-      })
+      });
 
-    })
+    });
   });
 
-  return flatInserts
+  return flatInserts;
 };
 
 /*

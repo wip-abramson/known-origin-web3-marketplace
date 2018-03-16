@@ -27,7 +27,7 @@ export default new Router({
       component: Artists
     },
     {
-      path: '/artist',
+      path: '/artist/:id',
       name: 'artist',
       component: ArtistPage,
       props: true

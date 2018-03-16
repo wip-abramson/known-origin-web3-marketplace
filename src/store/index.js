@@ -67,6 +67,11 @@ const store = new Vuex.Store({
     assetById: (state) => (tokenId) => {
       return _.find(state.assets, (asset) => asset.id.toString() === tokenId.toString());
     },
+    findArtist: (state) => (artistId) => {
+      return _.find(state.artists, function (artist) {
+        return artist.id.toString() === artistId;
+      });
+    },
     featuredArtists: (state) => {
       return state.artists.filter((a) => a.featured);
     },
