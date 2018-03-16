@@ -144,8 +144,8 @@
   }
 
   p {
-    padding: 10px;
-    line-height: 1.5;
+    padding: 5px;
+    line-height: 1.3;
   }
 
   .btn {
@@ -191,7 +191,7 @@
 
   #footer {
     background-color: #3e27d9;
-    color: #f2f2f2;;
+    color: #f2f2f2;
     padding: 10px;
   }
 

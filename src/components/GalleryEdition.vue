@@ -3,26 +3,28 @@
     <a href="#">
       <figure class="thumbnail">
         <img :src="edition.lowResImg"/>
+        <span class="edition-type">{{ edition.type }} artwork</span>
       </figure>
       <div class="card-content">
 
         <h2>{{ edition.editionName }}</h2>
 
-        <p>{{ edition.edition }}</p>
+        <h3>{{ edition.edition }}</h3>
 
-        <p><strong>{{ edition.type }}</strong></p>
+        <p class="muted">
+          1 of {{assetsForEdition(edition.edition).length}}<br/>
+          {{availableAssetsForEdition(edition.edition).length}} available
+        </p>
 
-        <p><i>{{ edition.priceInEther }} ETH</i></p>
+        <p class="price">Price {{ edition.priceInEther }} ETH</p>
 
-        <p>1 of {{assetsForEdition(edition.edition).length}}</p>
-        <p>{{availableAssetsForEdition(edition.edition).length}} available</p>
-
-        <router-link
-          :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
-          tag="button" class="btn">
-          View Details
-        </router-link>
-
+        <p class="btn-center">
+          <router-link
+            :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
+            tag="button" class="btn btn-center">
+            View Details
+          </router-link>
+        </p>
       </div>
     </a>
     <!-- .card-content -->
@@ -64,5 +66,33 @@
 <style scoped>
   .purchased {
     background-color: cornflowerblue;
+  }
+
+  .thumbnail {
+    position: relative;
+  }
+
+  .edition-type {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #3e27d9;
+    color: #f2f2f2;
+    padding: 10px;
+    opacity: 0.8;
+  }
+
+  .price {
+    font-weight: bold;
+    font-size: 1.25em;
+    text-align: center;
+  }
+
+  .muted {
+    color: gray;
+  }
+
+  .btn-center {
+    text-align: center;
   }
 </style>
