@@ -1,15 +1,12 @@
 <template>
   <div class="assets_to_buy">
-    <h1>{{ title }}</h1>
-
     <div class="centered" v-if="edition">
       <section>
         <edition :edition="edition"></edition>
       </section>
 
-      <confirm-purchase-button :edition="edition"></confirm-purchase-button>
+      <confirm-purchase-button :edition="edition" class="btn-center"></confirm-purchase-button>
     </div>
-
   </div>
 </template>
 
@@ -23,9 +20,6 @@
   export default {
     name: 'confirmPurchase',
     components: {Edition, ConfirmPurchaseButton},
-    data () {
-      return {};
-    },
     computed: {
       ...mapGetters([
         'firstAssetForEdition'
@@ -51,5 +45,14 @@
 </script>
 
 <style scoped>
+  .assets_to_buy {
+      margin-left: 170px;
+      margin-right: 170px;
+      margin-top: 50px;
+      margin-bottom: 50px;
+  }
 
+  .btn-center {
+    text-align: center;
+  }
 </style>

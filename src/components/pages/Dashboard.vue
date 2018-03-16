@@ -13,7 +13,6 @@
         <section class="cards">
             <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
         </section>
-        <h3>More artists and workshops to be announced...</h3>
       </div>
     </div>
 

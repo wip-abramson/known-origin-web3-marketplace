@@ -17,11 +17,10 @@
         <p class="edition-code">{{ edition.edition }}</p>
 
         <p class="muted">
-          <br/>
           {{availableAssetsForEdition(edition.edition).length}} available
         </p>
 
-        <p class="price">Price {{ edition.priceInEther }} ETH</p>
+        <p class="price centered">Price {{ edition.priceInEther }} ETH</p>
 
         <p class="btn-center">
           <router-link
@@ -69,10 +68,6 @@
 </script>
 
 <style scoped>
-  .purchased {
-    background-color: cornflowerblue;
-  }
-
   .thumbnail {
     position: relative;
   }
@@ -88,12 +83,9 @@
   }
 
   .edition-run {
-    position: absolute;
-    top: 0;
-    right: 0;
     background-color: gray;
     color: #f2f2f2;
-    padding: 10px;
+    padding: 5px;
   }
 
   .edition-code {

@@ -1,8 +1,6 @@
 <template>
   <div class="assets_to_buy" v-if="asset">
-    <h1>{{ asset.editionName }}</h1>
-    <h2>{{ asset.edition }}</h2>
-    <h2>{{ asset.id }}</h2>
+
 
     <div class="centered" v-if="asset">
       <section>
@@ -12,27 +10,29 @@
 
           <!-- TODO on completion replace content with confirmation -->
 
+          <h2>#{{ asset.id }}</h2>
+
+          <h3>
+            {{ asset.editionName }}
+            by
+            {{ asset.artist }}
+          </h3>
+
           <p class="purchased">{{ purchasedState(asset.purchased) }}</p>
 
-          <p>You 01223456787654678987 (account address)</p>
+          <p class="btn-center">
+            <img :src="asset.lowResImg" style="max-width: 150px"/>
+          </p>
 
-          <p><i>{{ asset.priceInEther }} ETH</i></p>
+          <p>You: {{ account }}</p>
 
-          <p>{{ asset.asset }}</p>
+          <p>To: {{ asset.owner }}</p>
 
-          <p>Deposit to: {{ asset.owner }}</p>
-
-          <hr>
-          <p>Total ETH {{ asset.priceInEther }}</p>
+          <p class="price">Price {{ asset.priceInEther }} ETH</p>
 
         </div>
 
-        <complete-purchase-button :asset="asset"></complete-purchase-button>
-
-        <a href="#">TODO back to gallery link</a>
-
-        <hr>
-
+        <complete-purchase-button :asset="asset" class="btn-center"></complete-purchase-button>
       </section>
     </div>
 
@@ -56,6 +56,9 @@
       ...mapGetters([
         'assetsForEdition',
         'firstAssetForEdition'
+      ]),
+      ...mapState([
+        'account'
       ]),
       title: function () {
         return `${this.$route.params.edition} - ID ${this.$route.params.tokenId}`;
@@ -84,5 +87,22 @@
 <style scoped>
   .purchased {
     background-color: cornflowerblue;
+  }
+
+  .assets_to_buy {
+    margin-left: 170px;
+    margin-right: 170px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  .btn-center {
+    text-align: center;
+  }
+
+  .price {
+    font-weight: bold;
+    font-size: 1.25em;
+    text-align: center;
   }
 </style>

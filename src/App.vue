@@ -27,7 +27,7 @@
       <current-network style="float: right"></current-network>
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
-      <p>(+44) 7715 86 28 33</p>
+      <!--<p>(+44) 7715 86 28 33</p>-->
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
     </footer>
   </div>
@@ -192,19 +192,22 @@
   }
 
   #header {
-    background-color: white;
+    /*background-color: white;*/
     color: #3e27d9;
     padding: 10px;
+    margin-bottom: 10px;
   }
 
   #footer {
     background-color: #3e27d9;
     color: #f2f2f2;
     padding: 10px;
+    font-weight: bold;
   }
 
   #footer a {
     color: #f2f2f2;
+    text-decoration: none;
   }
 
   .header-branding {
