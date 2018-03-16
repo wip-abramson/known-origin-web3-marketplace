@@ -143,6 +143,14 @@
     margin-bottom: 25px;
   }
 
+  h3 {
+    display: block;
+    font-size: 16px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
   p {
     padding: 5px;
     line-height: 1.3;

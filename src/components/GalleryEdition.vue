@@ -4,15 +4,20 @@
       <figure class="thumbnail">
         <img :src="edition.lowResImg"/>
         <span class="edition-type">{{ edition.type }} artwork</span>
+        <span class="edition-run">1 of {{assetsForEdition(edition.edition).length}}</span>
       </figure>
       <div class="card-content">
 
-        <h2>{{ edition.editionName }}</h2>
+        <h3>
+          {{ edition.editionName }}
+          by
+          {{ edition.artist }}
+        </h3>
 
-        <h3>{{ edition.edition }}</h3>
+        <p class="edition-code">{{ edition.edition }}</p>
 
         <p class="muted">
-          1 of {{assetsForEdition(edition.edition).length}}<br/>
+          <br/>
           {{availableAssetsForEdition(edition.edition).length}} available
         </p>
 
@@ -80,6 +85,20 @@
     color: #f2f2f2;
     padding: 10px;
     opacity: 0.8;
+  }
+
+  .edition-run {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: gray;
+    color: #f2f2f2;
+    padding: 10px;
+  }
+
+  .edition-code {
+    font-size: 0.85em;
+    padding: 0px;
   }
 
   .price {
