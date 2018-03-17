@@ -11,8 +11,6 @@ import { getNetIdString } from '../utils';
 
 import { KnownOriginDigitalAsset } from '../contracts/index';
 
-const utils = require('../utils');
-
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -43,7 +41,10 @@ const store = new Vuex.Store({
     artists: artistData,
     assets: [],
     assetsByEditions: [],
-    assetsByArtists: []
+    assetsByArtists: [],
+
+    // Frontend state
+    purchaseState: {}
   },
   getters: {
     assetsForEdition: (state) => (edition) => {
@@ -117,6 +118,18 @@ const store = new Vuex.Store({
     [mutations.SET_CURRENT_NETWORK] (state, currentNetwork) {
       state.currentNetwork = currentNetwork;
     },
+    [mutations.PURCHASE_TRIGGERED] (state, {tokenId, buyer}) {
+      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_TRIGGERED'};
+    },
+    [mutations.PURCHASE_FAILED] (state, {tokenId, buyer}) {
+      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_FAILED'};
+    },
+    [mutations.PURCHASE_SUCCESSFUL] (state, {tokenId, buyer}) {
+      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_SUCCESSFUL'};
+    },
+    [mutations.PURCHASE_STARTED] (state, {tokenId, buyer}) {
+      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_STARTED'};
+    },
   },
   actions: {
     [actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT] ({commit, dispatch, state}) {
@@ -157,6 +170,7 @@ const store = new Vuex.Store({
               commit(mutations.SET_ACCOUNT, {account, accountBalance});
             });
         });
+      // TODO handle locked metamask account
     },
     [actions.GET_ALL_ASSETS] ({commit, dispatch, state}) {
 
@@ -288,32 +302,41 @@ const store = new Vuex.Store({
 
           individualPurchaseEvent.watch(function (error, result) {
             if (!error) {
+              // 3) Purchase succeeded
               dispatch(actions.REFRESH_CONTRACT_DETAILS);
               dispatch(actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT);
+              commit(mutations.PURCHASE_SUCCESSFUL, {tokenId: _tokenId, buyer: _buyer});
             } else {
-              // TODO re-enable UI
+              // Purchase failure
+              commit(mutations.PURCHASE_FAILED, {tokenId: _tokenId, buyer: _buyer});
               individualPurchaseEvent.stopWatching();
-              console.error('Failure', error);
+              console.log('Failure', error);
             }
           });
 
-          // TODO disable UI
+          // 1) Initial purchase flow
+          commit(mutations.PURCHASE_TRIGGERED, {tokenId: _tokenId, buyer: _buyer});
 
-          // TODO how to handle rejections e.g. invalid amount supplied
-          // TODO how to handle rejections e.g already been purchased
-
-          return contract.purchaseWithEther(_tokenId, {
+          let purchase = contract.purchaseWithEther(_tokenId, {
             from: _buyer,
             value: assetToPurchase.priceInWei
           });
-        })
-        .then((res) => (res) => {
-          console.log('Success', res);
+
+          purchase
+            .then((data) => {
+              // 2) Purchase transaction submitted
+              console.log('Purchase transaction submitted', data);
+              commit(mutations.PURCHASE_STARTED, {tokenId: _tokenId, buyer: _buyer});
+            })
+            .catch((error) => {
+              // Purchase failure
+              console.log('Purchase rejection/error', error);
+              commit(mutations.PURCHASE_FAILED, {tokenId: _tokenId, buyer: _buyer});
+            });
         })
         .catch((e) => {
-          // TODO re-enable UI on error
-          // TODO Handle errors
-          console.error('Failure', e);
+          console.log('Failure', e);
+          commit(mutations.PURCHASE_FAILED, {tokenId: assetToPurchase.id, buyer: state.account});
         });
     },
     [actions.PURCHASE_ASSET_WITH_FIAT] ({commit, dispatch, state}, assetToPurchase) {
@@ -331,18 +354,38 @@ const store = new Vuex.Store({
 
           individualPurchaseEvent.watch(function (error, result) {
             if (!error) {
+              // 3) Purchase succeeded
               dispatch(actions.REFRESH_CONTRACT_DETAILS);
               dispatch(actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT);
+              commit(mutations.PURCHASE_SUCCESSFUL, {tokenId: _tokenId, buyer: _buyer});
             } else {
-              // TODO re-enable UI
+              // Purchase failure
+              commit(mutations.PURCHASE_FAILED, {tokenId: _tokenId, buyer: _buyer});
               individualPurchaseEvent.stopWatching();
-              console.error('Failure', error);
+              console.log('Failure', error);
             }
           });
 
-          return contract.purchaseWithFiat(_tokenId, {
-            from: _buyer
-          });
+          // 1) Initial purchase flow
+          commit(mutations.PURCHASE_TRIGGERED, {tokenId: _tokenId, buyer: _buyer});
+
+          let purchase = contract.purchaseWithFiat(_tokenId, {from: _buyer});
+
+          purchase
+            .then((data) => {
+              // 2) Purchase transaction submitted
+              console.log('Purchase transaction submitted', data);
+              commit(mutations.PURCHASE_STARTED, {tokenId: _tokenId, buyer: _buyer});
+            })
+            .catch((error) => {
+              // Purchase failure
+              console.log('Purchase rejection/error', error);
+              commit(mutations.PURCHASE_FAILED, {tokenId: _tokenId, buyer: _buyer});
+            });
+        })
+        .catch((e) => {
+          console.log('Failure', e);
+          commit(mutations.PURCHASE_FAILED, {tokenId: assetToPurchase.id, buyer: state.account});
         });
     },
     [actions.REVERSE_PURCHASE_ASSET_WITH_FIAT] ({commit, dispatch, state}, assetToPurchase) {

@@ -1,6 +1,6 @@
 <template>
   <div class="complete_purchase_container">
-    <form>
+    <form v-if="asset.purchased === 0">
       <p>
         <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
         <label :for="'confirm_terms'">I agree with KODA license</label>
@@ -23,6 +23,10 @@
 
       </p>
     </form>
+
+    <p v-if="asset.purchased !== 0">
+      Asset purchased!
+    </p>
   </div>
 </template>
 
@@ -54,14 +58,17 @@
     methods: {
       completePurchase: function () {
         console.log('Completing purchase', this.asset);
+        this.$emit('purchaseInitiated', this.asset);
         this.$store.dispatch(actions.PURCHASE_ASSET, this.asset);
       },
       completeFiatPurchase: function () {
         console.log('Completing FIAT purchase', this.asset);
+        this.$emit('purchaseInitiated', this.asset);
         this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, this.asset);
       },
-      reverseFiatPurchase: function() {
+      reverseFiatPurchase: function () {
         console.log('Reverse FIAT purchase', this.asset);
+        this.$emit('purchaseInitiated', this.asset);
         this.$store.dispatch(actions.REVERSE_PURCHASE_ASSET_WITH_FIAT, this.asset);
       }
     }
@@ -73,6 +80,7 @@
   .btn-warning {
     background-color: darkorange;
   }
+
   .btn-danger {
     background-color: darkred;
   }

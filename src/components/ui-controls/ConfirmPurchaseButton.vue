@@ -41,8 +41,7 @@
       confirmPurchase: function () {
         let nextAssetToPurchase = this.$store.getters.findNextAssetToPurchase(this.edition);
 
-        console.log('confirming purchase');
-        console.log(nextAssetToPurchase);
+        console.log('confirming purchase', nextAssetToPurchase);
 
         this.$router.push({
           name: 'completePurchase',
