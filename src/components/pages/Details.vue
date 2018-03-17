@@ -7,9 +7,19 @@
         <p>Addresses: </p>
       </div>
       <div class="message-body">
-        curatorAddress = {{ curatorAddress }} <br/>
-        commissionAddress = {{ commissionAddress }} <br/>
-        contractDeveloperAddress = {{ contractDeveloperAddress }}
+        <p>
+          curatorAddress = {{ curatorAddress }} <br/>
+          <address-icon :eth-address="curatorAddress"></address-icon>
+        </p>
+        <p>
+          commissionAddress = {{ commissionAddress }} <br/>
+          <address-icon :eth-address="commissionAddress"></address-icon>
+        </p>
+        <p>
+          contractDeveloperAddress = {{ contractDeveloperAddress }}
+          <address-icon :eth-address="contractDeveloperAddress"></address-icon>
+        </p>
+
       </div>
     </div>
     <div v-if="totalSupply" class="message is-primary">
@@ -44,9 +54,11 @@
 <script>
 
   import {mapGetters, mapState} from 'vuex';
+  import AddressIcon from '../utils/AddressIcon';
 
   export default {
     name: 'dashboard',
+    components: {AddressIcon},
     data() {
       return {
         title: 'Contract stuff',

@@ -37,7 +37,6 @@
     name: 'asset',
     props: {
       asset: {
-        required: true,
         type: Object
       },
     },

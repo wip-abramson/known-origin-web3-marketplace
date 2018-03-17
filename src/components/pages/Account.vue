@@ -4,6 +4,8 @@
 
     <p>My address: {{ account }}</p>
 
+    <p><address-icon :eth-address="account"></address-icon></p>
+
     <p>{{ accountBalance }} ETH</p>
 
     <h2>My Collection (total: {{assetsPurchasedByAccount.length}})</h2>
@@ -11,7 +13,7 @@
     <p>{{ assetsPurchasedByAccount.length }} Purchased</p>
 
     <div class="centered">
-      <section class="cards">
+      <section class="cards" v-if="assetsPurchasedByAccount">
         <Asset v-for="tokenId, key in assetsPurchasedByAccount"
                :asset="assetById(tokenId)"
                :key="key">
@@ -28,10 +30,11 @@
   import Artist from '../Artist';
   import Gallery from './Gallery';
   import Asset from '../Asset';
+  import AddressIcon from '../utils/AddressIcon';
 
   export default {
     name: 'dashboard',
-    components: {Asset},
+    components: {Asset, AddressIcon},
     data () {
       return {
         title: 'My Account',
