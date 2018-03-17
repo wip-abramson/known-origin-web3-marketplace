@@ -53,18 +53,15 @@
     },
     methods: {
       completePurchase: function () {
-        console.log('Completing purchase');
-        console.log(this.asset);
+        console.log('Completing purchase', this.asset);
         this.$store.dispatch(actions.PURCHASE_ASSET, this.asset);
       },
       completeFiatPurchase: function () {
-        console.log('Completing FIAT purchase');
-        console.log(this.asset);
+        console.log('Completing FIAT purchase', this.asset);
         this.$store.dispatch(actions.PURCHASE_ASSET_WITH_FIAT, this.asset);
       },
       reverseFiatPurchase: function() {
-        console.log('Reverse FIAT purchase');
-        console.log(this.asset);
+        console.log('Reverse FIAT purchase', this.asset);
         this.$store.dispatch(actions.REVERSE_PURCHASE_ASSET_WITH_FIAT, this.asset);
       }
     }

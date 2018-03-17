@@ -1,5 +1,5 @@
 <template>
-  <div class="eth-icon" v-if="ethAddress">
+  <div :class="'icon-' + size" v-if="ethAddress">
     <img :src="'data:image/png;base64,' + createIcon">
   </div>
 </template>
@@ -10,10 +10,17 @@
 
   export default {
     name: 'addressIcon',
-    props: ['ethAddress'],
+    props: {
+      ethAddress: {
+        type: String
+      },
+      size: {
+        type: String,
+        default: 'normal'
+      }
+    },
     computed: {
       createIcon: function () {
-        console.log('eth address', this.ethAddress);
         return new Identicon(this.ethAddress, 420).toString();
       }
     }
@@ -21,9 +28,14 @@
 </script>
 
 <style>
-  .eth-icon {
+  .icon-normal {
     height: 128px;
     width: 128px;
+  }
+
+  .icon-small {
+    height: 64px;
+    width: 64px;
   }
 
 </style>

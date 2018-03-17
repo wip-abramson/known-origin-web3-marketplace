@@ -18,15 +18,21 @@
             {{ asset.artist }}
           </h3>
 
-          <p class="purchased">{{ purchasedState(asset.purchased) }}</p>
+          <purchase-state :state="asset.purchased"></purchase-state>
 
           <p class="btn-center">
             <img :src="asset.lowResImg" style="max-width: 150px"/>
           </p>
 
-          <p>You: {{ account }}</p>
+          <p>
+            You: {{ account }}<br/>
+            <address-icon :eth-address="account"></address-icon>
+          </p>
 
-          <p>To: {{ asset.owner }}</p>
+          <p>
+            To: {{ asset.owner }}<br/>
+            <address-icon :eth-address="asset.owner"></address-icon>
+          </p>
 
           <p class="price">Price {{ asset.priceInEther }} ETH</p>
 
@@ -45,10 +51,12 @@
   import Asset from '../Asset';
   import CompletePurchaseButton from '../ui-controls/CompletePurchaseButton';
   import _ from 'lodash';
+  import AddressIcon from '../utils/AddressIcon';
+  import PurchaseState from '../utils/PurchaseState.vue';
 
   export default {
     name: 'completePurchase',
-    components: {Asset, CompletePurchaseButton},
+    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton},
     data () {
       return {};
     },
@@ -66,28 +74,11 @@
       asset: function () {
         return this.$store.getters.assetById(this.$route.params.tokenId);
       }
-    },
-    methods: {
-      purchasedState: (purchasedId) => {
-        switch (purchasedId) {
-          case 0:
-            return 'AVAILABLE';
-          case 1:
-            return 'SOLD CRYPTO';
-          case 2:
-            return 'SOLD FIAT';
-          default:
-            return 'ERRRR...';
-        }
-      }
     }
   };
 </script>
 
 <style scoped>
-  .purchased {
-    background-color: cornflowerblue;
-  }
 
   .assets_to_buy {
     margin-left: 170px;

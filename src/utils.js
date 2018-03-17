@@ -1,13 +1,3 @@
-const safeFromJson = (raw) => {
-  try {
-    return JSON.parse(raw);
-  } catch (e) {
-    console.warn("safe json failure", e);
-    return "";
-  }
-};
-
-
 const getNetIdString = () => {
   return window.web3.eth.net.getId()
     .then((id) => {
@@ -31,6 +21,5 @@ const getNetIdString = () => {
 };
 
 export {
-  safeFromJson,
   getNetIdString
 };
