@@ -1,6 +1,6 @@
 <template>
   <div v-if="edition">
-    <a v-on:click="showQr = !showQr">Show QR Code</a>
+    <a v-on:click="showQr = !showQr">{{showQr ? 'Hide' : 'Show'}} QR Code</a>
     <div v-if="showQr">
       <h4>#{{ edition.edition }}</h4>
       <img :src="generateQrCode" alt="qrcode"/>
@@ -10,7 +10,6 @@
 
 <script>
   /* global web3:true */
-  import qr from 'qr-image';
   import QRCode from 'qrcode';
 
   export default {
