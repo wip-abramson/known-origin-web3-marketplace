@@ -91,7 +91,7 @@
           "edition": "JOCFFF01PHY",
           "type": "physical",
           "numberOfEditions": 1,
-          "fiatCost": 70,
+          "fiatCost": 65,
           "costInEth": 0.11
         },
         {

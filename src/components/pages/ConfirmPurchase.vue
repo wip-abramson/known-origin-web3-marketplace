@@ -5,7 +5,13 @@
         <edition :edition="edition"></edition>
       </section>
 
-      <confirm-purchase-button :edition="edition" class="btn-center"></confirm-purchase-button>
+      <section>
+        <confirm-purchase-button :edition="edition" class="btn-center"></confirm-purchase-button>
+      </section>
+
+      <section>
+        <edition-qr-code :edition="edition"></edition-qr-code>
+      </section>
     </div>
   </div>
 </template>
@@ -16,10 +22,12 @@
   import Edition from '../Edition';
   import ConfirmPurchaseButton from '../ui-controls/ConfirmPurchaseButton';
   import _ from 'lodash';
+  import EditionQrCode from '../utils/EditionQrCode.vue';
 
   export default {
     name: 'confirmPurchase',
-    components: {Edition, ConfirmPurchaseButton},
+    components: {
+      EditionQrCode, Edition, ConfirmPurchaseButton},
     computed: {
       ...mapGetters([
         'firstAssetForEdition'

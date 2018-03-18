@@ -6,6 +6,10 @@ import router from './router';
 import store from './store';
 import logging from './logging';
 
+import AsyncComputed from 'vue-async-computed';
+
+Vue.use(AsyncComputed);
+
 Vue.config.productionTip = false
 
 ;(async () => {
@@ -13,7 +17,7 @@ Vue.config.productionTip = false
     // pre-Vue JS bootstrap
   } catch (e) {
     // eslint-disable-next-line
-    console.log(e)
+    console.log(e);
   } finally {
     /* eslint-disable no-new */
     new Vue({
