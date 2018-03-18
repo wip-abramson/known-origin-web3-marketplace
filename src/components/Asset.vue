@@ -1,12 +1,10 @@
 <template>
   <article class="card" v-if="asset">
     <a href="#">
-      <figure class="thumbnail">
-        <img :src="asset.lowResImg"/>
-      </figure>
+      <asset-figure :edition="asset"></asset-figure>
       <div class="card-content">
 
-        <h2>{{ asset.assetName }}</h2>
+        <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
         <purchase-state :state="asset.purchased"></purchase-state>
 
@@ -21,9 +19,7 @@
 
         <p>{{ asset.otherMeta.description }}</p>
 
-        <p><strong>{{ asset.type }}</strong></p>
-
-        <p><i>{{ asset.priceInEther }} ETH</i></p>
+        <price-in-eth :value="asset.priceInEther"></price-in-eth>
 
       </div>
     </a>
@@ -37,9 +33,12 @@
   import _ from 'lodash';
   import PurchaseState from './utils/PurchaseState.vue';
   import AddressIcon from './utils/AddressIcon.vue';
+  import AssetFigure from './AssetFigure.vue';
+  import PriceInEth from './ui-controls/PriceInEth.vue';
+  import EditionNameByArtist from './ui-controls/EditionNameByArtist.vue';
 
   export default {
-    components: {AddressIcon, PurchaseState},
+    components: {AddressIcon, PurchaseState, AssetFigure, PriceInEth, EditionNameByArtist},
     name: 'asset',
     props: {
       asset: {

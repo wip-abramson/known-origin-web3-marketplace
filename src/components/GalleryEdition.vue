@@ -4,11 +4,7 @@
       <asset-figure :edition="edition"></asset-figure>
       <div class="card-content">
 
-        <h3>
-          {{ edition.editionName }}
-          by
-          {{ edition.artist }}
-        </h3>
+        <edition-name-by-artist :edition="edition"></edition-name-by-artist>
 
         <p class="edition-code">{{ edition.edition }}</p>
 
@@ -36,11 +32,12 @@
   import { mapGetters, mapState } from 'vuex';
   import _ from 'lodash';
   import PriceInEth from './ui-controls/PriceInEth.vue';
+  import EditionNameByArtist from './ui-controls/EditionNameByArtist.vue';
   import AssetFigure from './AssetFigure.vue';
 
   export default {
     name: 'galleryEdition',
-    components: {PriceInEth, AssetFigure},
+    components: {PriceInEth, AssetFigure, EditionNameByArtist},
     props: {
       edition: {
         required: true,
