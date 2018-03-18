@@ -29,15 +29,7 @@
       generateQrCode: function () {
         return QRCode.toDataURL(window.location.href, {
           margin: 2,
-        })
-          .then(url => {
-            console.log(url);
-            return url;
-          })
-          .catch(err => {
-            console.error(err);
-            return null;
-          });
+        });
       }
     }
   };
