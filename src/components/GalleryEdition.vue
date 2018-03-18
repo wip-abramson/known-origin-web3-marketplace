@@ -20,7 +20,7 @@
           {{availableAssetsForEdition(edition.edition).length}} available
         </p>
 
-        <p class="price centered">Price ETH {{ edition.priceInEther }}</p>
+        <price-in-eth :value="edition.priceInEther"></price-in-eth>
 
         <p class="btn-center">
           <router-link
@@ -39,9 +39,11 @@
 <script>
   import { mapGetters, mapState } from 'vuex';
   import _ from 'lodash';
+  import PriceInEth from './ui-controls/PriceInEth.vue';
 
   export default {
     name: 'galleryEdition',
+    components: {PriceInEth},
     props: {
       edition: {
         required: true,

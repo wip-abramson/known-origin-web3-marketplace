@@ -32,7 +32,7 @@
     </p>
 
     <p v-if="!account" class="error">
-      Your account is Locked!
+      Your account is locked!
     </p>
   </div>
 </template>

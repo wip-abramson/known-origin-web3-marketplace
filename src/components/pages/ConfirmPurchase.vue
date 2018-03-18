@@ -26,8 +26,7 @@
 
   export default {
     name: 'confirmPurchase',
-    components: {
-      EditionQrCode, Edition, ConfirmPurchaseButton},
+    components: {EditionQrCode, Edition, ConfirmPurchaseButton},
     computed: {
       ...mapGetters([
         'firstAssetForEdition'

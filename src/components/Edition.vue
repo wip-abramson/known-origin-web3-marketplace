@@ -23,9 +23,7 @@
         <h4>Artwork description</h4>
         <p>{{ edition.otherMeta.description }}</p>
 
-        <hr/>
-
-        <p class="price centered">Price {{ edition.priceInEther }} ETH</p>
+        <price-in-eth :value="edition.priceInEther"></price-in-eth>
 
       </div>
     </a>
@@ -37,9 +35,11 @@
 <script>
   import { mapGetters, mapState } from 'vuex';
   import _ from 'lodash';
+  import PriceInEth from './ui-controls/PriceInEth.vue';
 
   export default {
     name: 'edition',
+    components: {PriceInEth},
     props: {
       edition: {
         required: true,

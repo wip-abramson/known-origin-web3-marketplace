@@ -28,8 +28,4 @@
 </script>
 
 <style>
-  .purchased {
-    background-color: cornflowerblue;
-  }
-
 </style>
