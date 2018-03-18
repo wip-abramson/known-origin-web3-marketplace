@@ -20,7 +20,7 @@
   import Edition from '../Edition';
   import ConfirmPurchaseButton from '../ui-controls/ConfirmPurchaseButton';
   import _ from 'lodash';
-  import EditionQrCode from '../utils/EditionQrCode.vue';
+  import EditionQrCode from '../ui-controls/EditionQrCode.vue';
 
   export default {
     name: 'confirmPurchase',

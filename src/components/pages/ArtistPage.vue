@@ -7,7 +7,7 @@
 <script>
 
   import { mapGetters, mapState } from 'vuex';
-  import ArtistShortBio from '../ArtistShortBio';
+  import ArtistShortBio from '../ui-controls/ArtistShortBio';
 
   export default {
     name: 'artistPage',

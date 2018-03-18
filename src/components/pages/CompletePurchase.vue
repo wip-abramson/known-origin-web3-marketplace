@@ -63,8 +63,8 @@
   import Asset from '../Asset';
   import CompletePurchaseButton from '../ui-controls/CompletePurchaseButton';
   import _ from 'lodash';
-  import AddressIcon from '../utils/AddressIcon';
-  import PurchaseState from '../utils/PurchaseState.vue';
+  import AddressIcon from '../ui-controls/AddressIcon';
+  import PurchaseState from '../ui-controls/PurchaseState.vue';
   import * as mutations from '../../store/mutation-types';
   import { KnownOriginDigitalAsset } from '../../contracts/index';
 

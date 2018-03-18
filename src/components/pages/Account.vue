@@ -30,7 +30,7 @@
   import Artist from '../Artist';
   import Gallery from './Gallery';
   import Asset from '../Asset';
-  import AddressIcon from '../utils/AddressIcon';
+  import AddressIcon from '../ui-controls/AddressIcon';
 
   export default {
     name: 'dashboard',

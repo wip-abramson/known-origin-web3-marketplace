@@ -40,7 +40,7 @@
   import { mapGetters, mapState } from 'vuex';
   import * as actions from './store/actions';
   import * as mutations from './store/mutation-types';
-  import CurrentNetwork from './components/utils/CurrentNetwork';
+  import CurrentNetwork from './components/ui-controls/CurrentNetwork';
 
   export default {
     name: 'app',

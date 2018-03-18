@@ -31,8 +31,8 @@
 <script>
   import { mapGetters, mapState } from 'vuex';
   import _ from 'lodash';
-  import PurchaseState from './utils/PurchaseState.vue';
-  import AddressIcon from './utils/AddressIcon.vue';
+  import PurchaseState from './ui-controls/PurchaseState.vue';
+  import AddressIcon from './ui-controls/AddressIcon.vue';
   import AssetFigure from './AssetFigure.vue';
   import PriceInEth from './ui-controls/PriceInEth.vue';
   import EditionNameByArtist from './ui-controls/EditionNameByArtist.vue';

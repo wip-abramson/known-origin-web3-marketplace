@@ -54,7 +54,7 @@
 <script>
 
   import {mapGetters, mapState} from 'vuex';
-  import AddressIcon from '../utils/AddressIcon';
+  import AddressIcon from '../ui-controls/AddressIcon';
 
   export default {
     name: 'dashboard',
