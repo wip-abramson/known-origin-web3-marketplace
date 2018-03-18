@@ -34,6 +34,7 @@ contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
 
     event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
     event PurchasedWithFiat(uint256 indexed _tokenId);
+    event PurchasedWithFiatReversed(uint256 indexed _tokenId);
 
     modifier onlyCurator() {
         require(msg.sender == curator);
@@ -219,6 +220,26 @@ contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
         totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
         PurchasedWithFiat(_tokenId);
+
+        return true;
+    }
+
+    function reverseFiatPurchase(uint _tokenId)
+    public
+    onlyCurator
+    onlyCuratorOwnedToken(_tokenId)
+    onlyWhenBuyDateOpen(_tokenId)
+    returns (bool) {
+
+        // Ensure on FIAT purchase can be rolled back if FIAT transaction fails
+        require(tokenIdToPurchased[_tokenId] == PurchaseState.FiatPurchase);
+
+        // reset to Unsold
+        tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
+
+        totalNumberOfPurchases = totalNumberOfPurchases.sub(1);
+
+        PurchasedWithFiatReversed(_tokenId);
 
         return true;
     }

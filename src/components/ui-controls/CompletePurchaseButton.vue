@@ -1,6 +1,6 @@
 <template>
   <div class="complete_purchase_container">
-    <form v-if="asset.purchased === 0">
+    <form v-if="account">
       <p>
         <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
         <label :for="'confirm_terms'">I agree with KODA license</label>
@@ -10,7 +10,7 @@
         <router-link :to="{ name: 'license' }">Read license</router-link>
       </p>
       <p>
-        <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
+        <button type="button" class="btn" :disabled="!confirm_terms" v-on:click="completePurchase" v-if="isUnsold">
           Confirm buy
         </button>
 
@@ -29,6 +29,10 @@
 
     <p v-if="asset.purchased !== 0">
       Asset purchased!
+    </p>
+
+    <p v-if="!account" class="error">
+      Your account is Locked!
     </p>
   </div>
 </template>
@@ -49,9 +53,13 @@
     },
     computed: {
       ...mapGetters(['isCurator']),
+      ...mapState(['account']),
       soldAsFiat: function () {
         return this.asset.purchased === 2;
-      }
+      },
+      isUnsold: function () {
+        return this.asset.purchased === 0;
+      },
     },
     data () {
       return {
@@ -86,5 +94,9 @@
 
   .btn-danger {
     background-color: darkred;
+  }
+
+  .error {
+    background-color: red;
   }
 </style>
