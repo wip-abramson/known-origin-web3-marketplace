@@ -339,7 +339,7 @@ const store = new Vuex.Store({
           commit(mutations.PURCHASE_FAILED, {tokenId: assetToPurchase.id, buyer: state.account});
         });
     },
-    [actions.PURCHASE_ASSET_WITH_FIAT] ({commit, dispatch, state}, assetToPurchase) {
+    [actions.PURCHASE_ASSET_WITH_FIAT] ({commit, dispatch, state} = controls, assetToPurchase) {
 
       let _buyer = state.account;
       let _tokenId = assetToPurchase.id;

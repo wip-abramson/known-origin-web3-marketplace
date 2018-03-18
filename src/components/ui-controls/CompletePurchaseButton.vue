@@ -6,11 +6,12 @@
         <label :for="'confirm_terms'">I agree with KODA license</label>
       </p>
       <p>
+        By choosing <strong>I Agree</strong>, you understand and agree to KnownOrigin's term of service and usage license.
         <router-link :to="{ name: 'license' }">Read license</router-link>
       </p>
       <p>
         <button type="button" :disabled="!confirm_terms" v-on:click="completePurchase" class="btn">
-          Confirm Buy
+          Confirm buy
         </button>
 
         <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator && !soldAsFiat">
@@ -20,7 +21,9 @@
         <button type="button" v-on:click="reverseFiatPurchase" class="btn btn-danger" v-if="isCurator && soldAsFiat">
           Reverse FIAT Purchase
         </button>
-
+      </p>
+      <p>
+        <router-link :to="{ name: 'gallery' }">Back to gallery</router-link>
       </p>
     </form>
 

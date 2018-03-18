@@ -29,7 +29,7 @@ const uploadMetaData = ({ipfsPath}) => {
   let cachedIpfsHash = getCachedIpfsHashes(ipfsPath);
   if (cachedIpfsHash) {
     console.log(`Found cached version of [${ipfsPath}] - ipfs hash ${cachedIpfsHash}`);
-    return Promise.resolve({hash: cachedIpfsHash})
+    return Promise.resolve({hash: cachedIpfsHash});
   }
 
   let meta = require(`../config/data/ipfs_data/${ipfsPath}/meta.json`);
@@ -39,27 +39,27 @@ const uploadMetaData = ({ipfsPath}) => {
   if (fs.existsSync(`./config/data/ipfs_data/${ipfsPath}/low_res.gif`)) {
     image = fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/low_res.gif`);
   } else {
-    image = fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/low_res.jpeg`)
+    image = fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/low_res.jpeg`);
   }
 
   return ipfs.add([
-      {
-        path: `${ipfsPath}/name`,
-        content: new streams.ReadableStream(`${meta.artworkName} - ${meta.artist}`).read(),
-      },
-      {
-        path: `${ipfsPath}/image`,
-        content: image,
-      },
-      {
-        path: `${ipfsPath}/description`,
-        content: new streams.ReadableStream(`${meta.description}`).read(),
-      },
-      {
-        path: `${ipfsPath}/other`,
-        content: fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/meta.json`),
-      }
-    ], {recursive: false}
+    {
+      path: `${ipfsPath}/name`,
+      content: new streams.ReadableStream(`${meta.artworkName} - ${meta.artist}`).read(),
+    },
+    {
+      path: `${ipfsPath}/image`,
+      content: image,
+    },
+    {
+      path: `${ipfsPath}/description`,
+      content: new streams.ReadableStream(`${meta.description}`).read(),
+    },
+    {
+      path: `${ipfsPath}/other`,
+      content: fs.createReadStream(`./config/data/ipfs_data/${ipfsPath}/meta.json`),
+    }
+  ], {recursive: false}
   )
     .then((res) => {
       console.log('Uploaded file to IPFS', res);

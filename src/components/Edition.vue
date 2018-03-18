@@ -20,8 +20,10 @@
           {{availableAssetsForEdition(edition.edition).length}} available
         </p>
 
-        <h4>Description</h4>
+        <h4>Artwork description</h4>
         <p>{{ edition.otherMeta.description }}</p>
+
+        <hr/>
 
         <p class="price centered">Price {{ edition.priceInEther }} ETH</p>
 

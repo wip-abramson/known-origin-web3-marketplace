@@ -20,13 +20,13 @@
           {{availableAssetsForEdition(edition.edition).length}} available
         </p>
 
-        <p class="price centered">Price {{ edition.priceInEther }} ETH</p>
+        <p class="price centered">Price ETH {{ edition.priceInEther }}</p>
 
         <p class="btn-center">
           <router-link
             :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
             tag="button" class="btn btn-center">
-            View Details
+            View details
           </router-link>
         </p>
       </div>

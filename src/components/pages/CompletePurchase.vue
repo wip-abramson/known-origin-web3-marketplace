@@ -21,23 +21,30 @@
             {{ asset.artist }}
           </h3>
 
-          <purchase-state :state="asset.purchased"></purchase-state>
+          <h4>@ {{ asset.priceInEther }} ETH</h4>
 
           <p class="btn-center">
             <img :src="asset.lowResImg" style="max-width: 150px"/>
           </p>
 
           <p>
-            You: {{ account }}<br/>
-            <address-icon :eth-address="account"></address-icon>
+            You<br/>
+            {{ account }} <address-icon :eth-address="account" :size="'small'"></address-icon>
           </p>
 
           <p>
-            To: {{ asset.owner }}<br/>
-            <address-icon :eth-address="asset.owner"></address-icon>
+            Amount<br/>
+            {{ asset.priceInEther }} ETH
           </p>
 
-          <p class="price">Price {{ asset.priceInEther }} ETH</p>
+          <p>
+            Current owner<br/>
+            {{ asset.owner }} <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+          </p>
+
+          <p class="price">Total ETH {{ asset.priceInEther }}</p>
+
+          <purchase-state :state="asset.purchased"></purchase-state>
 
         </div>
 
@@ -122,11 +129,4 @@
     text-align: center;
   }
 
-  .btn-warning {
-    background-color: darkorange;
-  }
-
-  .btn-danger {
-    background-color: darkred;
-  }
 </style>
