@@ -1,11 +1,7 @@
 <template>
   <article class="card" v-if="edition">
     <a href="#">
-      <figure class="thumbnail">
-        <img :src="edition.lowResImg"/>
-        <span class="edition-type">{{ edition.type }} artwork</span>
-        <span class="edition-run">1 of {{assetsForEdition(edition.edition).length}}</span>
-      </figure>
+      <asset-figure :edition="edition"></asset-figure>
       <div class="card-content">
 
         <h3>
@@ -36,10 +32,11 @@
   import { mapGetters, mapState } from 'vuex';
   import _ from 'lodash';
   import PriceInEth from './ui-controls/PriceInEth.vue';
+  import AssetFigure from './AssetFigure.vue';
 
   export default {
     name: 'edition',
-    components: {PriceInEth},
+    components: {PriceInEth, AssetFigure},
     props: {
       edition: {
         required: true,
@@ -66,37 +63,11 @@
 </script>
 
 <style scoped>
-  .thumbnail {
-    position: relative;
-  }
-
-  .edition-type {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #3e27d9;
-    color: #f2f2f2;
-    padding: 10px;
-    opacity: 0.8;
-  }
-
-  .edition-run {
-    background-color: gray;
-    color: #f2f2f2;
-    padding: 5px;
-  }
-
   .edition-code {
     font-size: 0.85em;
     padding: 0px;
   }
-
-  .price {
-    font-weight: bold;
-    font-size: 1.25em;
-    text-align: center;
-  }
-
+  
   .muted {
     color: gray;
   }

@@ -2,10 +2,8 @@
   <div class="assets_to_buy">
     <div class="centered" v-if="edition">
       <section>
-        <edition :edition="edition"></edition>
-      </section>
-
-      <section>
+        <edition :edition="edition">
+        </edition>
         <confirm-purchase-button :edition="edition" class="btn-center"></confirm-purchase-button>
       </section>
 
