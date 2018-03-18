@@ -1,22 +1,17 @@
 <template>
-  <div class="artist">
-    <h1>Artist Page</h1>
-
-    <div class="centered">
-      <artist :artist="lookupArtist()"></artist>
-    </div>
-
+  <div class="centered">
+    <artist-short-bio :artist="lookupArtist()"></artist-short-bio>
   </div>
 </template>
 
 <script>
 
   import { mapGetters, mapState } from 'vuex';
-  import Artist from '../Artist';
+  import ArtistShortBio from '../ArtistShortBio';
 
   export default {
     name: 'artistPage',
-    components: {Artist},
+    components: {ArtistShortBio},
     computed: {},
     methods: {
       lookupArtist: function () {

@@ -19,7 +19,7 @@
       <router-link :to="{ name: 'account' }">Account</router-link>
     </div>
 
-    <div class="centered">
+    <div class="centered margin-bottom">
       <router-view></router-view>
     </div>
 
@@ -231,6 +231,10 @@
 
   .pad-bottom {
     padding-bottom: 20px;
+  }
+
+  .margin-bottom {
+    margin-bottom: 150px;
   }
 
   @media screen and (min-width: 52em) {
