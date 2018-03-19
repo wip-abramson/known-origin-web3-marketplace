@@ -142,7 +142,7 @@
     <p>(d) Nothing in this Public License constitutes or may be interpreted as a limitation upon, or waiver of, any privileges and immunities that apply to the Licensor or You, including from the legal processes of any jurisdiction or authority.</p>
 
     <div class="back-to-gallery">
-      <router-link :to="{ name: 'gallery' }" tag="button" class="btn">Back to gallery</router-link>
+      <router-link :to="{ name: 'gallery' }" tag="button" class="btn btn-center">Back to gallery</router-link>
     </div>
 
   </div>
@@ -176,11 +176,4 @@
 </script>
 
 <style scoped>
-  h1, h2, h3 {
-    font-weight: bold;
-  }
-
-  .back-to-gallery {
-    text-align: center;
-  }
 </style>
