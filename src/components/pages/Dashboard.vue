@@ -106,7 +106,7 @@
 
     <div id="partners">
       <h2>Our partners</h2>
-      <img src="../../assets/Partner_Footer2.png" style="max-width: 100%"/>
+      <img src="../../../static/Partner_Footer2.png" style="max-width: 100%"/>
     </div>
 
     <hr/>
