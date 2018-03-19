@@ -2,52 +2,39 @@
   <div id="details">
     <h1>{{ title }}</h1>
 
+    <h2>
+      Contract address: {{ contractAddress }}
+      <address-icon :eth-address="contractAddress"></address-icon>
+    </h2>
+
+    <div v-if="contractName && contractSymbol" class="message is-primary">
+        <p>Symbol {{ contractSymbol }}</p>
+    </div>
+
     <div v-if="curatorAddress" class="message is-primary">
-      <div class="message-header">
-        <p>Addresses: </p>
-      </div>
-      <div class="message-body">
         <p>
-          curatorAddress = {{ curatorAddress }} <br/>
+          Curator: {{ curatorAddress }} <br/>
           <address-icon :eth-address="curatorAddress"></address-icon>
         </p>
         <p>
-          commissionAddress = {{ commissionAddress }} <br/>
+          Commission: {{ commissionAddress }} <br/>
           <address-icon :eth-address="commissionAddress"></address-icon>
         </p>
         <p>
-          contractDeveloperAddress = {{ contractDeveloperAddress }}
+          Smart contract partner: {{ contractDeveloperAddress }}
           <address-icon :eth-address="contractDeveloperAddress"></address-icon>
         </p>
+    </div>
 
-      </div>
-    </div>
     <div v-if="totalSupply" class="message is-primary">
-      <div class="message-header">
-        <p>Total Supply:</p>
-      </div>
-      <div class="message-body">
-        {{ totalSupply }}
-      </div>
+      <p>Total supply of assets: {{ totalSupply }}</p>
     </div>
+
     <div v-if="totalPurchaseValueInWei && totalNumberOfPurchases && totalPurchaseValueInEther" class="message is-primary">
-      <div class="message-header">
-        <p>Totals:</p>
-      </div>
-      <div class="message-body">
-        totalPurchaseValueInWei = {{ totalPurchaseValueInWei }} |
-        totalNumberOfPurchases = {{ totalNumberOfPurchases }} |
-        totalPurchaseValueInEther = {{ totalPurchaseValueInEther }}
-      </div>
+      <p>Number of sales: {{ totalNumberOfPurchases }}</p>
+      <p>Purchase total in ETH: {{ totalPurchaseValueInEther }}</p>
     </div>
-    <div v-if="contractName && contractSymbol" class="message is-primary">
-      <div class="message-header">
-        <p>Info:</p>
-      </div>
-      <div class="message-body">
-        contractName = {{ contractName }} <br/> contractSymbol = {{ contractSymbol }}
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -61,7 +48,7 @@
     components: {AddressIcon},
     data() {
       return {
-        title: 'Contract stuff',
+        title: 'KODA Contract',
       };
     },
     computed: {
@@ -75,6 +62,7 @@
         'totalPurchaseValueInEther',
         'contractName',
         'contractSymbol',
+        'contractAddress'
       ])
     }
   };

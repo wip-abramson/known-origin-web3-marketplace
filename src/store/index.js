@@ -25,6 +25,7 @@ const store = new Vuex.Store({
     // contract metadata
     contractName: '',
     contractSymbol: '',
+    contractAddress: '',
 
     // contract totals
     totalSupply: null,
@@ -84,10 +85,11 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    [mutations.SET_COMMISSION_ADDRESSES] (state, {curatorAddress, commissionAddress, contractDeveloperAddress}) {
+    [mutations.SET_COMMISSION_ADDRESSES] (state, {curatorAddress, commissionAddress, contractDeveloperAddress, contractAddress}) {
       state.curatorAddress = curatorAddress;
       state.commissionAddress = commissionAddress;
       state.contractDeveloperAddress = contractDeveloperAddress;
+      state.contractAddress = contractAddress;
     },
     [mutations.SET_ASSETS] (state, {assets, assetsByEditions, assetsByArtists}) {
       Vue.set(state, 'assets', assets);
@@ -257,12 +259,13 @@ const store = new Vuex.Store({
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
 
-          Promise.all([contract.curator(), contract.commissionAccount(), contract.contractDeveloper()])
+          Promise.all([contract.curator(), contract.commissionAccount(), contract.contractDeveloper(), contract.address])
             .then((results) => {
               commit(mutations.SET_COMMISSION_ADDRESSES, {
                 curatorAddress: results[0],
                 commissionAddress: results[1],
-                contractDeveloperAddress: results[2]
+                contractDeveloperAddress: results[2],
+                contractAddress: results[3]
               });
             });
 

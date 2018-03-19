@@ -319,6 +319,10 @@
     color: gray;
   }
 
+  .bold {
+    font-weight: bold;
+  }
+
   .btn-center {
     text-align: center;
   }

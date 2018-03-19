@@ -29,13 +29,13 @@
 
 <style>
   .icon-normal {
-    height: 128px;
-    width: 128px;
+    height: 64px;
+    width: 64px;
   }
 
   .icon-small {
-    height: 64px;
-    width: 64px;
+    height: 32px;
+    width: 32px;
   }
 
 </style>

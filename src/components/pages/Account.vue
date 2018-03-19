@@ -2,15 +2,10 @@
   <div id="account">
     <h1>{{ title }}</h1>
 
-    <p>My address: {{ account }}</p>
+    <p>My address: {{ account }} <address-icon :eth-address="account"></address-icon></p>
 
-    <p><address-icon :eth-address="account"></address-icon></p>
+    <h2>My collection <span class="bold">{{assetsPurchasedByAccount.length}} assets</span></h2>
 
-    <p>{{ accountBalance }} ETH</p>
-
-    <h2>My Collection (total: {{assetsPurchasedByAccount.length}})</h2>
-
-    <p>{{ assetsPurchasedByAccount.length }} Purchased</p>
 
     <div class="centered">
       <section class="cards" v-if="assetsPurchasedByAccount">
