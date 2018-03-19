@@ -4,8 +4,7 @@
 
       <router-link :to="{ name: 'artist', params: { id: artist.id} }">
         <figure class="thumbnail">
-          <!--<img :src="artist.img"/>-->
-          <img src="../assets/artists/ArtistBarrieD_preview.jpeg"/>
+          <img :src="artist.img"/>
         </figure>
 
         <h2>{{ artist.name }}</h2>
