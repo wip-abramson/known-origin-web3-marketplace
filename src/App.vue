@@ -2,22 +2,9 @@
   <div id="app">
 
     <header id="header" class="centered">
-      <div class="header-branding ">KnownOrigin.io</div>
+      <router-link :to="{ name: 'account' }" class="pull-right">Account</router-link>
+      <div class="header-branding "><router-link :to="{ name: 'dashboard' }" class="header-dash">KnownOrigin.io</router-link></div>
     </header>
-
-    <div class="centered pad-top">
-      <router-link :to="{ name: 'dashboard' }">Dash</router-link>
-      |
-      <router-link :to="{ name: 'artists' }">Artists</router-link>
-      |
-      <router-link :to="{ name: 'gallery' }">Gallery</router-link>
-      |
-      <router-link :to="{ name: 'license' }">License</router-link>
-      |
-      <router-link :to="{ name: 'details' }">Contract details</router-link>
-      |
-      <router-link :to="{ name: 'account' }">Account</router-link>
-    </div>
 
     <div class="centered margin-bottom">
       <router-view></router-view>
@@ -29,6 +16,9 @@
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
       <!--<p>(+44) 7715 86 28 33</p>-->
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
+
+      <router-link :to="{ name: 'license' }" class="pull-right">License</router-link>
+      <router-link :to="{ name: 'details' }" class="pull-right">Contract details</router-link>
     </footer>
   </div>
 </template>
@@ -202,7 +192,7 @@
     background-color: #3e27d9;
     color: #f2f2f2;
     padding: 10px;
-    font-weight: bold;
+    padding-bottom: 50px;
   }
 
   #footer a {
@@ -325,5 +315,20 @@
 
   .btn-center {
     text-align: center;
+  }
+
+  .pull-right {
+    float: right;
+    margin: 10px;
+  }
+
+  .header-dash {
+    text-decoration: none;
+  }
+
+  .back-arrow {
+    font-size: 1.25em;
+    text-decoration: none;
+    padding-right: 20px;
   }
 </style>

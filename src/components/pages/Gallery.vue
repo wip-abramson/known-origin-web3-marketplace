@@ -1,6 +1,6 @@
 <template>
   <div id="gallery">
-    <h1>{{ title }}</h1>
+    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Gallery</h1>
 
     <div class="centered">
       <section class="cards">
@@ -23,11 +23,6 @@
   export default {
     name: 'gallery',
     components: {GalleryEdition},
-    data() {
-      return {
-        title: 'Gallery',
-      };
-    },
     computed: {
       ...mapState([
         'assetsByEditions'

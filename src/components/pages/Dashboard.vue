@@ -37,6 +37,8 @@
       <div class="centered">
         <section class="cards">
             <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
+
+          <router-link :to="{ name: 'artists' }" tag="button" class="btn btn-center">View artists</router-link>
         </section>
       </div>
     </div>

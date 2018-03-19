@@ -7,14 +7,16 @@
           <!--<img :src="artist.img"/>-->
           <img src="../assets/artists/ArtistBarrieD_preview.jpeg"/>
         </figure>
+
+        <h2>{{ artist.name }}</h2>
+
+        <p>{{ artist.bio }}</p>
+
+        <p v-if="artist.twitter">
+          <a :href="'http://twitter.com/' + artist.twitter" target="_blank" class="twitter">{{artist.twitter}}</a>
+        </p>
+
       </router-link>
-
-      <h2>{{ artist.name }}</h2>
-      <p>{{ artist.bio }}</p>
-      <p v-if="artist.twitter">
-        <a :href="'http://twitter.com/' + artist.twitter" target="_blank" class="twitter">{{artist.twitter}}</a>
-      </p>
-
     </div>
     <!-- .card-content -->
   </article>

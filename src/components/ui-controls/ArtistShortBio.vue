@@ -1,8 +1,8 @@
 <template>
   <div v-if="artist">
-      <img :src="artist.img" style="max-width: 150px; float:right"/>
-      <h1>{{ artist.name }}</h1>
+      <h1><router-link :to="{ name: 'artists' }" class="back-arrow">&lt;</router-link>{{ artist.name }}</h1>
 
+      <img :src="artist.img"/>
   </div>
 </template>
 

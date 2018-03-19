@@ -1,6 +1,6 @@
 <template>
   <div id="account">
-    <h1>{{ title }}</h1>
+    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Account</h1>
 
     <p>My address: {{ account }} <address-icon :eth-address="account"></address-icon></p>
 
@@ -30,11 +30,6 @@
   export default {
     name: 'dashboard',
     components: {Asset, AddressIcon},
-    data () {
-      return {
-        title: 'My Account',
-      };
-    },
     computed: {
       ...mapState([
         'account',
