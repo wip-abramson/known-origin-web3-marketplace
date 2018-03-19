@@ -5,13 +5,13 @@
         <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
         <label :for="'confirm_terms'">I agree with KODA license</label>
       </p>
-      <p>
-        By choosing <strong>I Agree</strong>, you understand and agree to KnownOrigin's term of service and usage license.
+      <div class="license-text">
+        By choosing <strong>I agree</strong>, you understand and agree to KnownOrigin's term of service and usage license.
         <router-link :to="{ name: 'license' }">Read license</router-link>
-      </p>
+      </div>
       <p>
         <button type="button" class="btn" :disabled="!confirm_terms" v-on:click="completePurchase" v-if="isUnsold">
-          Confirm buy
+          Confirm purchase
         </button>
 
         <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator && !soldAsFiat">
@@ -21,19 +21,19 @@
         <button type="button" v-on:click="reverseFiatPurchase" class="btn btn-danger" v-if="isCurator && soldAsFiat">
           Reverse FIAT Purchase
         </button>
-      </p>
-      <p>
-        <router-link :to="{ name: 'gallery' }">Back to gallery</router-link>
+
+        <button v-if="asset.purchased !== 0" class="btn btn-sold">
+          SOLD
+        </button>
       </p>
     </form>
 
-    <p v-if="asset.purchased !== 0">
-      Asset purchased!
-    </p>
+
 
     <p v-if="!account" class="error">
       Your account is locked!
     </p>
+
   </div>
 </template>
 
@@ -98,5 +98,14 @@
 
   .error {
     background-color: red;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  .license-text {
+    font-size: 0.8em;
+    margin: 5px;
   }
 </style>

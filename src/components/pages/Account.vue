@@ -2,9 +2,13 @@
   <div id="account">
     <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Account</h1>
 
-    <p>My address: {{ account }} <address-icon :eth-address="account"></address-icon></p>
+    <p>
+      <!--My address:  -->
+      <address-icon :eth-address="account"></address-icon>
+      {{ account }}
+    </p>
 
-    <h2>My collection <span class="bold">{{assetsPurchasedByAccount.length}} assets</span></h2>
+    <h2>My collection (<span class="bold">{{assetsPurchasedByAccount.length}}</span>)</h2>
 
     <div class="centered">
       <section class="cards" v-if="assetsPurchasedByAccount">

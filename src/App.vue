@@ -74,7 +74,7 @@
 
   h2 {
     display: block;
-    font-size: 24px;
+    font-size: 28px;
     margin-top: 25px;
     margin-bottom: 25px;
   }
@@ -102,7 +102,6 @@
   }
 
   .btn:hover {
-    background: #3e27d9;
     text-decoration: none;
   }
 
@@ -283,5 +282,11 @@
   .btn-sold {
     background-color: red;
     color: white;
+  }
+
+  .token-id {
+    font-weight: bold;
+    color: #3e27d9;
+    font-size: 1.25em;
   }
 </style>

@@ -1,55 +1,51 @@
 <template>
-  <div class="assets_to_buy" v-if="asset">
+  <div>
+    <h1>
+      <router-link :to="{ name: 'confirmPurchase', params: { edition: asset.edition }}" class="back-arrow">&lt;</router-link>
+      {{ asset.editionName }}
+    </h1>
 
-    <div class="centered" v-if="asset">
-      <section>
+    <div class="assets_to_buy centered" v-if="asset">
 
-        <div class="card-content">
+      <div class="centered" v-if="asset">
+        <section>
 
-          <!-- TODO extract component -->
+          <asset-figure :edition="asset" class="centered"></asset-figure>
 
-          <!-- TODO on completion replace content with confirmation -->
+          <div class="card-content">
 
-          {{purchaseState}}
+            <div class="token-id">#0000{{ asset.id }}</div>
 
-          <h2>#{{ asset.id }}</h2>
+            <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-          <h3>
-            {{ asset.editionName }}
-            by
-            {{ asset.artist }}
-          </h3>
+            <!--<h4>@ {{ asset.priceInEther }} ETH</h4>-->
+            <br/>
+            
+            <div>
+              You
+              <!--{{ account }}-->
+              <address-icon :eth-address="account" :size="'small'"></address-icon>
+            </div>
 
-          <h4>@ {{ asset.priceInEther }} ETH</h4>
+            <price-in-eth :value="asset.priceInEther"></price-in-eth>
 
-          <p class="btn-center">
-            <img :src="asset.lowResImg" style="max-width: 150px"/>
-          </p>
+            <div>
+              Current owner<br/>
+              <!--{{ asset.owner }}-->
+              <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+            </div>
 
-          <p>
-            You<br/>
-            {{ account }} <address-icon :eth-address="account" :size="'small'"></address-icon>
-          </p>
+          </div>
 
-          <p>
-            Amount<br/>
-            {{ asset.priceInEther }} ETH
-          </p>
+          <complete-purchase-button :asset="asset" class="btn-center" @purchaseInitiated="onPurchaseInitiated"></complete-purchase-button>
+        </section>
+      </div>
 
-          <p>
-            Current owner<br/>
-            {{ asset.owner }} <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
-          </p>
-
-          <price-in-eth :value="asset.priceInEther"></price-in-eth>
-
-          <purchase-state :state="asset.purchased"></purchase-state>
-
-        </div>
-
-        <complete-purchase-button :asset="asset" class="btn-center" @purchaseInitiated="onPurchaseInitiated"></complete-purchase-button>
-      </section>
     </div>
+
+    <purchase-state :state="asset.purchased"></purchase-state>
+
+    {{ purchaseState }}
 
   </div>
 </template>
@@ -62,13 +58,15 @@
   import _ from 'lodash';
   import AddressIcon from '../ui-controls/AddressIcon';
   import PurchaseState from '../ui-controls/PurchaseState.vue';
+  import AssetFigure from '../AssetFigure.vue';
   import PriceInEth from '../ui-controls/PriceInEth.vue';
+  import EditionNameByArtist from '../ui-controls/EditionNameByArtist.vue';
   import * as mutations from '../../store/mutation-types';
   import { KnownOriginDigitalAsset } from '../../contracts/index';
 
   export default {
     name: 'completePurchase',
-    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton, PriceInEth},
+    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton, PriceInEth, AssetFigure, EditionNameByArtist},
     data () {
       return {
         confirm_terms: false
@@ -109,15 +107,8 @@
 </script>
 
 <style scoped>
-
   .assets_to_buy {
     background: white;
+    max-width: 400px;
   }
-
-  .price {
-    font-weight: bold;
-    font-size: 1.25em;
-    text-align: center;
-  }
-
 </style>

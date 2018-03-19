@@ -46,9 +46,5 @@
 </script>
 
 <style scoped>
-  .token-id {
-    font-weight: bold;
-    color: #3e27d9;
-    font-size: 1.25em;
-  }
+
 </style>
