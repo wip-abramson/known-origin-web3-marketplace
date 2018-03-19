@@ -121,16 +121,16 @@ const store = new Vuex.Store({
       state.currentNetwork = currentNetwork;
     },
     [mutations.PURCHASE_TRIGGERED] (state, {tokenId, buyer}) {
-      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_TRIGGERED'};
+      state.purchaseState[tokenId] = {tokenId, buyer, state: 'PURCHASE_TRIGGERED'};
     },
     [mutations.PURCHASE_FAILED] (state, {tokenId, buyer}) {
-      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_FAILED'};
+      state.purchaseState[tokenId] = {tokenId, buyer, state: 'PURCHASE_FAILED'};
     },
     [mutations.PURCHASE_SUCCESSFUL] (state, {tokenId, buyer}) {
-      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_SUCCESSFUL'};
+      state.purchaseState[tokenId] = {tokenId, buyer, state: 'PURCHASE_SUCCESSFUL'};
     },
     [mutations.PURCHASE_STARTED] (state, {tokenId, buyer}) {
-      state.purchaseState = {...state.purchaseState, tokenId, buyer, state: 'PURCHASE_STARTED'};
+      state.purchaseState[tokenId] = {tokenId, buyer, state: 'PURCHASE_STARTED'};
     },
   },
   actions: {
