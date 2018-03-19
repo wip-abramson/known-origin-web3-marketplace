@@ -1,16 +1,13 @@
 <template>
-  <div class="assets_to_buy">
-    <div class="centered" v-if="edition">
-      <section>
-        <edition :edition="edition">
-        </edition>
+  <div>
+    <h1><router-link :to="{ name: 'gallery' }" class="back-arrow">&lt;</router-link>  {{ edition.editionName }}</h1>
+    
+    <div class="assets_to_buy centered" v-if="edition">
+        <edition :edition="edition"></edition>
         <confirm-purchase-button :edition="edition" class="btn-center"></confirm-purchase-button>
-      </section>
-
-      <section>
-        <edition-qr-code :edition="edition"></edition-qr-code>
-      </section>
     </div>
+
+    <edition-qr-code :edition="edition"></edition-qr-code>
   </div>
 </template>
 
@@ -51,13 +48,7 @@
 
 <style scoped>
   .assets_to_buy {
-      margin-left: 170px;
-      margin-right: 170px;
-      margin-top: 50px;
-      margin-bottom: 50px;
-  }
-
-  .btn-center {
-    text-align: center;
+    background: white;
+    max-width: 400px;
   }
 </style>

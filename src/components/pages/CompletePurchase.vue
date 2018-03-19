@@ -1,7 +1,6 @@
 <template>
   <div class="assets_to_buy" v-if="asset">
 
-
     <div class="centered" v-if="asset">
       <section>
 
@@ -48,9 +47,7 @@
 
         </div>
 
-        <complete-purchase-button :asset="asset" class="btn-center"
-                                  @purchaseInitiated="onPurchaseInitiated">
-        </complete-purchase-button>
+        <complete-purchase-button :asset="asset" class="btn-center" @purchaseInitiated="onPurchaseInitiated"></complete-purchase-button>
       </section>
     </div>
 
@@ -113,10 +110,7 @@
 <style scoped>
 
   .assets_to_buy {
-    margin-left: 170px;
-    margin-right: 170px;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    background: white;
   }
 
   .btn-center {

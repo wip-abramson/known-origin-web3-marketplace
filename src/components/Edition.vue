@@ -1,7 +1,7 @@
 <template>
   <article class="card" v-if="edition">
-    <a href="#">
-      <asset-figure :edition="edition"></asset-figure>
+    <div>
+      <asset-figure :edition="edition" class="centered"></asset-figure>
       <div class="card-content">
 
         <edition-name-by-artist :edition="edition"></edition-name-by-artist>
@@ -16,7 +16,7 @@
         <price-in-eth :value="edition.priceInEther"></price-in-eth>
 
       </div>
-    </a>
+    </div>
     <!-- .card-content -->
   </article>
 
@@ -58,4 +58,5 @@
 </script>
 
 <style scoped>
+
 </style>

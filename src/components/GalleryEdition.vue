@@ -1,6 +1,6 @@
 <template>
   <article class="card" v-if="edition">
-    <a href="#">
+    <div>
       <asset-figure :edition="edition"></asset-figure>
       <div class="card-content">
 
@@ -21,7 +21,7 @@
         </p>
 
       </div>
-    </a>
+    </div>
     <!-- .card-content -->
   </article>
 

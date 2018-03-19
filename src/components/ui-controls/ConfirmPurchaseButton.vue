@@ -8,9 +8,9 @@
       </p>
     </form>
 
-    <div  v-if="!findNextAssetToPurchase(edition)">
-        ASSET has sold out, no more items left to sell
-    </div>
+    <button class="btn-warning" v-if="!findNextAssetToPurchase(edition)">
+       SOLD OUT
+    </button>
 
   </div>
 </template>
