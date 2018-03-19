@@ -6,13 +6,12 @@
 
     <h2>My collection <span class="bold">{{assetsPurchasedByAccount.length}} assets</span></h2>
 
-
     <div class="centered">
       <section class="cards" v-if="assetsPurchasedByAccount">
-        <Asset v-for="tokenId, key in assetsPurchasedByAccount"
+        <asset v-for="tokenId, key in assetsPurchasedByAccount"
                :asset="assetById(tokenId)"
                :key="key">
-        </Asset>
+        </asset>
       </section>
     </div>
 

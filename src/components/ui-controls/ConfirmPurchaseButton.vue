@@ -1,15 +1,11 @@
 <template>
   <div class="confirm_purchase_container">
-    <form v-if="findNextAssetToPurchase(edition)">
-      <p>
-        <button type="button" v-on:click="confirmPurchase" class="btn">
-          Buy Now
-        </button>
-      </p>
-    </form>
+    <button type="button" v-on:click="confirmPurchase" class="btn" v-if="findNextAssetToPurchase(edition)">
+      Buy Now
+    </button>
 
-    <button class="btn-warning" v-if="!findNextAssetToPurchase(edition)">
-       SOLD OUT
+    <button class="btn btn-sold" v-if="!findNextAssetToPurchase(edition)">
+       SOLD
     </button>
 
   </div>
@@ -57,7 +53,5 @@
 
 <style scoped>
 
-  .btn-warning {
-    background-color: darkorange;
-  }
+
 </style>

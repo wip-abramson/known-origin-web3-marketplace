@@ -1,28 +1,22 @@
 <template>
   <article class="card" v-if="asset">
-    <a href="#">
+    <div>
       <asset-figure :edition="asset"></asset-figure>
       <div class="card-content">
 
+        <div class="token-id">#0000{{asset.id}}</div>
+
         <edition-name-by-artist :edition="asset"></edition-name-by-artist>
-
-        <purchase-state :state="asset.purchased"></purchase-state>
-
-        <p>TOKEN ID {{asset.id}}</p>
-
-        <p>{{ asset.asset }}</p>
-
-        <p>
-          Owner: {{ asset.owner }} <br />
-          <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
-        </p>
 
         <p>{{ asset.otherMeta.description }}</p>
 
         <price-in-eth :value="asset.priceInEther"></price-in-eth>
 
+        <button class="btn btn-sold">
+          <purchase-state :state="asset.purchased"></purchase-state>
+        </button>
       </div>
-    </a>
+    </div>
     <!-- .card-content -->
   </article>
 
@@ -52,4 +46,9 @@
 </script>
 
 <style scoped>
+  .token-id {
+    font-weight: bold;
+    color: #3e27d9;
+    font-size: 1.25em;
+  }
 </style>

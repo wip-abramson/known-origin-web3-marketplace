@@ -7,7 +7,7 @@
         <edition-name-by-artist :edition="edition"></edition-name-by-artist>
 
         <p class="muted">
-          {{availableAssetsForEdition(edition.edition).length}} available
+          {{ availableAssetsForEdition(edition.edition).length }} available
         </p>
 
         <price-in-eth :value="edition.priceInEther"></price-in-eth>

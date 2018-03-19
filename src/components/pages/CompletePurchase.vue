@@ -41,7 +41,7 @@
             {{ asset.owner }} <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
           </p>
 
-          <p class="price">Total ETH {{ asset.priceInEther }}</p>
+          <price-in-eth :value="asset.priceInEther"></price-in-eth>
 
           <purchase-state :state="asset.purchased"></purchase-state>
 
@@ -62,12 +62,13 @@
   import _ from 'lodash';
   import AddressIcon from '../ui-controls/AddressIcon';
   import PurchaseState from '../ui-controls/PurchaseState.vue';
+  import PriceInEth from '../ui-controls/PriceInEth.vue';
   import * as mutations from '../../store/mutation-types';
   import { KnownOriginDigitalAsset } from '../../contracts/index';
 
   export default {
     name: 'completePurchase',
-    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton},
+    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton, PriceInEth},
     data () {
       return {
         confirm_terms: false
@@ -111,10 +112,6 @@
 
   .assets_to_buy {
     background: white;
-  }
-
-  .btn-center {
-    text-align: center;
   }
 
   .price {

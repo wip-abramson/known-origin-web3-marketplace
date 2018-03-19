@@ -2,6 +2,7 @@
   <figure class="thumbnail">
     <img :src="edition.lowResImg"/>
     <span class="edition-type">{{ edition.type }} artwork</span>
+    <span class="edition-sold" v-if="availableAssetsForEdition(edition.edition).length == 0">SOLD</span>
     <span class="edition-run">1 of {{assetsForEdition(edition.edition).length}}</span>
   </figure>
 </template>
@@ -14,7 +15,8 @@
     props: ['edition'],
     computed: {
       ...mapGetters([
-        'assetsForEdition'
+        'assetsForEdition',
+        'availableAssetsForEdition'
       ]),
     }
   };
@@ -33,6 +35,17 @@
     color: #f2f2f2;
     padding: 10px;
     opacity: 0.8;
+  }
+
+  .edition-sold {
+    position: absolute;
+    top: 100px;
+    right: 100px;
+    background-color: red;
+    color: #f2f2f2;
+    padding: 10px;
+    opacity: 0.6;
+    font-size: 1.25em;
   }
 
   .edition-run {

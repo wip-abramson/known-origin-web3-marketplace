@@ -98,6 +98,7 @@
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
+    margin: 5px;
   }
 
   .btn:hover {
@@ -277,5 +278,10 @@
     font-size: 1.25em;
     text-decoration: none;
     padding-right: 20px;
+  }
+
+  .btn-sold {
+    background-color: red;
+    color: white;
   }
 </style>
