@@ -315,4 +315,11 @@
 
   /* mq 60em*/
 
+  .muted {
+    color: gray;
+  }
+
+  .btn-center {
+    text-align: center;
+  }
 </style>

@@ -6,8 +6,6 @@
 
         <edition-name-by-artist :edition="edition"></edition-name-by-artist>
 
-        <p class="edition-code">{{ edition.edition }}</p>
-
         <p class="muted">
           {{availableAssetsForEdition(edition.edition).length}} available
         </p>
@@ -21,6 +19,7 @@
             View details
           </router-link>
         </p>
+
       </div>
     </a>
     <!-- .card-content -->
@@ -64,16 +63,4 @@
 </script>
 
 <style scoped>
-  .edition-code {
-    font-size: 0.85em;
-    padding: 0px;
-  }
-
-  .muted {
-    color: gray;
-  }
-
-  .btn-center {
-    text-align: center;
-  }
 </style>

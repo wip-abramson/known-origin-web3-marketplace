@@ -4,7 +4,7 @@ const artists = [
     name: 'Barrie J Davis',
     twitter: '@barriejdavies',
     bio: 'Hello, I\'m Barrie J Davies and I\'m an artist (born 1977) I\'m a British artist from Milford Haven, Pembrokeshire, Wales. I graduated from the Southampton Institute with a Fine Art degree in 2000 and I completed my Master\'s Degree at the University of Wales Institute, Cardiff in 2004. I now live and work in Brighton, England UK. My artwork is a fun colourful psychedelic and humourous approach to expose the human condition: notions of success, money, glamour, love, death, sex, gender & religion are picked at with dry comedic use of tragedy meshed with absurdity.',
-    img: 'assets/artists/ArtistBarrieD_preview.jpeg',
+    img: '../assets/artists/ArtistBarrieD_preview.jpeg',
     featured: true
   },
   {
