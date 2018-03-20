@@ -44,10 +44,6 @@ const uploadMetaData = ({ipfsPath}) => {
 
   return ipfs.add([
     {
-      path: `${ipfsPath}/name`,
-      content: new streams.ReadableStream(`${meta.artworkName} - ${meta.artist}`).read(),
-    },
-    {
       path: `${ipfsPath}/image`,
       content: image,
     },
@@ -62,20 +58,40 @@ const uploadMetaData = ({ipfsPath}) => {
   ], {recursive: false}
   )
     .then((res) => {
-      console.log('Uploaded file to IPFS', res);
-      let rootHash = _.last(res);
+      console.log('Uploaded meta file to IPFS', res);
+      let metaPath = _.last(res);
 
-      // TODO convert to multi address support https://github.com/multiformats/multiaddr
+      let ipfsData = {
+        name: `${meta.artworkName}`,
+        description: `${meta.description}`,
+        image: `https://ipfs.infura.io/ipfs/${metaPath.hash}/image`,
+        meta: `https://ipfs.infura.io/ipfs/${metaPath.hash}/other`
+      };
 
-      cacheIpfsHashes(ipfsPath, rootHash);
+      return ipfs.add([
+        {
+          path: `${ipfsPath}`,
+          content: new streams.ReadableStream(JSON.stringify(ipfsData)).read(),
+        }
+      ])
+        .then((res) => {
+          console.log('Uploaded root file to IPFS', res);
+          let rootHash = _.last(res);
 
-      return rootHash;
+          // TODO convert to multi address support https://github.com/multiformats/multiaddr
+
+          let tokenUri = `https://ipfs.infura.io/ipfs/${rootHash.hash}`;
+
+          cacheIpfsHashes(ipfsPath, tokenUri);
+
+          return tokenUri;
+        });
     });
 };
 
-const cacheIpfsHashes = (ipfsPath, rootHash) => {
+const cacheIpfsHashes = (ipfsPath, tokenUri) => {
   let cache = JSON.parse(fs.readFileSync(CACHE_FILE));
-  let updatedCache = _.set(cache, ipfsPath, rootHash.hash);
+  let updatedCache = _.set(cache, ipfsPath, tokenUri);
   console.log(updatedCache);
   fs.writeFileSync(CACHE_FILE, JSON.stringify(updatedCache, null, 4));
 };

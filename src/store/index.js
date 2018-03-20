@@ -192,23 +192,24 @@ const store = new Vuex.Store({
     },
     [actions.GET_ALL_ASSETS] ({commit, dispatch, state}) {
 
-      const lookupIPFSData = (hash) => {
-        // TODO handle multiaddress meta
+      const lookupIPFSData = (tokenUri) => {
 
-        // Conforms to existing IPFS meta structure
-        let name = axios.get(`https://ipfs.infura.io/ipfs/${hash}/name`);
-        let description = axios.get(`https://ipfs.infura.io/ipfs/${hash}/description`);
-        let otherMeta = axios.get(`https://ipfs.infura.io/ipfs/${hash}/other`);
-        let lowResImg = `https://ipfs.infura.io/ipfs/${hash}/image`;
+        // Load root IPFS data
+        return axios.get(`${tokenUri}`)
+          .then((tokenMeta) => {
 
-        return Promise.all([name, description, otherMeta])
-          .then((results) => {
-            return {
-              name: results[0].data,
-              description: results[1].data,
-              otherMeta: results[2].data,
-              lowResImg: lowResImg
-            };
+            let rootMeta = tokenMeta.data;
+
+            // Load additional meta about asset from IPFS
+            return axios.get(`${rootMeta.meta}`)
+              .then((otherMeta) => {
+                return {
+                  name: rootMeta.name,
+                  description: rootMeta.description,
+                  otherMeta: otherMeta.data,
+                  lowResImg: rootMeta.image
+                };
+              });
           });
       };
 
@@ -221,7 +222,7 @@ const store = new Vuex.Store({
             let assetInfo = results[0];
             let editionInfo = results[1];
 
-            let rawMeta = editionInfo[6];
+            let tokenUri = editionInfo[6];
 
             let fullAssetDetails = {
               id: assetInfo[0].toNumber(),
@@ -236,10 +237,10 @@ const store = new Vuex.Store({
               editionName: editionInfo[3].toString(),
               editionNumber: editionInfo[4].toNumber(),
               artist: editionInfo[5].toString(),
-              rawMeta: rawMeta
+              tokenUri: tokenUri
             };
 
-            return lookupIPFSData(rawMeta).then((ipfsMeata) => {
+            return lookupIPFSData(tokenUri).then((ipfsMeata) => {
               // set IPFS lookup back on object
               _.set(fullAssetDetails, 'otherMeta', ipfsMeata.otherMeta);
               _.set(fullAssetDetails, 'description', ipfsMeata.description);
@@ -257,7 +258,7 @@ const store = new Vuex.Store({
             .then((assets) => {
 
               let assetsByEditions = _.groupBy(assets, 'edition');
-              let assetsByArtists = _.groupBy(assets, 'artistName');
+              let assetsByArtists = _.groupBy(assets, 'artist');
 
               commit(mutations.SET_ASSETS, {
                 assets: assets,

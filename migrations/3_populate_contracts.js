@@ -35,11 +35,11 @@ const loadSeedData = (instance, _curatorAccount) => {
     console.log(`Seeding test data for [${insert.artworkName}]`);
 
     return ipfsUploader.uploadMetaData(insert)
-      .then((res) => {
+      .then((tokenUri) => {
 
         // mint edition
         return instance.mintEdition(
-          res.hash,
+          tokenUri,
           insert.edition,
           insert.artistName,
           insert.artworkName,
