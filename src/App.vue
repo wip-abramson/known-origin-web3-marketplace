@@ -175,7 +175,7 @@
 
   @media screen and (min-width: 52em) {
     .centered {
-      max-width: 52em;
+      /*max-width: 52em;*/
     }
   }
 
