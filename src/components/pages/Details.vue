@@ -3,7 +3,7 @@
     <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> KODA smart contract</h1>
 
     <h2>
-      Contract address: {{ contractAddress }}
+      Contract address:
       <address-icon :eth-address="contractAddress"></address-icon>
     </h2>
 
@@ -13,15 +13,15 @@
 
     <div v-if="curatorAddress" class="message is-primary">
         <p>
-          Curator: {{ curatorAddress }} <br/>
+          Curator:
           <address-icon :eth-address="curatorAddress"></address-icon>
         </p>
         <p>
-          Commission: {{ commissionAddress }} <br/>
+          Commission:
           <address-icon :eth-address="commissionAddress"></address-icon>
         </p>
         <p>
-          Smart contract partner: {{ contractDeveloperAddress }}
+          Smart contract partner:
           <address-icon :eth-address="contractDeveloperAddress"></address-icon>
         </p>
     </div>

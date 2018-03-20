@@ -5,7 +5,6 @@
     <p>
       <!--My address:  -->
       <address-icon :eth-address="account"></address-icon>
-      {{ account }}
     </p>
 
     <h2>My collection (<span class="bold">{{assetsPurchasedByAccount.length}}</span>)</h2>
@@ -29,10 +28,11 @@
   import Gallery from './Gallery';
   import Asset from '../Asset';
   import AddressIcon from '../ui-controls/AddressIcon';
+  import EthAddress from '../ui-controls/EthAddress';
 
   export default {
     name: 'dashboard',
-    components: {Asset, AddressIcon},
+    components: {Asset, AddressIcon, EthAddress},
     computed: {
       ...mapState([
         'account',

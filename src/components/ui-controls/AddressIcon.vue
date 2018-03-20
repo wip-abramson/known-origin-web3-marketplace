@@ -1,15 +1,18 @@
 <template>
-  <div :class="'icon-' + size" v-if="ethAddress">
-    <img :src="'data:image/png;base64,' + createIcon">
+  <div v-if="ethAddress">
+    <img :class="'icon-' + size" :src="'data:image/png;base64,' + createIcon"/>
+    <eth-address :value="ethAddress"></eth-address>
   </div>
 </template>
 
 <script>
   /* global web3:true */
   import Identicon from 'identicon.js';
+  import EthAddress from './EthAddress';
 
   export default {
     name: 'addressIcon',
+    components: {EthAddress},
     props: {
       ethAddress: {
         type: String
