@@ -99,10 +99,12 @@ h3 {
   margin-bottom: 15px;
   font-weight: bold;
 }
+
 p {
   padding: 5px;
-  line-height: 1.3;
+  line-height: 1.5em;
 }
+
 .btn {
   background: $primary;
   color: $secondary;
@@ -302,9 +304,24 @@ strong {
 .current-network {
   font-size: 12px;
 }
-#splash, #partners, #quote {
+
+#partners, #quote {
   text-align: center;
   margin: 5px;
+}
+
+#splash {
+  text-align: center;
+  color: $white;
+  background-image: url('../static/background.jpg');
+  min-height: 300px;
+
+  .strap {
+    margin: 50px;
+    padding-top: 100px;
+    font-size: 3em;
+    line-height: 1.5em;
+  }
 }
 
 #quote {

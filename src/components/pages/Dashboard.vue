@@ -2,12 +2,9 @@
   <div id="dashboard">
 
     <div id="splash">
-      <h1>{{ title }}</h1>
-      <h2>Buy original artwork and rare digital assets</h2>
+      <h2 class="strap">Buy original artwork and rare digital art</h2>
       <router-link :to="{ name: 'gallery' }" tag="button" class="btn">View gallery</router-link>
     </div>
-
-    <hr/>
 
     <div id="intro">
       <h2>What is KnownOrigin.io</h2>
@@ -30,8 +27,6 @@
       </div>
     </div>
 
-    <hr/>
-
     <div id="featured-artists">
       <h2>Featured artists</h2>
       <div class="centered">
@@ -42,8 +37,6 @@
         </section>
       </div>
     </div>
-
-    <hr/>
 
     <div id="how-ko-works">
       <h2>How KnownOrigin.io works</h2>
@@ -102,14 +95,10 @@
       </div>
     </div>
 
-    <hr/>
-
     <div id="partners">
       <h2>Our partners</h2>
       <img src="../../../static/Partner_Footer2.png" style="max-width: 100%"/>
     </div>
-
-    <hr/>
 
   </div>
 </template>
@@ -123,11 +112,6 @@
   export default {
     name: 'dashboard',
     components: {Artist, Gallery},
-    data() {
-      return {
-        title: 'Be original. Buy original.',
-      };
-    },
     computed: {
       ...mapGetters([
         'featuredArtists'
