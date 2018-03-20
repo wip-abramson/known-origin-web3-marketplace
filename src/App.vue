@@ -205,6 +205,7 @@ img {
 .pull-right {
   float: right;
   margin: 10px;
+  text-decoration: none;
 }
 .header-dash {
   text-decoration: none;
