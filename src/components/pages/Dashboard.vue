@@ -137,15 +137,5 @@
 </script>
 
 <style scoped>
-  #splash, #partners, #quote {
-    text-align: center;
-    margin: 5px;
-  }
 
-  #quote {
-    text-align: left;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 25px;
-  }
 </style>

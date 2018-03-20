@@ -18,9 +18,6 @@
   };
 </script>
 
-<style>
-  .current-network {
-    font-size: 12px;
-  }
+<style scoped>
 
 </style>

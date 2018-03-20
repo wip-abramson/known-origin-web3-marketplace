@@ -88,24 +88,5 @@
 
 <style scoped>
 
-  .btn-warning {
-    background-color: darkorange;
-  }
 
-  .btn-danger {
-    background-color: darkred;
-  }
-
-  .error {
-    background-color: red;
-  }
-
-  strong {
-    font-weight: bold;
-  }
-
-  .license-text {
-    font-size: 0.8em;
-    margin: 5px;
-  }
 </style>

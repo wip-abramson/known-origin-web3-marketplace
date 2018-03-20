@@ -23,34 +23,5 @@
 </script>
 
 <style scoped>
-  .thumbnail {
-    position: relative;
-  }
 
-  .edition-type {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #3e27d9;
-    color: #f2f2f2;
-    padding: 10px;
-    opacity: 0.8;
-  }
-
-  .edition-sold {
-    position: absolute;
-    top: 100px;
-    right: 100px;
-    background-color: red;
-    color: #f2f2f2;
-    padding: 10px;
-    opacity: 0.6;
-    font-size: 1.25em;
-  }
-
-  .edition-run {
-    background-color: gray;
-    color: #f2f2f2;
-    padding: 5px;
-  }
 </style>

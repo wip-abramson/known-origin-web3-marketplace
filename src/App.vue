@@ -63,230 +63,257 @@
 </script>
 
 <style lang="scss">
-  h1 {
-    display: block;
-    font-size: 38px;
-    margin-top: 35px;
-    margin-bottom: 35px;
-    color: #3e27d9;
-    border-bottom: 1px;
-  }
+$primary: #3e27d9;
+$secondary: #f2f2f2;
+$black: black;
+$gray: gray;
+$white: white;
+$font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
+$sold: red;
+$warning: darkorange;
 
-  h2 {
-    display: block;
-    font-size: 28px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-  }
-
-  h3 {
-    display: block;
-    font-size: 16px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    font-weight: bold;
-  }
-
-  p {
-    padding: 5px;
-    line-height: 1.3;
-  }
-
-  .btn {
-    background: #3e27d9;
-    color: #f2f2f2;
-    font-size: 20px;
-    padding: 10px 20px 10px 20px;
-    text-decoration: none;
-    margin: 5px;
-  }
-
-  .btn:hover {
-    text-decoration: none;
-  }
-
-  .btn:disabled {
-    background: grey;
-    text-decoration: none;
-  }
-
-  .router-link-exact-active {
-    font-weight: bold;
-  }
-
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    background-color: #f2f2f2;
-    margin: 0;
-  }
-
-  a {
-    color: #3e27d9;
-  }
-
-  #header {
-    /*background-color: white;*/
-    color: #3e27d9;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-
-  #footer {
-    background-color: #3e27d9;
-    color: #f2f2f2;
-    padding: 10px;
-    padding-bottom: 50px;
-  }
-
-  #footer a {
-    color: #f2f2f2;
-    text-decoration: none;
-  }
-
-  .header-branding {
-    font-weight: 600;
-    font-style: normal;
-    font-size: 34px;
-    letter-spacing: 0em;
-    line-height: 1em;
-    text-transform: none;
-    color: #3e27d9;
-  }
-
-  .centered {
-    margin: 0 auto;
-    padding: 0 1em;
-  }
-
-  .pad-top {
-    padding-top: 20px;
-  }
-
-  .pad-bottom {
-    padding-bottom: 20px;
-  }
-
-  .margin-bottom {
-    margin-bottom: 150px;
-  }
-
-  @media screen and (min-width: 52em) {
-    .centered {
-      /*max-width: 52em;*/
-    }
-  }
-
-  /*--------------------------------------------------------------
+/*--------------------------------------------------------------
   Header styles minus menu
   --------------------------------------------------------------*/
-
-  .card {
-    background: white;
-    margin-bottom: 2em;
-    max-width: 400px;
-  }
-
-  .card a {
-    color: black;
+/* Flexbox styles */
+/* mq 40em*/
+/* mq 60em*/
+h1 {
+  display: block;
+  font-size: 38px;
+  margin-top: 35px;
+  margin-bottom: 35px;
+  color: $primary;
+  border-bottom: 1px;
+}
+h2 {
+  display: block;
+  font-size: 28px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+h3 {
+  display: block;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+p {
+  padding: 5px;
+  line-height: 1.3;
+}
+.btn {
+  background: $primary;
+  color: $secondary;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  margin: 5px;
+  &:hover {
     text-decoration: none;
   }
-
-  .card a:hover {
-    /*box-shadow: 3px 3px 8px hsl(0, 0%, 70%);*/
+  &:disabled {
+    background: $gray;
+    text-decoration: none;
   }
-
-  .card-content {
-    padding: 1.4em;
+}
+.router-link-exact-active {
+  font-weight: bold;
+}
+#app {
+  font-family: $font_family_1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $secondary;
+  margin: 0;
+}
+a {
+  color: $primary;
+}
+#header {
+  color: $primary;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#footer {
+  background-color: $primary;
+  color: $secondary;
+  padding: 10px;
+  padding-bottom: 50px;
+  a {
+    color: $secondary;
+    text-decoration: none;
   }
-
-  .card-content h2 {
+}
+.header-branding {
+  font-weight: 600;
+  font-style: normal;
+  font-size: 34px;
+  letter-spacing: 0em;
+  line-height: 1em;
+  text-transform: none;
+  color: $primary;
+}
+.centered {
+  margin: 0 auto;
+  padding: 0 1em;
+}
+.pad-top {
+  padding-top: 20px;
+}
+.pad-bottom {
+  padding-bottom: 20px;
+}
+.margin-bottom {
+  margin-bottom: 150px;
+}
+.card {
+  background: $white;
+  margin-bottom: 2em;
+  max-width: 400px;
+  a {
+    color: $black;
+    text-decoration: none;
+  }
+}
+.card-content {
+  padding: 1.4em;
+  h2 {
     margin-top: 0;
     margin-bottom: .5em;
     font-weight: normal;
   }
-
-  .card-content p {
+  p {
     font-size: 95%;
     padding: 10px;
   }
-
-  img {
-    width: 100%;
-    height: auto;
+}
+img {
+  width: 100%;
+  height: auto;
+}
+.muted {
+  color: $gray;
+}
+.bold {
+  font-weight: bold;
+}
+.btn-center {
+  text-align: center;
+}
+.pull-right {
+  float: right;
+  margin: 10px;
+}
+.header-dash {
+  text-decoration: none;
+}
+.back-arrow {
+  font-size: 1.25em;
+  text-decoration: none;
+  padding-right: 20px;
+}
+.btn-sold {
+  background-color: $sold;
+  color: $white;
+}
+.token-id {
+  font-weight: bold;
+  color: $primary;
+  font-size: 1.25em;
+}
+@media screen and (min-width: 40em) {
+  .cards {
+    margin-top: -1em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
-
-  /* Flexbox styles */
-  @media screen and (min-width: 40em) {
-    .cards {
-      margin-top: -1em;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    .card {
-      margin-bottom: 1em;
-      display: flex;
-      flex: 0 1 calc(50% - 0.5em);
-      /* width: calc(50% - 1em); */
-    }
+  .card {
+    margin-bottom: 1em;
+    display: flex;
+    flex: 0 1 calc(50% - 0.5em);
   }
-
-  /* mq 40em*/
-
-  @media screen and (min-width: 60em) {
-    .cards {
-      margin-top: inherit;
-    }
-
-    .card {
-      margin-bottom: 2em;
-      display: flex;
-      flex: 0 1 calc(33% - 0.5em);
-      /* width: calc(33% - 1em); */
-    }
+}
+@media screen and (min-width: 60em) {
+  .cards {
+    margin-top: inherit;
   }
-
-  /* mq 60em*/
-
-  .muted {
-    color: gray;
+  .card {
+    margin-bottom: 2em;
+    display: flex;
+    flex: 0 1 calc(33% - 0.5em);
   }
+}
 
-  .bold {
-    font-weight: bold;
-  }
+.thumbnail {
+  position: relative;
+}
 
-  .btn-center {
-    text-align: center;
-  }
+.edition-type {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $primary;
+  color: $secondary;
+  padding: 10px;
+  opacity: 0.8;
+}
 
-  .pull-right {
-    float: right;
-    margin: 10px;
-  }
+.edition-sold {
+  position: absolute;
+  top: 100px;
+  right: 100px;
+  background-color: $sold;
+  color: $secondary;
+  padding: 10px;
+  opacity: 0.6;
+  font-size: 1.25em;
+}
 
-  .header-dash {
-    text-decoration: none;
-  }
+.edition-run {
+  background-color: $gray;
+  color: $secondary;
+  padding: 5px;
+}
 
-  .back-arrow {
-    font-size: 1.25em;
-    text-decoration: none;
-    padding-right: 20px;
-  }
+.btn-warning {
+  background-color: $warning;
+}
 
-  .btn-sold {
-    background-color: red;
-    color: white;
-  }
+.btn-danger {
+  background-color: $sold;
+}
 
-  .token-id {
-    font-weight: bold;
-    color: #3e27d9;
-    font-size: 1.25em;
-  }
+.error {
+  background-color: $sold;
+}
+
+strong {
+  font-weight: bold;
+}
+
+.license-text {
+  font-size: 0.8em;
+  margin: 5px;
+}
+.current-network {
+  font-size: 12px;
+}
+#splash, #partners, #quote {
+  text-align: center;
+  margin: 5px;
+}
+
+#quote {
+  text-align: left;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 25px;
+}
+.assets_to_buy {
+  background: $white;
+  max-width: 400px;
+}
 </style>

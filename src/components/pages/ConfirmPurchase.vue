@@ -47,8 +47,5 @@
 </script>
 
 <style scoped>
-  .assets_to_buy {
-    background: white;
-    max-width: 400px;
-  }
+
 </style>

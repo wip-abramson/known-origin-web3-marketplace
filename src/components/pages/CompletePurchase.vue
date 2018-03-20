@@ -20,7 +20,7 @@
 
             <!--<h4>@ {{ asset.priceInEther }} ETH</h4>-->
             <br/>
-            
+
             <div>
               You
               <!--{{ account }}-->
@@ -107,8 +107,5 @@
 </script>
 
 <style scoped>
-  .assets_to_buy {
-    background: white;
-    max-width: 400px;
-  }
+
 </style>

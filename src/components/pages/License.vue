@@ -1,6 +1,6 @@
 <template>
   <div id="license">
-    <h1>{{ title }}</h1>
+    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link>  License</h1>
 
     <h2>KnownOrigin.io Attribution-NonCommercial-NoDerivatives 4.0 International Public License</h2>
 
@@ -141,10 +141,6 @@
 
     <p>(d) Nothing in this Public License constitutes or may be interpreted as a limitation upon, or waiver of, any privileges and immunities that apply to the Licensor or You, including from the legal processes of any jurisdiction or authority.</p>
 
-    <div class="back-to-gallery">
-      <router-link :to="{ name: 'gallery' }" tag="button" class="btn btn-center">Back to gallery</router-link>
-    </div>
-
   </div>
 
 </template>
@@ -158,11 +154,6 @@
   export default {
     name: 'dashboard',
     components: {},
-    data() {
-      return {
-        title: 'License / terms of use',
-      };
-    },
     computed: {
       ...mapState([
         'account',

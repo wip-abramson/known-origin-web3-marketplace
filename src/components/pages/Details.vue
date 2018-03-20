@@ -1,6 +1,6 @@
 <template>
   <div id="details">
-    <h1>{{ title }}</h1>
+    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> KODA smart contract</h1>
 
     <h2>
       Contract address: {{ contractAddress }}
@@ -46,11 +46,6 @@
   export default {
     name: 'dashboard',
     components: {AddressIcon},
-    data() {
-      return {
-        title: 'KODA Contract',
-      };
-    },
     computed: {
       ...mapState([
         'curatorAddress',
@@ -69,11 +64,5 @@
 </script>
 
 <style scoped>
-  .message-header {
-    font-weight: bold;
-  }
 
-  .message-body {
-    line-height: 1.5;
-  }
 </style>
