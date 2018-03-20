@@ -57,11 +57,11 @@
   import CompletePurchaseButton from '../ui-controls/CompletePurchaseButton';
   import _ from 'lodash';
   import AddressIcon from '../ui-controls/AddressIcon';
-  import PurchaseState from '../ui-controls/PurchaseState.vue';
-  import AssetFigure from '../AssetFigure.vue';
-  import PriceInEth from '../ui-controls/PriceInEth.vue';
+  import PurchaseState from '../ui-controls/PurchaseState';
+  import AssetFigure from '../AssetFigure';
+  import PriceInEth from '../ui-controls/PriceInEth';
   import TokenId from '../ui-controls/TokenId.vue';
-  import EditionNameByArtist from '../ui-controls/EditionNameByArtist.vue';
+  import EditionNameByArtist from '../ui-controls/EditionNameByArtist';
   import * as mutations from '../../store/mutation-types';
   import { KnownOriginDigitalAsset } from '../../contracts/index';
 

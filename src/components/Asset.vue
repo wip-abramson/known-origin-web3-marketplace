@@ -25,12 +25,12 @@
 <script>
   import { mapGetters, mapState } from 'vuex';
   import _ from 'lodash';
-  import PurchaseState from './ui-controls/PurchaseState.vue';
-  import AddressIcon from './ui-controls/AddressIcon.vue';
-  import AssetFigure from './AssetFigure.vue';
-  import PriceInEth from './ui-controls/PriceInEth.vue';
-  import TokenId from './ui-controls/TokenId.vue';
-  import EditionNameByArtist from './ui-controls/EditionNameByArtist.vue';
+  import PurchaseState from './ui-controls/PurchaseState';
+  import AddressIcon from './ui-controls/AddressIcon';
+  import AssetFigure from './AssetFigure';
+  import PriceInEth from './ui-controls/PriceInEth';
+  import TokenId from './ui-controls/TokenId';
+  import EditionNameByArtist from './ui-controls/EditionNameByArtist';
 
   export default {
     components: {AddressIcon, PurchaseState, AssetFigure, PriceInEth, EditionNameByArtist, TokenId},
