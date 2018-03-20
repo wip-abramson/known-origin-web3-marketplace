@@ -26,10 +26,10 @@ const uploadMetaData = ({ipfsPath}) => {
   console.log(`Attempting to upload files in [${ipfsPath}]`);
 
   // Check cache as to not upload duplicates
-  let cachedIpfsHash = getCachedIpfsHashes(ipfsPath);
-  if (cachedIpfsHash) {
-    console.log(`Found cached version of [${ipfsPath}] - ipfs hash ${cachedIpfsHash}`);
-    return Promise.resolve({hash: cachedIpfsHash});
+  let cachedTokenUri = getFromCache(ipfsPath);
+  if (cachedTokenUri) {
+    console.log(`Found cached version of [${ipfsPath}] - token URI ${cachedTokenUri}`);
+    return Promise.resolve(cachedTokenUri);
   }
 
   let meta = require(`../config/data/ipfs_data/${ipfsPath}/meta.json`);
@@ -96,7 +96,7 @@ const cacheIpfsHashes = (ipfsPath, tokenUri) => {
   fs.writeFileSync(CACHE_FILE, JSON.stringify(updatedCache, null, 4));
 };
 
-const getCachedIpfsHashes = (ipfsPath) => {
+const getFromCache = (ipfsPath) => {
   let cache = JSON.parse(fs.readFileSync(CACHE_FILE));
   return _.get(cache, ipfsPath);
 };
