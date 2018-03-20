@@ -4,7 +4,7 @@
       <asset-figure :edition="asset"></asset-figure>
       <div class="card-content">
 
-        <div class="token-id">#0000{{asset.id}}</div>
+        <token-id :value="asset.id"></token-id>
 
         <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
@@ -29,10 +29,11 @@
   import AddressIcon from './ui-controls/AddressIcon.vue';
   import AssetFigure from './AssetFigure.vue';
   import PriceInEth from './ui-controls/PriceInEth.vue';
+  import TokenId from './ui-controls/TokenId.vue';
   import EditionNameByArtist from './ui-controls/EditionNameByArtist.vue';
 
   export default {
-    components: {AddressIcon, PurchaseState, AssetFigure, PriceInEth, EditionNameByArtist},
+    components: {AddressIcon, PurchaseState, AssetFigure, PriceInEth, EditionNameByArtist, TokenId},
     name: 'asset',
     props: {
       asset: {

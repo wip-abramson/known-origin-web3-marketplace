@@ -14,7 +14,7 @@
 
           <div class="card-content">
 
-            <div class="token-id">#0000{{ asset.id }}</div>
+            <token-id :value="asset.id"></token-id>
 
             <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
@@ -60,13 +60,14 @@
   import PurchaseState from '../ui-controls/PurchaseState.vue';
   import AssetFigure from '../AssetFigure.vue';
   import PriceInEth from '../ui-controls/PriceInEth.vue';
+  import TokenId from '../ui-controls/TokenId.vue';
   import EditionNameByArtist from '../ui-controls/EditionNameByArtist.vue';
   import * as mutations from '../../store/mutation-types';
   import { KnownOriginDigitalAsset } from '../../contracts/index';
 
   export default {
     name: 'completePurchase',
-    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton, PriceInEth, AssetFigure, EditionNameByArtist},
+    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton, PriceInEth, AssetFigure, EditionNameByArtist, TokenId},
     data () {
       return {
         confirm_terms: false
