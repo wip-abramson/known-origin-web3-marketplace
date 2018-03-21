@@ -10,11 +10,10 @@
       <h2>What is KnownOrigin.io</h2>
       <div class="centered">
         <section>
-          We have built a platform that allows people to own original art linked to a digital asset.
+          <p>We have built a platform that allows people to own original art linked to a digital asset.</p>
         </section>
         <section>
-          KnownOrigin.io brings together Blockchain technology and digital artworks though the power of
-          Web3 and ERC-721 backed digital arts assets.
+          <p>KnownOrigin.io brings together Blockchain technology and digital artworks though the power of Web3 and ERC-721 backed digital arts assets.</p>
         </section>
         <section>
           <div id="quote">
