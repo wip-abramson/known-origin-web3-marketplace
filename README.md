@@ -3,44 +3,34 @@
 
 ## Installation
 
-1. Install [Truffle](http://truffleframework.com) and an Ethereum client - like [EthereumJS TestRPC](https://github.com/ethereumjs/testrpc).
+1. Install [Ganache](http://truffleframework.com/ganache/).
+
+2. Install [Truffle](http://truffleframework.com).
 	```
 	npm install -g truffle
-	npm install -g ethereumjs-testrpc
 	```
 
-2. Compile and migrate the contracts.
-	```
-	truffle compile
-	truffle migrate
-	```
-	* use `npm run clean` to clean the build directory
-	* `truffle compile --all` to force compile all
-	* `truffle migrate --reset --all` to force  migrate all 
+3. Install [Metamask](https://metamask.io/) in chrome so you can test purchasing assets
 
-3. Run the webpack server for front-end hot reloading. Smart contract changes do not support hot reloading for now.
+4. When running locally you will need to link your *Metamask* account and your locally running Ganache.
+  * In Metamask - ensure you are logged out.
+  * In Metamask - `Restore from seed phrase` and place the 12 word seed from the Ganache in to Metamask
+     * This will link the accounts inside Ganache with Metamask & give you 100 ETH to test with
+  * In Metamask - add a custom network of `http://127.0.0.1:7545` - this is Ganache
+     * This will point Metamask at your locally running Ganache blockchain
+     
+5. Compile and migrate the contracts to your local blockchain (default is *ganache*).
+	```
+	./clean_deploy_local.sh
+	```
+	* This will compile the contracts and place the ABI files into `/build/` as well as deploying to Ganache 
+
+6. Run the webpack server for front-end hot reloading. Smart contract changes do not support hot reloading for now.
 	```
 	npm run start
 	```
-    
-## Tests
-This box comes with everything bundled for `unit`, `e2e` and `truffle` contracts testing.
-
-1. `unit` and `e2e` tests.
-	```
-	npm run test/dapp
-	```
-
-2. `truffle` contracts tests.
-	```
-	npm run test/truffle
-	```
-
-3. Alternatively you can directly run `unit`, `e2e` and `truffle` contracts tests in one command.
-	```
-	npm run test
-	```
-
+  **It should now work!** 
+ 
 ## Build for production
 To build the application for production, use the build command. A production build will be compiled in the `dist` folder.
 ```javascript
