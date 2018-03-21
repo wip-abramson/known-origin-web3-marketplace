@@ -16,3 +16,4 @@ selenium-debug.log
 *.sln
 *.iml
 /contracts-flat/
+/build/
