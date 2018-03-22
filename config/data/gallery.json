@@ -6,7 +6,7 @@
         {
           "artworkName": "Lending a hand 3",
           "ipfsPath": "lending_a_hand_3",
-          "edition": "PDLMAH01PHY",
+          "edition": "PDALMAH01PHY",
           "type": "physical",
           "numberOfEditions": 1,
           "fiatCost": 499.00,
@@ -15,7 +15,7 @@
         {
           "artworkName": "Lending a hand 3",
           "ipfsPath": "lending_a_hand_3",
-          "edition": "PDLMAH01DIG",
+          "edition": "PDALMAH01DIG",
           "type": "digital",
           "numberOfEditions": 10,
           "fiatCost": 49.00,
@@ -24,7 +24,7 @@
         {
           "artworkName": "Lending a hand 2",
           "ipfsPath": "lending_a_hand_2",
-          "edition": "PDLMAH02PHY",
+          "edition": "PDALMAH02PHY",
           "type": "physical",
           "numberOfEditions": 1,
           "fiatCost": 499.00,
@@ -33,7 +33,7 @@
         {
           "artworkName": "Lending a hand 3",
           "ipfsPath": "lending_a_hand_3",
-          "edition": "PDLMAH02DIG",
+          "edition": "PDALMAH02DIG",
           "type": "digital",
           "numberOfEditions": 10,
           "fiatCost": 49.00,

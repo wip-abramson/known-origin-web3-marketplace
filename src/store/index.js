@@ -42,7 +42,7 @@ const store = new Vuex.Store({
     artists: artistData,
     assets: [],
     assetsByEditions: [],
-    assetsByArtists: [],
+    assetsByArtistCode: [],
 
     // Frontend state
     purchaseState: {}
@@ -91,10 +91,10 @@ const store = new Vuex.Store({
       state.contractDeveloperAddress = contractDeveloperAddress;
       state.contractAddress = contractAddress;
     },
-    [mutations.SET_ASSETS] (state, {assets, assetsByEditions, assetsByArtists}) {
+    [mutations.SET_ASSETS] (state, {assets, assetsByEditions, assetsByArtistCode}) {
       Vue.set(state, 'assets', assets);
       Vue.set(state, 'assetsByEditions', assetsByEditions);
-      Vue.set(state, 'assetsByArtists', assetsByArtists);
+      Vue.set(state, 'assetsByArtistCode', assetsByArtistCode);
     },
     [mutations.SET_ARTISTS] (state, {artists}) {
       state.artists = artists;
@@ -237,6 +237,7 @@ const store = new Vuex.Store({
               editionName: editionInfo[3].toString(),
               editionNumber: editionInfo[4].toNumber(),
               artist: editionInfo[5].toString(),
+              artistCode: editionInfo[2].toString().substring(0, 3),
               tokenUri: tokenUri
             };
 
@@ -258,12 +259,12 @@ const store = new Vuex.Store({
             .then((assets) => {
 
               let assetsByEditions = _.groupBy(assets, 'edition');
-              let assetsByArtists = _.groupBy(assets, 'artist');
+              let assetsByArtistCode = _.groupBy(assets, 'artistCode');
 
               commit(mutations.SET_ASSETS, {
                 assets: assets,
                 assetsByEditions: assetsByEditions,
-                assetsByArtists: assetsByArtists,
+                assetsByArtistCode: assetsByArtistCode,
               });
             });
         });
