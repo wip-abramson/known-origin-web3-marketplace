@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1><router-link :to="{ name: 'gallery' }" class="back-arrow">&lt;</router-link>  {{ edition.editionName }}</h1>
+    <h1><router-link :to="{ name: 'artist', params: { id: edition.artistCode } }" class="back-arrow">&lt;</router-link>  {{ edition.editionName }}</h1>
 
     <div class="assets_to_buy centered" v-if="edition">
         <edition :edition="edition"></edition>
