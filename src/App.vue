@@ -141,6 +141,19 @@
     margin: 25px;
   }
 
+  a {
+    color: $primary;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
   .btn {
     background: $primary;
     color: $secondary;
@@ -172,18 +185,20 @@
     }
   }
 
-  .router-link-exact-active {
-    font-weight: bold;
-  }
-
-  a {
-    color: $primary;
-  }
-
   #header {
     color: $primary;
     padding: 10px;
     margin-bottom: 10px;
+
+    .header-branding {
+      font-weight: 600;
+      font-style: normal;
+      font-size: 34px;
+      letter-spacing: 0em;
+      line-height: 1em;
+      text-transform: none;
+      color: $primary;
+    }
   }
 
   #footer {
@@ -191,20 +206,11 @@
     color: $secondary;
     padding: 10px;
     padding-bottom: 50px;
+
     a {
       color: $secondary;
       text-decoration: none;
     }
-  }
-
-  .header-branding {
-    font-weight: 600;
-    font-style: normal;
-    font-size: 34px;
-    letter-spacing: 0em;
-    line-height: 1em;
-    text-transform: none;
-    color: $primary;
   }
 
   .centered {
@@ -222,34 +228,6 @@
 
   .margin-bottom {
     margin-bottom: 150px;
-  }
-
-  .card {
-    background: $white;
-    margin-bottom: 2em;
-    max-width: 400px;
-    a {
-      color: $black;
-      text-decoration: none;
-    }
-  }
-
-  .card-content {
-    padding: 1.4em;
-    h2 {
-      margin-top: 0;
-      margin-bottom: .5em;
-      font-weight: normal;
-    }
-    p {
-      font-size: 95%;
-      padding: 10px;
-    }
-  }
-
-  img {
-    width: 100%;
-    height: auto;
   }
 
   .muted {
@@ -274,6 +252,29 @@
     font-weight: bold;
     color: $primary;
     font-size: 1.25em;
+  }
+
+  .card {
+    background: $white;
+    margin-bottom: 2em;
+    max-width: 400px;
+    a {
+      color: $black;
+      text-decoration: none;
+    }
+  }
+
+  .card-content {
+    padding: 1.4em;
+    h2 {
+      margin-top: 0;
+      margin-bottom: .5em;
+      font-weight: normal;
+    }
+    p {
+      font-size: 95%;
+      padding: 10px;
+    }
   }
 
   @media screen and (min-width: 40em) {
@@ -341,10 +342,6 @@
     background-color: $gray;
     color: $secondary;
     padding: 5px;
-  }
-
-  strong {
-    font-weight: bold;
   }
 
   #splash {

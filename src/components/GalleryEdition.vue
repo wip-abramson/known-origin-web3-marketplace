@@ -14,7 +14,7 @@
 
         <p class="btn-center">
           <router-link
-            :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
+            :to="{ name: 'confirmPurchase', params: { edition: edition.edition }}"
             tag="button" class="btn btn-center">
             View details
           </router-link>

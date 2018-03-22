@@ -11,7 +11,6 @@
         </galleryEdition>
       </section>
     </div>
-    {{  }}
   </div>
 </template>
 
