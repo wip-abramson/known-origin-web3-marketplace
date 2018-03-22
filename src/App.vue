@@ -8,9 +8,19 @@
       </div>
     </header>
 
-    <modal name="no-web3-found">
+    <modal name="no-web3-found" :height="400" :clickToClose="false">
       <div class="no-web3-found-container">
-        No web3? You should consider trying MetaMask!
+        <div>
+          <h1>No web3 provider found!</h1>
+
+          <p>
+            You need to install <a href='https://metmask.io' target="_blank">MetaMask </a> to use this feature. <a
+            href='https://metmask.io' target="_blank">https://metamask.io</a>
+          </p>
+        </div>
+        <div>
+          <img src="../static/pay_with_metamask.png"/>
+        </div>
       </div>
     </modal>
 
@@ -73,6 +83,7 @@
 </script>
 
 <style lang="scss">
+
   $primary: #3e27d9;
   $secondary: #f2f2f2;
   $black: black;
@@ -124,6 +135,10 @@
   p {
     padding: 5px;
     line-height: 1.5em;
+  }
+
+  hr {
+    margin: 25px;
   }
 
   .btn {
@@ -307,6 +322,17 @@
     background-color: $sold;
     color: $secondary;
     padding: 10px;
+    opacity: 0.9;
+    font-size: 1.25em;
+  }
+
+  .edition-sold-out {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: $sold;
+    color: $secondary;
+    padding: 10px;
     opacity: 0.6;
     font-size: 1.25em;
   }
@@ -315,10 +341,6 @@
     background-color: $gray;
     color: $secondary;
     padding: 5px;
-  }
-
-  .error {
-    background-color: $sold;
   }
 
   strong {
@@ -348,6 +370,7 @@
     padding: 20px;
     font-size: 30px;
     color: red;
+    height: 400px;
   }
 
 </style>

@@ -23,12 +23,12 @@
 
       <div v-if="isPurchaseFailed(asset.id) || !assetPurchaseState(asset.id)">
 
-        <p v-if="isUnsold">
+        <div class="pad-bottom" v-if="isUnsold">
           <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
           <label :for="'confirm_terms'">I agree with KODA license</label>
-        </p>
+        </div>
 
-        <div class="license-text" v-if="isUnsold">
+        <div class="pad-bottom muted" v-if="isUnsold">
           By choosing <strong>I agree</strong>, you understand and agree to KnownOrigin's term of service and usage license.
           <router-link :to="{ name: 'license' }">Read license</router-link>
         </div>
@@ -58,7 +58,7 @@
 
     </form>
 
-    <p v-if="!account" class="error">
+    <p v-if="!account">
       Your account is locked!
     </p>
 
