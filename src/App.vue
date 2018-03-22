@@ -116,6 +116,10 @@ p {
   line-height: 1.5em;
 }
 
+hr {
+  margin: 25px;
+}
+
 .btn {
   background: $primary;
   color: $secondary;
@@ -314,10 +318,6 @@ img {
   background-color: $gray;
   color: $secondary;
   padding: 5px;
-}
-
-.error {
-  background-color: $sold;
 }
 
 strong {

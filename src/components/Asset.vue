@@ -11,10 +11,7 @@
         <p>{{ asset.otherMeta.description }}</p>
 
         <price-in-eth :value="asset.priceInEther"></price-in-eth>
-
-        <button class="btn btn-sold">
-          <purchase-state :state="asset.purchased"></purchase-state>
-        </button>
+        
       </div>
     </div>
     <!-- .card-content -->

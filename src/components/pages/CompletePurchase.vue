@@ -22,30 +22,28 @@
 
             <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-            <!--<h4>@ {{ asset.priceInEther }} ETH</h4>-->
-            <br/>
+            <hr/>
 
-            <div>
-              You
-              <!--{{ account }}-->
-              <address-icon :eth-address="account" :size="'small'"></address-icon>
+            <div class="centered">
+              You: <address-icon :eth-address="account" :size="'small'"></address-icon>
             </div>
+
+            <hr/>
 
             <price-in-eth :value="asset.priceInEther"></price-in-eth>
 
-            <div>
-              Current owner<br/>
-              <!--{{ asset.owner }}-->
-              <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+            <hr/>
+
+            <div class="centered">
+              KnownOrigin.io: <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
             </div>
 
+            <hr/>
+
+            <complete-purchase-button :asset="asset" class="btn-center pad-bottom" @purchaseInitiated="onPurchaseInitiated">
+            </complete-purchase-button>
+
           </div>
-
-          <complete-purchase-button :asset="asset" class="btn-center"
-                                    @purchaseInitiated="onPurchaseInitiated">
-          </complete-purchase-button>
-
-          <purchase-state :state="asset.purchased" class="btn-center"></purchase-state>
 
         </section>
 
