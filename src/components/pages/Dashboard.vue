@@ -16,10 +16,12 @@
           <p>KnownOrigin.io brings together Blockchain technology and digital artworks though the power of Web3 and ERC-721 backed digital arts assets.</p>
         </section>
         <section>
-          <div id="quote">
+          <div>
             <p>
+              <strong>
               Can we use the power of Ethereum blockchain and the integrity of digital assets in the art world to
               improve the proof of ownership, provenance, authenticity and reducing forgery of artwork?
+              </strong>
             </p>
           </div>
         </section>

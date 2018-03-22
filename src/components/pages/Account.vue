@@ -7,7 +7,7 @@
       <address-icon :eth-address="account"></address-icon>
     </p>
 
-    <h2>My collection (<span class="bold">{{assetsPurchasedByAccount.length}}</span>)</h2>
+    <h2>My collection (<strong>{{assetsPurchasedByAccount.length}}</strong>)</h2>
 
     <div class="centered">
       <section class="cards" v-if="assetsPurchasedByAccount">

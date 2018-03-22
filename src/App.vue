@@ -2,8 +2,8 @@
   <div id="app">
 
     <header id="header" class="centered">
-      <router-link :to="{ name: 'account' }" class="pull-right">Account</router-link>
-      <div class="header-branding "><router-link :to="{ name: 'dashboard' }" class="header-dash">KnownOrigin.io</router-link></div>
+      <router-link :to="{ name: 'account' }" style="float: right">Account</router-link>
+      <div class="header-branding"><router-link :to="{ name: 'dashboard' }" class="header-dash">KnownOrigin.io</router-link></div>
     </header>
 
     <div class="centered margin-bottom">
@@ -16,6 +16,8 @@
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
       <!--<p>(+44) 7715 86 28 33</p>-->
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
+
+      <br/>
 
       <router-link :to="{ name: 'license' }" class="pull-right">License</router-link>
       <router-link :to="{ name: 'details' }" class="pull-right">Contract details</router-link>
@@ -78,6 +80,15 @@ $warning: darkorange;
 /* Flexbox styles */
 /* mq 40em*/
 /* mq 60em*/
+
+#app {
+  font-family: $font_family_1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $secondary;
+  margin: 0;
+}
+
 h1 {
   display: block;
   font-size: 38px;
@@ -123,13 +134,7 @@ p {
 .router-link-exact-active {
   font-weight: bold;
 }
-#app {
-  font-family: $font_family_1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: $secondary;
-  margin: 0;
-}
+
 a {
   color: $primary;
 }
@@ -138,6 +143,7 @@ a {
   padding: 10px;
   margin-bottom: 10px;
 }
+
 #footer {
   background-color: $primary;
   color: $secondary;
@@ -148,6 +154,7 @@ a {
     text-decoration: none;
   }
 }
+
 .header-branding {
   font-weight: 600;
   font-style: normal;
@@ -157,19 +164,24 @@ a {
   text-transform: none;
   color: $primary;
 }
+
 .centered {
   margin: 0 auto;
   padding: 0 1em;
 }
+
 .pad-top {
   padding-top: 20px;
 }
+
 .pad-bottom {
   padding-bottom: 20px;
 }
+
 .margin-bottom {
   margin-bottom: 150px;
 }
+
 .card {
   background: $white;
   margin-bottom: 2em;
@@ -179,6 +191,7 @@ a {
     text-decoration: none;
   }
 }
+
 .card-content {
   padding: 1.4em;
   h2 {
@@ -191,41 +204,49 @@ a {
     padding: 10px;
   }
 }
+
 img {
   width: 100%;
   height: auto;
 }
+
 .muted {
   color: $gray;
 }
-.bold {
-  font-weight: bold;
-}
+
 .btn-center {
   text-align: center;
 }
-.pull-right {
-  float: right;
-  margin: 10px;
-  text-decoration: none;
-}
+
 .header-dash {
   text-decoration: none;
 }
+
 .back-arrow {
   font-size: 1.25em;
   text-decoration: none;
   padding-right: 20px;
 }
+
 .btn-sold {
   background-color: $sold;
   color: $white;
 }
+
+.btn-warning {
+  background-color: $warning;
+}
+
+.btn-danger {
+  background-color: $sold;
+}
+
 .token-id {
   font-weight: bold;
   color: $primary;
   font-size: 1.25em;
 }
+
 @media screen and (min-width: 40em) {
   .cards {
     margin-top: -1em;
@@ -239,6 +260,7 @@ img {
     flex: 0 1 calc(50% - 0.5em);
   }
 }
+
 @media screen and (min-width: 60em) {
   .cards {
     margin-top: inherit;
@@ -281,14 +303,6 @@ img {
   padding: 5px;
 }
 
-.btn-warning {
-  background-color: $warning;
-}
-
-.btn-danger {
-  background-color: $sold;
-}
-
 .error {
   background-color: $sold;
 }
@@ -305,11 +319,6 @@ strong {
   font-size: 12px;
 }
 
-#partners, #quote {
-  text-align: center;
-  margin: 5px;
-}
-
 #splash {
   text-align: center;
   color: $white;
@@ -324,14 +333,9 @@ strong {
   }
 }
 
-#quote {
-  text-align: left;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 25px;
-}
 .assets_to_buy {
   background: $white;
   max-width: 400px;
 }
+
 </style>
