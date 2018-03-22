@@ -289,9 +289,20 @@ img {
 }
 
 .edition-sold {
+   position: absolute;
+   top: 100px;
+   right: 100px;
+   background-color: $sold;
+   color: $secondary;
+   padding: 10px;
+   opacity: 0.9;
+   font-size: 1.25em;
+}
+
+.edition-sold-out {
   position: absolute;
-  top: 100px;
-  right: 100px;
+  top: 0px;
+  right: 0px;
   background-color: $sold;
   color: $secondary;
   padding: 10px;

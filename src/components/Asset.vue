@@ -1,7 +1,7 @@
 <template>
   <article class="card" v-if="asset">
     <div>
-      <asset-figure :edition="asset"></asset-figure>
+      <asset-figure :edition="asset" :is-asset="true"></asset-figure>
       <div class="card-content">
 
         <token-id :value="asset.id"></token-id>
