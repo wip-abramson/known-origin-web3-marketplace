@@ -3,9 +3,12 @@
     <artist-short-bio :artist="lookupArtist()"></artist-short-bio>
 
     <div class="centered">
-      <section class="cards" v-if="assetsByArtistCode">
-        <asset v-for="asset, key in lookupAssetsByArtistCode()" :asset="asset" :key="key">
-        </asset>
+      <section class="cards">
+        <galleryEdition
+          v-for="assetEdition, key in lookupAssetsByArtistCode($route.params.id)"
+          :edition="assetEdition[0]"
+          :key="key">
+        </galleryEdition>
       </section>
     </div>
     {{  }}
@@ -17,19 +20,17 @@
   import { mapGetters, mapState } from 'vuex';
   import ArtistShortBio from '../ui-controls/ArtistShortBio';
   import Asset from '../Asset';
+  import GalleryEdition from '../GalleryEdition';
 
   export default {
     name: 'artistPage',
-    components: {ArtistShortBio, Asset},
+    components: {ArtistShortBio, GalleryEdition},
     computed: {
-      ...mapState(['assetsByArtistCode'])
+      ...mapGetters(['lookupAssetsByArtistCode'])
     },
     methods: {
       lookupArtist: function () {
         return this.$store.getters.findArtist(this.$route.params.id);
-      },
-      lookupAssetsByArtistCode: function () {
-        return this.assetsByArtistCode[this.$route.params.id];
       }
     }
   };
