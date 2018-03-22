@@ -11,7 +11,7 @@
         <p>{{ asset.otherMeta.description }}</p>
 
         <price-in-eth :value="asset.priceInEther"></price-in-eth>
-        
+
       </div>
     </div>
     <!-- .card-content -->
