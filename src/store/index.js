@@ -70,9 +70,7 @@ const store = new Vuex.Store({
       return _.find(state.assets, (asset) => asset.id.toString() === tokenId.toString());
     },
     findArtist: (state) => (artistId) => {
-      return _.find(state.artists, function (artist) {
-        return artist.id.toString() === artistId;
-      });
+      return _.find(state.artists, (artist) => artist.id.toString() === artistId);
     },
     featuredArtists: (state) => {
       return state.artists.filter((a) => a.featured);
@@ -82,6 +80,9 @@ const store = new Vuex.Store({
         return state.curatorAddress.toLowerCase() === state.account.toLowerCase();
       }
       return false;
+    },
+    lookupAssetsByArtistCode: (state) => (artistCode) => {
+      return _.filter(state.assetsByEditions, (key, value) => value.startsWith(artistCode));
     },
     assetPurchaseState: (state) => (assetId) => {
       return _.get(state.purchaseState, assetId);
