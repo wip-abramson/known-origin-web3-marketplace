@@ -123,12 +123,27 @@ p {
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   margin: 5px;
+
   &:hover {
     text-decoration: none;
   }
+
   &:disabled {
     background: $gray;
     text-decoration: none;
+  }
+
+  &.btn-sold {
+    background-color: $sold;
+    color: $white;
+  }
+
+  &.btn-warning {
+    background-color: $warning;
+  }
+
+  &.btn-danger {
+    background-color: $sold;
   }
 }
 .router-link-exact-active {
@@ -228,19 +243,6 @@ img {
   padding-right: 20px;
 }
 
-.btn-sold {
-  background-color: $sold;
-  color: $white;
-}
-
-.btn-warning {
-  background-color: $warning;
-}
-
-.btn-danger {
-  background-color: $sold;
-}
-
 .token-id {
   font-weight: bold;
   color: $primary;
@@ -309,14 +311,6 @@ img {
 
 strong {
   font-weight: bold;
-}
-
-.license-text {
-  font-size: 0.8em;
-  margin: 5px;
-}
-.current-network {
-  font-size: 12px;
 }
 
 #splash {
