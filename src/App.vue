@@ -138,8 +138,8 @@ hr {
   }
 
   &.btn-sold {
-    background-color: $sold;
-    color: $white;
+    background-color: $white;
+    color: $sold;
   }
 
   &.btn-warning {

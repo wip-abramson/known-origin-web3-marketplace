@@ -11,7 +11,7 @@
         <p>{{ artist.bio }}</p>
 
         <p v-if="artist.twitter">
-          <a :href="'http://twitter.com/' + artist.twitter" target="_blank" class="twitter">{{artist.twitter}}</a>
+         {{artist.twitter}}
         </p>
       </router-link>
     </div>
@@ -27,8 +27,4 @@
 </script>
 
 <style scoped>
-  .twitter {
-    background-color: deepskyblue;
-    padding: 10px;
-  }
 </style>
