@@ -189,7 +189,7 @@ const store = new Vuex.Store({
           let account = accounts[0];
 
           // init the KODA contract
-          store.dispatch(actions.REFRESH_CONTRACT_DETAILS);
+          dispatch(actions.REFRESH_CONTRACT_DETAILS);
 
           return web3.eth.getBalance(account)
             .then((balance) => {
