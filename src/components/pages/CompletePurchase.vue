@@ -22,11 +22,13 @@
 
             <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-            <hr/>
+            <span v-if="asset.purchased == 0">
+              <hr/>
 
-            <div class="centered">
-              You: <address-icon :eth-address="account" :size="'small'"></address-icon>
-            </div>
+              <div class="centered">
+                You: <address-icon :eth-address="account" :size="'small'"></address-icon>
+              </div>
+            </span>
 
             <hr/>
 
@@ -35,7 +37,7 @@
             <hr/>
 
             <div class="centered">
-              KnownOrigin.io: <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+              Owner: <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
             </div>
 
             <hr/>
