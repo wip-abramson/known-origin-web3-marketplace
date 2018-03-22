@@ -82,6 +82,21 @@ const store = new Vuex.Store({
         return state.curatorAddress.toLowerCase() === state.account.toLowerCase();
       }
       return false;
+    },
+    assetPurchaseState: (state) => (assetId) => {
+      return _.get(state.purchaseState, assetId);
+    },
+    isPurchaseTriggered: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_TRIGGERED;
+    },
+    isPurchaseStarted: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_STARTED;
+    },
+    isPurchaseSuccessful: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_SUCCESSFUL;
+    },
+    isPurchaseFailed: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_FAILED;
     }
   },
   mutations: {

@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-if="edition">
     <h1><router-link :to="{ name: 'gallery' }" class="back-arrow">&lt;</router-link>  {{ edition.editionName }}</h1>
 
-    <div class="assets_to_buy centered" v-if="edition">
+    <div class="assets_to_buy centered">
         <edition :edition="edition"></edition>
         <confirm-purchase-button :edition="edition" class="btn-center"></confirm-purchase-button>
     </div>

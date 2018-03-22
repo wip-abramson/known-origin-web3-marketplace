@@ -1,13 +1,17 @@
 <template>
-  <div>
+  <div v-if="asset">
     <h1>
-      <router-link :to="{ name: 'confirmPurchase', params: { edition: asset.edition }}" class="back-arrow">&lt;</router-link>
+      <router-link
+        :to="{ name: 'confirmPurchase',
+        params: { edition: asset.edition }}"
+        class="back-arrow">&lt;
+      </router-link>
       {{ asset.editionName }}
     </h1>
 
-    <div class="assets_to_buy centered" v-if="asset">
+    <div class="assets_to_buy centered">
 
-      <div class="centered" v-if="asset">
+      <div class="centered">
         <section>
 
           <asset-figure :edition="asset" class="centered"></asset-figure>
@@ -37,15 +41,18 @@
 
           </div>
 
-          <complete-purchase-button :asset="asset" class="btn-center" @purchaseInitiated="onPurchaseInitiated"></complete-purchase-button>
+          <complete-purchase-button :asset="asset" class="btn-center"
+                                    @purchaseInitiated="onPurchaseInitiated">
+          </complete-purchase-button>
+
+          <purchase-state :state="asset.purchased" class="btn-center"></purchase-state>
+
         </section>
+
       </div>
 
     </div>
 
-    <purchase-state :state="asset.purchased"></purchase-state>
-
-    {{ purchaseState }}
 
   </div>
 </template>
@@ -67,7 +74,16 @@
 
   export default {
     name: 'completePurchase',
-    components: {PurchaseState, Asset, AddressIcon, CompletePurchaseButton, PriceInEth, AssetFigure, EditionNameByArtist, TokenId},
+    components: {
+      PurchaseState,
+      Asset,
+      AddressIcon,
+      CompletePurchaseButton,
+      PriceInEth,
+      AssetFigure,
+      EditionNameByArtist,
+      TokenId
+    },
     data () {
       return {
         confirm_terms: false
@@ -80,8 +96,7 @@
         'isCurator'
       ]),
       ...mapState([
-        'account',
-        'purchaseState'
+        'account'
       ]),
       title: function () {
         return `${this.$route.params.edition} - ID ${this.$route.params.tokenId}`;
