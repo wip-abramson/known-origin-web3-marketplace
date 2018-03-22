@@ -1,6 +1,6 @@
 <template>
   <div v-if="ethAddress">
-    <img :class="'icon-' + size" :src="'data:image/png;base64,' + createIcon"/>
+    <!--<img :class="'icon-' + size" :src="'data:image/png;base64,' + createIcon"/>-->
     <eth-address :value="ethAddress"></eth-address>
   </div>
 </template>
