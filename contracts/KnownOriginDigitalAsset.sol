@@ -88,6 +88,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
       uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
+//      super.approve(msg.sender, _tokenId);
       _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _type, _priceInWei, _auctionStartDate);
     }
   }
@@ -99,6 +100,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
+//    super.approve(msg.sender, _tokenId);
     _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _type, _priceInWei, _auctionStartDate);
   }
 
@@ -201,7 +203,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
       // approve sender as they have paid the required amount
       super.approve(msg.sender, _tokenId);
-
 
       // transfer assets from contract creator (curator) to new owner
       super.safeTransferFrom(curator, msg.sender, _tokenId);

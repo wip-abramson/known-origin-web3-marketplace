@@ -853,16 +853,14 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         //Ensure all Unsold
         const range = _.range(0, NUMBER_OF_EDITIONS);
-        for (let id of range) {
-          let isPurchased = await this.token.isPurchased(id);
+        for (let tokenId of range) {
+          let isPurchased = await this.token.isPurchased(tokenId);
           isPurchased.should.be.bignumber.equal(Unsold);
 
-          let ownerOf = await this.token.ownerOf(id);
+          let ownerOf = await this.token.ownerOf(tokenId);
           ownerOf.should.be.equal(curator);
-
-          let isApprovedOrOwner = await this.token.isApprovedOrOwner(curator, id);
-          isApprovedOrOwner.should.be.equal(curator);
         }
+
         //Ensure all Ids as expected and owned by curator
         let ownerTokens = await this.token.getOwnerTokens(curator);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
@@ -871,8 +869,30 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('price in wei', function () {
         it.only('can only purchase if price equal to token value', async function () {
-          let response = await this.token.purchaseWithEther(tokenToPurchase, {value: _priceInWei, from: buyer});
-          response.should.be.equal(true);
+          let {logs} = await this.token.purchaseWithEther(tokenToPurchase, {value: _priceInWei, from: buyer});
+
+          console.log(logs);
+
+          logs.length.should.be.equal(4);
+
+          logs[0].event.should.be.eq('Approval');
+          logs[0].args._owner.should.be.equal(curator);
+          logs[0].args._approved.should.be.equal(buyer);
+          logs[0].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
+
+          logs[1].event.should.be.eq('Approval');
+          logs[1].args._owner.should.be.equal(curator);
+          logs[1].args._approved.should.be.equal(ZERO_ADDRESS);
+          logs[1].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
+
+          logs[2].event.should.be.eq('Transfer');
+          logs[2].args._from.should.be.equal(curator);
+          logs[2].args._to.should.be.equal(buyer);
+          logs[2].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
+
+          logs[3].event.should.be.eq('PurchasedWithEther');
+          logs[3].args._buyer.should.be.equal(buyer);
+          logs[3].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
           let isPurchased = await this.token.isPurchased(tokenToPurchase);
           isPurchased.should.be.bignumber.equal(EtherPurchase);
