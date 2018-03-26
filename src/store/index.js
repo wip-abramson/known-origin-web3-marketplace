@@ -69,8 +69,8 @@ const store = new Vuex.Store({
     assetById: (state) => (tokenId) => {
       return _.find(state.assets, (asset) => asset.id.toString() === tokenId.toString());
     },
-    findArtist: (state) => (artistId) => {
-      return _.find(state.artists, (artist) => artist.id.toString() === artistId);
+    findArtist: (state) => (artistCode) => {
+      return _.find(state.artists, (artist) => artist.artistCode.toString() === artistCode);
     },
     featuredArtists: (state) => {
       return state.artists.filter((a) => a.featured);
@@ -269,7 +269,7 @@ const store = new Vuex.Store({
 
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
-          let supply = _.range(0, state.totalSupply);
+          let supply = _.range(1, state.totalSupply);
 
           return Promise.all(_.map(supply, (index) => lookupAssetInfo(contract, index)))
             .then((assets) => {

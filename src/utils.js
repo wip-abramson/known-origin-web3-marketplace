@@ -1,7 +1,9 @@
 const getNetIdString = () => {
   return window.web3.eth.net.getId()
     .then((id) => {
+
       console.log(`Running on network ID ${id}`);
+
       switch (id) {
         case 1:
           return 'Main Ethereum Network';

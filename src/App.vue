@@ -2,9 +2,9 @@
   <div id="app">
 
     <header id="header" class="centered">
-      <router-link :to="{ name: 'account' }" style="float: right">Account</router-link>
+      <router-link :to="{ name: 'account' }" style="float: right" class="no-text-decoration">Account</router-link>
       <div class="header-branding">
-        <router-link :to="{ name: 'dashboard' }" class="header-dash">KnownOrigin.io</router-link>
+        <router-link :to="{ name: 'dashboard' }" class="no-text-decoration">KnownOrigin.io</router-link>
       </div>
     </header>
 
@@ -37,8 +37,9 @@
 
       <br/>
 
-      <router-link :to="{ name: 'license' }" class="pull-right">License</router-link>
-      <router-link :to="{ name: 'details' }" class="pull-right">Contract details</router-link>
+      <router-link :to="{ name: 'license' }">License</router-link> |
+      <router-link :to="{ name: 'details' }">Contract details</router-link> |
+      <router-link :to="{ name: 'assets' }">Assets</router-link>
     </footer>
   </div>
 </template>
@@ -84,12 +85,16 @@
 
 <style lang="scss">
 
-  $primary: #3e27d9;
-  $secondary: #f2f2f2;
-  $black: black;
-  $gray: gray;
-  $white: white;
+  $primary: #3d3bee;
+  $background: #f0f0ff;
+
+  $success: #2ed573;
+
+  $strong-text: #4f4f6f;
+  $normal-text: #757587;
+
   $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
+
   $sold: red;
   $warning: darkorange;
 
@@ -104,16 +109,16 @@
     font-family: $font_family_1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: $secondary;
+    background-color: $background;
     margin: 0;
   }
 
   h1 {
     display: block;
-    font-size: 38px;
+    font-size: 28px;
     margin-top: 35px;
     margin-bottom: 35px;
-    color: $primary;
+    color: $strong-text;
     border-bottom: 1px;
   }
 
@@ -122,6 +127,7 @@
     font-size: 28px;
     margin-top: 25px;
     margin-bottom: 25px;
+    color: $strong-text;
   }
 
   h3 {
@@ -130,11 +136,14 @@
     margin-top: 15px;
     margin-bottom: 15px;
     font-weight: bold;
+    color: $strong-text;
   }
 
   p {
+    font-size: 14px;
     padding: 5px;
     line-height: 1.5em;
+    color: $normal-text;
   }
 
   hr {
@@ -156,7 +165,7 @@
 
   .btn {
     background: $primary;
-    color: $secondary;
+    color: $background;
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
@@ -167,12 +176,11 @@
     }
 
     &:disabled {
-      background: $gray;
+      background: $normal-text;
       text-decoration: none;
     }
 
     &.btn-sold {
-      background-color: $white;
       color: $sold;
     }
 
@@ -182,6 +190,10 @@
 
     &.btn-danger {
       background-color: $sold;
+    }
+
+    &.btn-success {
+      background-color: $success;
     }
   }
 
@@ -203,13 +215,17 @@
 
   #footer {
     background-color: $primary;
-    color: $secondary;
+    color: $background;
     padding: 10px;
     padding-bottom: 50px;
 
     a {
-      color: $secondary;
+      color: $background;
       text-decoration: none;
+    }
+
+    p {
+      color: $background;
     }
   }
 
@@ -231,14 +247,14 @@
   }
 
   .muted {
-    color: $gray;
+    color: $normal-text;
   }
 
   .btn-center {
     text-align: center;
   }
 
-  .header-dash {
+  .no-text-decoration {
     text-decoration: none;
   }
 
@@ -255,13 +271,9 @@
   }
 
   .card {
-    background: $white;
+    background: $background;
     margin-bottom: 2em;
     max-width: 400px;
-    a {
-      color: $black;
-      text-decoration: none;
-    }
   }
 
   .card-content {
@@ -311,7 +323,7 @@
     top: 0;
     left: 0;
     background-color: $primary;
-    color: $secondary;
+    color: $background;
     padding: 10px;
     opacity: 0.8;
   }
@@ -321,7 +333,7 @@
     top: 100px;
     right: 100px;
     background-color: $sold;
-    color: $secondary;
+    color: $background;
     padding: 10px;
     opacity: 0.9;
     font-size: 1.25em;
@@ -332,21 +344,20 @@
     top: 0px;
     right: 0px;
     background-color: $sold;
-    color: $secondary;
+    color: $background;
     padding: 10px;
     opacity: 0.6;
     font-size: 1.25em;
   }
 
   .edition-run {
-    background-color: $gray;
-    color: $secondary;
+    background-color: $normal-text;
+    color: $background;
     padding: 5px;
   }
 
   #splash {
     text-align: center;
-    color: $white;
     background-image: url('../static/background.jpg');
     min-height: 300px;
 
@@ -359,7 +370,7 @@
   }
 
   .assets_to_buy {
-    background: $white;
+    background-color: $background;
     max-width: 400px;
   }
 

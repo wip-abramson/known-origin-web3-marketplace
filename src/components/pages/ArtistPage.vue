@@ -5,7 +5,7 @@
     <div class="centered">
       <section class="cards">
         <galleryEdition
-          v-for="assetEdition, key in lookupAssetsByArtistCode($route.params.id)"
+          v-for="assetEdition, key in lookupAssetsByArtistCode($route.params.artistCode)"
           :edition="assetEdition[0]"
           :key="key">
         </galleryEdition>
@@ -29,7 +29,7 @@
     },
     methods: {
       lookupArtist: function () {
-        return this.$store.getters.findArtist(this.$route.params.id);
+        return this.$store.getters.findArtist(this.$route.params.artistCode);
       }
     }
   };

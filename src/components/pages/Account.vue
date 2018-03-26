@@ -31,7 +31,7 @@
   import EthAddress from '../ui-controls/EthAddress';
 
   export default {
-    name: 'dashboard',
+    name: 'account',
     components: {Asset, AddressIcon, EthAddress},
     computed: {
       ...mapState([
@@ -42,9 +42,6 @@
       ...mapGetters([
         'assetById',
       ])
-    },
-    mounted () {
-
     }
   };
 </script>

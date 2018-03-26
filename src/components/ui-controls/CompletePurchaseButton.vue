@@ -37,7 +37,7 @@
 
       <div v-if="isPurchaseFailed(asset.id) || !assetPurchaseState(asset.id)">
 
-        <button type="button" class="btn"
+        <button type="button" class="btn btn-success"
                 :disabled="!confirm_terms || isPurchaseTriggered(asset.id)"
                 v-on:click="completePurchase" v-if="isUnsold">
           Confirm purchase

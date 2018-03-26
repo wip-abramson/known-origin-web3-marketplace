@@ -1,7 +1,7 @@
 {
   "name": "known-origin-web3-marketstore",
   "version": "0.0.1",
-  "description": "Web3JS enable digital arts store",
+  "description": "Web3JS enabled digital assets project",
   "author": "james@blockchainmanchester.co.uk & andy@blockchainmanchester.co.uk",
   "private": true,
   "scripts": {
@@ -11,9 +11,10 @@
     "build": "node scripts/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
-    "test/truffle": "truffle test test/truffle/*",
+    "coverage": "test/coverage.sh",
+    "test/contracts": "test/test_truffle.sh",
     "test/dapp": "npm run unit && npm run e2e",
-    "test": "npm run test/truffle && npm run test/dapp",
+    "test": "npm run test/contracts",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
@@ -32,8 +33,8 @@
     "vue-swal": "^0.1.0",
     "vuejs-logger": "1.3.4",
     "vuex": "^3.0.1",
-    "web3": "^1.0.0-beta.30",
-    "zeppelin-solidity": "^1.7.0"
+    "zeppelin-solidity": "^1.7.0",
+    "web3": "^1.0.0-beta.30"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -46,6 +47,8 @@
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
     "chai": "^3.5.0",
+    "chai-as-promised": "^7.0.0",
+    "chai-bignumber": "^2.0.0",
     "chalk": "^2.0.1",
     "chromedriver": "^2.27.2",
     "clean-dir": "^1.0.3",
@@ -62,6 +65,7 @@
     "eslint-plugin-html": "^3.0.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
+    "ethereumjs-testrpc": "^6.0.3",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.14.1",
     "extract-text-webpack-plugin": "^2.0.0",
@@ -95,6 +99,9 @@
     "shelljs": "^0.7.6",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
+    "solidity-coverage": "^0.4.12",
+    "truffle": "^4.0.0",
+    "truffle-flattener": "^1.2.5",
     "truffle-hdwallet-provider": "0.0.3",
     "url-loader": "^0.5.8",
     "vue-loader": "^13.3.0",

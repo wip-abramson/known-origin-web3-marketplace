@@ -17,9 +17,11 @@ module.exports = function (deployer, network, accounts) {
 
       console.log(`Deployed contract to address = [${instance.address}] to network [${network}]`);
 
-      if (network === 'development' || network === 'ropsten' || network === 'rinkeby') {
+      if (network === 'ganache' || network === 'ropsten' || network === 'rinkeby') {
         console.log(`Loading in seed data`);
         return loadSeedData(instance, _curatorAccount);
+      } else {
+        console.log(`SKIPPING loading seed data as running on ${network}`);
       }
 
       return instance;

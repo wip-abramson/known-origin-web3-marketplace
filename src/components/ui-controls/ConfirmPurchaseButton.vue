@@ -42,6 +42,7 @@
         this.$router.push({
           name: 'completePurchase',
           params: {
+            artistCode: nextAssetToPurchase.edition.substring(0, 3),
             edition: nextAssetToPurchase.edition,
             tokenId: nextAssetToPurchase.id
           }

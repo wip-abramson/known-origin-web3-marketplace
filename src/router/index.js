@@ -6,6 +6,7 @@ import Details from '@/components/pages/Details';
 import Gallery from '@/components/pages/Gallery';
 import Account from '@/components/pages/Account';
 import License from '@/components/pages/License';
+import Assets from '@/components/pages/Assets';
 import ConfirmPurchase from '@/components/pages/ConfirmPurchase';
 import ArtistPage from '@/components/pages/ArtistPage';
 import CompletePurchase from '@/components/pages/CompletePurchase';
@@ -27,12 +28,6 @@ export default new Router({
       component: Artists
     },
     {
-      path: '/artist/:id',
-      name: 'artist',
-      component: ArtistPage,
-      props: true
-    },
-    {
       path: '/details',
       name: 'details',
       component: Details
@@ -40,6 +35,11 @@ export default new Router({
     {
       path: '/gallery',
       name: 'gallery',
+      component: Gallery
+    },
+    {
+      path: '/editions',
+      name: 'editions',
       component: Gallery
     },
     {
@@ -53,14 +53,37 @@ export default new Router({
       component: License
     },
     {
-      path: '/edition/:edition',
+      path: '/assets',
+      name: 'assets',
+      component: Assets
+    },
+    {
+      path: '/artists/:artistCode',
+      name: 'artist',
+      component: ArtistPage,
+      props: true
+    },
+    {
+      path: '/artists/:artistCode/editions/:edition',
       name: 'confirmPurchase',
       component: ConfirmPurchase,
       props: true
     },
     {
-      path: '/edition/:edition/:tokenId',
+      path: '/editions/:edition',
+      name: 'confirmPurchaseShort',
+      component: ConfirmPurchase,
+      props: true
+    },
+    {
+      path: '/artists/:artistCode/editions/:edition/assets/:tokenId',
       name: 'completePurchase',
+      component: CompletePurchase,
+      props: true
+    },
+    {
+      path: '/assets/:tokenId',
+      name: 'completePurchaseShort',
       component: CompletePurchase,
       props: true
     },
