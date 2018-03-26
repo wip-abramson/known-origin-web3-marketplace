@@ -15,7 +15,7 @@ require('chai')
   .should();
 
 contract('KnownOriginDigitalAsset', function (accounts) {
-  const creator = accounts[0];
+  const curator = accounts[0];
   const _commissionAccount = accounts[1];
   const _contractDeveloper = accounts[2];
   const buyer = accounts[3];
@@ -51,19 +51,19 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   // TODO handle custom setters
 
   beforeEach(async function () {
-    this.token = await KnownOriginDigitalAsset.new(_commissionAccount, _contractDeveloper, {from: creator});
+    this.token = await KnownOriginDigitalAsset.new(_commissionAccount, _contractDeveloper, {from: curator});
   });
 
   describe('like a ERC721BasicToken', function () {
     beforeEach(async function () {
-      await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: creator});
-      await this.token.mint(_tokenURI, _edition2, _artist, _editionName, _typePhysical, _priceInWei, _auctionStartDate, {from: creator});
+      await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: curator});
+      await this.token.mint(_tokenURI, _edition2, _artist, _editionName, _typePhysical, _priceInWei, _auctionStartDate, {from: curator});
     });
 
     describe('balanceOf', function () {
       describe('when the given address owns some tokens', function () {
         it('returns the amount of tokens owned by the given address', async function () {
-          const balance = await this.token.balanceOf(creator);
+          const balance = await this.token.balanceOf(curator);
           balance.should.be.bignumber.equal(2);
         });
       });
@@ -108,7 +108,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         it('returns the owner of the given token ID', async function () {
           const owner = await this.token.ownerOf(tokenId);
-          owner.should.be.equal(creator);
+          owner.should.be.equal(curator);
         });
       });
 
@@ -364,7 +364,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('approve', function () {
       const tokenId = firstTokenId;
-      const sender = creator;
+      const sender = curator;
       const to = accounts[1];
 
       let logs = null;
@@ -486,7 +486,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     });
 
     describe('setApprovalForAll', function () {
-      const sender = creator;
+      const sender = curator;
 
       describe('when the operator willing to approve is not the owner', function () {
         const operator = accounts[1];
@@ -565,7 +565,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       describe('when the operator is the owner', function () {
-        const operator = creator;
+        const operator = curator;
 
         it('reverts', async function () {
           await assertRevert(this.token.setApprovalForAll(operator, true, {from: sender}));
@@ -576,8 +576,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
   describe('like a mintable and burnable ERC721Token', function () {
     beforeEach(async function () {
-      await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: creator});
-      await this.token.mint(_tokenURI, _edition2, _artist, _editionName, _typePhysical, _priceInWei, _auctionStartDate, {from: creator});
+      await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: curator});
+      await this.token.mint(_tokenURI, _edition2, _artist, _editionName, _typePhysical, _priceInWei, _auctionStartDate, {from: curator});
     });
 
     describe('mint', function () {
@@ -585,17 +585,17 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('when successful', function () {
         beforeEach(async function () {
-          const result = await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: creator});
+          const result = await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: curator});
           logs = result.logs;
         });
 
         it('assigns the token to the new owner', async function () {
           const owner = await this.token.ownerOf(3);
-          owner.should.be.equal(creator);
+          owner.should.be.equal(curator);
         });
 
         it('increases the balance of its owner', async function () {
-          const balance = await this.token.balanceOf(creator);
+          const balance = await this.token.balanceOf(curator);
           balance.should.be.bignumber.equal(3);
         });
 
@@ -603,7 +603,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           logs.length.should.be.equal(1);
           logs[0].event.should.be.eq('Transfer');
           logs[0].args._from.should.be.equal(ZERO_ADDRESS);
-          logs[0].args._to.should.be.equal(creator);
+          logs[0].args._to.should.be.equal(curator);
           logs[0].args._tokenId.should.be.bignumber.equal(3);
         });
       });
@@ -625,7 +625,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('burn', function () {
       const tokenId = firstTokenId;
-      const sender = creator;
+      const sender = curator;
       let logs = null;
 
       describe('when successful', function () {
@@ -675,7 +675,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('when the given token ID was not tracked by this contract', function () {
         it('reverts', async function () {
-          await assertRevert(this.token.burn(unknownTokenId, {from: creator}));
+          await assertRevert(this.token.burn(unknownTokenId, {from: curator}));
         });
       });
     });
@@ -685,13 +685,13 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('mint()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: creator});
+        await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _typeDigital, _priceInWei, _auctionStartDate, {from: curator});
       });
 
       describe('balanceOf', function () {
         describe('when the given address owns some tokens', function () {
           it('returns the amount of tokens owned by the given address', async function () {
-            const balance = await this.token.balanceOf(creator);
+            const balance = await this.token.balanceOf(curator);
             balance.should.be.bignumber.equal(1);
           });
         });
@@ -711,7 +711,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           tokenId.should.be.bignumber.equal(1);
 
           let owner = assetInfo[1];
-          owner.should.be.equal(creator);
+          owner.should.be.equal(curator);
 
           let purchaseState = assetInfo[2];
           purchaseState.should.be.bignumber.equal(Unsold);
@@ -771,13 +771,13 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const NUMBER_OF_EDITIONS = 10;
 
       beforeEach(async function () {
-        await this.token.mintEdition(_tokenURI, _edition1, _artist, _editionName, _typeDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {from: creator});
+        await this.token.mintEdition(_tokenURI, _edition1, _artist, _editionName, _typeDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {from: curator});
       });
 
       describe('balanceOf', function () {
         describe('when the given address owns some tokens', function () {
           it('returns the amount of tokens owned by the given address', async function () {
-            const balance = await this.token.balanceOf(creator);
+            const balance = await this.token.balanceOf(curator);
             balance.should.be.bignumber.equal(10);
           });
         });
@@ -799,7 +799,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
             tokenId.should.be.bignumber.equal(id);
 
             let owner = assetInfo[1];
-            owner.should.be.equal(creator);
+            owner.should.be.equal(curator);
 
             let purchaseState = assetInfo[2];
             purchaseState.should.be.bignumber.equal(Unsold);
@@ -844,16 +844,33 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe.skip('purchaseWithEther()', function () {
+    describe('purchaseWithEther()', function () {
       const NUMBER_OF_EDITIONS = 10;
       const tokenToPurchase = new BigNumber(3);
 
       beforeEach(async function () {
-        await this.token.mintEdition(_tokenURI, _edition1, _artist, _editionName, _typeDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {from: creator});
+        await this.token.mintEdition(_tokenURI, _edition1, _artist, _editionName, _typeDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {from: curator});
+
+        //Ensure all Unsold
+        const range = _.range(0, NUMBER_OF_EDITIONS);
+        for (let id of range) {
+          let isPurchased = await this.token.isPurchased(id);
+          isPurchased.should.be.bignumber.equal(Unsold);
+
+          let ownerOf = await this.token.ownerOf(id);
+          ownerOf.should.be.equal(curator);
+
+          let isApprovedOrOwner = await this.token.isApprovedOrOwner(curator, id);
+          isApprovedOrOwner.should.be.equal(curator);
+        }
+        //Ensure all Ids as expected and owned by curator
+        let ownerTokens = await this.token.getOwnerTokens(curator);
+        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
+        ownerTokens.should.be.deep.equal(range);
       });
 
       describe('price in wei', function () {
-        it('can only purchase if price equal to token value', async function () {
+        it.only('can only purchase if price equal to token value', async function () {
           let response = await this.token.purchaseWithEther(tokenToPurchase, {value: _priceInWei, from: buyer});
           response.should.be.equal(true);
 
@@ -886,7 +903,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       describe('purchasing from different accounts', function () {
-        it('can purchase if currently owned by creator', async function () {
+        it('can purchase if currently owned by curator', async function () {
 
         });
 

@@ -83,9 +83,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement {
 
-    uint256 offset = allTokens.length + 1;
+    uint256 offset = allTokens.length;
     for (uint8 i = 0; i < _totalEdition; i++) {
-      uint _tokenId = offset + i;
+      uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
       _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _type, _priceInWei, _auctionStartDate);
@@ -96,7 +96,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement {
 
-    uint _tokenId = allTokens.length + 1;
+    uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
     _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _type, _priceInWei, _auctionStartDate);
@@ -117,7 +117,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
   function burn(uint256 _tokenId)
   public
   onlyManagement
+  onlyUnsold(_tokenId)
+  onlyManagementOwnedToken(_tokenId)
   {
+    // TODO fix me - clean up internal metadata when being burnt
     super._burn(ownerOf(_tokenId), _tokenId);
   }
 
@@ -125,7 +128,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   {
-    super._setTokenURI(_tokenId, _uri);
+    _setTokenURI(_tokenId, _uri);
   }
 
   function getOwnerTokens(address _owner)
@@ -186,7 +189,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return true;
   }
 
-  function purchaseWithEther(uint _tokenId)
+  function purchaseWithEther(uint256 _tokenId)
   public
   payable
   onlyUnsold(_tokenId)
@@ -199,8 +202,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
       // approve sender as they have paid the required amount
       super.approve(msg.sender, _tokenId);
 
+
       // transfer assets from contract creator (curator) to new owner
-      super.transferFrom(curator, msg.sender, _tokenId);
+      super.safeTransferFrom(curator, msg.sender, _tokenId);
 
       // now purchased - don't allow re-purchase!
       tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
