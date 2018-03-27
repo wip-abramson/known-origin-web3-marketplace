@@ -229,6 +229,17 @@ const store = new Vuex.Store({
           });
       };
 
+      const mapType = (rawType) => {
+        switch (rawType) {
+          case 'DIG':
+            return 'digital';
+          case 'PHY':
+            return 'physical';
+          default:
+            return rawType;
+        }
+      };
+
       const lookupAssetInfo = (contract, index) => {
         return Promise.all([
           contract.assetInfo(index),
@@ -248,7 +259,7 @@ const store = new Vuex.Store({
               priceInEther: Web3.utils.fromWei(assetInfo[3].toString(), 'ether').valueOf(),
               auctionStartDate: assetInfo[4], // TODO handle auction start date
 
-              type: editionInfo[1].toString(),
+              type: mapType(Web3.utils.toAscii(editionInfo[1])),
               edition: editionInfo[2].toString(),
               editionName: editionInfo[3].toString(),
               editionNumber: editionInfo[4].toNumber(),
