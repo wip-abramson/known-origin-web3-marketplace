@@ -186,6 +186,10 @@
     font-weight: bold;
   }
 
+  button {
+    width: 100%;
+  }
+
   .btn {
     -webkit-border-radius: 28;
     -moz-border-radius: 28;
