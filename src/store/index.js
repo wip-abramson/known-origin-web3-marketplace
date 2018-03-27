@@ -269,7 +269,7 @@ const store = new Vuex.Store({
 
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
-          let supply = _.range(1, state.totalSupply);
+          let supply = _.range(0, state.totalSupply);
 
           return Promise.all(_.map(supply, (index) => lookupAssetInfo(contract, index)))
             .then((assets) => {

@@ -28,16 +28,25 @@ contract KnownOriginDigitalAsset is ERC721Token {
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
+
   mapping (uint => string) internal tokenIdToEdition;
+
   mapping (uint => uint8) internal tokenIdToEditionNumber;
+
   mapping (uint => string) internal tokenIdToEditionName;
+
   mapping (uint => string) internal tokenIdToArtist;
+
   mapping (uint => string) internal tokenIdToType;
+
   mapping (uint => uint256) internal tokenIdToPriceInWei;
+
   mapping (uint => uint256) internal tokenIdToBuyFromDate;
 
   event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
+
   event PurchasedWithFiat(uint256 indexed _tokenId);
+
   event PurchasedWithFiatReversed(uint256 indexed _tokenId);
 
   modifier onlyCurator() {
@@ -83,9 +92,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement {
 
-    uint256 offset = allTokens.length + 1;
+    uint256 offset = allTokens.length;
     for (uint8 i = 0; i < _totalEdition; i++) {
-      uint _tokenId = offset + i;
+      uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
       _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _type, _priceInWei, _auctionStartDate);
@@ -96,7 +105,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement {
 
-    uint _tokenId = allTokens.length + 1;
+    uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
     _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _type, _priceInWei, _auctionStartDate);
@@ -117,7 +126,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
   function burn(uint256 _tokenId)
   public
   onlyManagement
+  onlyUnsold(_tokenId)
+  onlyManagementOwnedToken(_tokenId)
   {
+    // TODO fix me - clean up internal metadata when being burnt
     super._burn(ownerOf(_tokenId), _tokenId);
   }
 
@@ -125,7 +137,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   {
-    super._setTokenURI(_tokenId, _uri);
+    _setTokenURI(_tokenId, _uri);
   }
 
   function getOwnerTokens(address _owner)
@@ -180,27 +192,41 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   returns (bool) {
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     return true;
   }
 
-  function purchaseWithEther(uint _tokenId)
+  /**
+   * @dev Used to pre-approve a purchaser in order for internal purchase methods
+   * to succeed without calling approve() directly
+   * @param _tokenId uint256 ID of the token to query the approval of
+   * @return address currently approved for a the given token ID
+   */
+  function _approvePurchaser(address _to, uint _tokenId)
+  internal
+  {
+    address owner = ownerOf(_tokenId);
+    require(_to != address(0));
+
+    tokenApprovals[_tokenId] = _to;
+    Approval(owner, _to, _tokenId);
+  }
+
+  function purchaseWithEther(uint256 _tokenId)
   public
   payable
   onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  returns (bool _success) {
 
     if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
 
       // approve sender as they have paid the required amount
-      super.approve(msg.sender, _tokenId);
+      _approvePurchaser(msg.sender, _tokenId);
 
       // transfer assets from contract creator (curator) to new owner
-      super.transferFrom(curator, msg.sender, _tokenId);
+      safeTransferFrom(curator, msg.sender, _tokenId);
 
       // now purchased - don't allow re-purchase!
       tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
@@ -236,9 +262,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  returns (bool _success) {
 
     // now purchased - don't allow re-purchase!
     tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
@@ -254,9 +279,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyFiatPurchased(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  returns (bool _success) {
 
     // reset to Unsold
     tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
