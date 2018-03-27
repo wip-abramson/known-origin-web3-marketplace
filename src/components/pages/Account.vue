@@ -1,11 +1,17 @@
 <template>
   <div id="account">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Account</h1>
+    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> My Account</h1>
+
+    <p>
+      <img src="/../static/account.svg" style="height:50px"/>
+    </p>
 
     <p>
       <!--My address:  -->
       <address-icon :eth-address="account"></address-icon>
     </p>
+
+    <hr/>
 
     <h2>My collection (<strong>{{assetsPurchasedByAccount.length}}</strong>)</h2>
 

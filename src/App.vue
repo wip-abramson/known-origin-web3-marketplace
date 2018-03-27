@@ -118,6 +118,10 @@
     margin: 0;
   }
 
+  body {
+    background-color: $background;
+  }
+
   h1 {
     display: block;
     font-size: 28px;
@@ -191,6 +195,7 @@
     padding: 10px 20px 10px 20px;
     border: solid $primary 3px;
     text-decoration: none;
+    display: block;
 
     &:hover {
       text-decoration: none;

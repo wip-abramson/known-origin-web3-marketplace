@@ -1,12 +1,12 @@
 <template>
   <div class="confirm_purchase_container">
-    <button type="button" v-on:click="confirmPurchase" class="btn btn-primary" v-if="findNextAssetToPurchase(edition)">
+    <a v-on:click="confirmPurchase" class="btn btn-primary" v-if="findNextAssetToPurchase(edition)">
       Buy Now
-    </button>
+    </a>
 
-    <button class="btn btn-sold" v-if="!findNextAssetToPurchase(edition)">
+    <a class="btn btn-sold" v-if="!findNextAssetToPurchase(edition)">
        SOLD
-    </button>
+    </a>
 
   </div>
 </template>

@@ -2,8 +2,7 @@
   <div class="complete_purchase_container">
     <form v-if="account">
 
-      <div id="purchase-state-feedback-container">
-
+      <div id="purchase-state-feedback-container" class="pad-top pad-bottom">
         <div v-if="isPurchaseTriggered(asset.id)">
           Purchased Triggered
         </div>
@@ -41,7 +40,7 @@
         <button type="button" class="btn btn-success"
                 :disabled="!confirm_terms || isPurchaseTriggered(asset.id)"
                 v-on:click="completePurchase" v-if="isUnsold">
-          Confirm purchase
+          Confirm buy
         </button>
 
         <div class="pad-top">
@@ -61,14 +60,12 @@
         </button>
       </div>
 
-      <hr/>
       <div>
         <router-link v-if="asset.purchased !== 0" :to="{ name: 'account'}" class="btn">
           View account
         </router-link>
       </div>
 
-      <hr/>
       <div>
         <router-link :to="{ name: 'gallery'}" class="btn btn-muted">
           Back to gallery

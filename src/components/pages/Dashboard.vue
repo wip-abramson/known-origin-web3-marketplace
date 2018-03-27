@@ -7,14 +7,14 @@
 
     <div class="text-center">
       <p>Buy original artwork and rare digital art</p>
-      <p class="pad-top"><router-link :to="{ name: 'gallery' }" class="nav_link btn">View gallery</router-link></p>
+      <p><router-link :to="{ name: 'gallery' }" class="nav_link btn">View gallery</router-link></p>
     </div>
 
     <section>
       <h2>What is KnownOrigin.io</h2>
       <p>We have built a platform that allows people to own original art linked to a digital asset.</p>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      <p class="text-center pad-top"><router-link :to="{ name: 'gallery' }" class="nav_link btn">Get started</router-link></p>
+      <p class="text-center"><router-link :to="{ name: 'gallery' }" class="nav_link btn">Get started</router-link></p>
     </section>
 
     <section id="featured-artists">
