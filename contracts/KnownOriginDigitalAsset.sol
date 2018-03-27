@@ -192,7 +192,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   returns (bool) {
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     return true;
@@ -217,7 +216,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   payable
   onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
   returns (bool _success) {
 
@@ -263,7 +261,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
   returns (bool _success) {
 
@@ -281,7 +278,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyFiatPurchased(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
   returns (bool _success) {
 
