@@ -198,11 +198,12 @@ contract KnownOriginDigitalAsset is ERC721Token {
   }
 
   /**
-   * @dev Used to force set an approval in order for internal purchase methods to succeed
+   * @dev Used to pre-approve a purchaser in order for internal purchase methods
+   * to succeed without calling approve() directly
    * @param _tokenId uint256 ID of the token to query the approval of
    * @return address currently approved for a the given token ID
    */
-  function _forceApproval(address _to, uint _tokenId)
+  function _approvePurchaser(address _to, uint _tokenId)
   internal
   {
     address owner = ownerOf(_tokenId);
@@ -222,7 +223,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
 
       // approve sender as they have paid the required amount
-      _forceApproval(msg.sender, _tokenId);
+      _approvePurchaser(msg.sender, _tokenId);
 
       // transfer assets from contract creator (curator) to new owner
       safeTransferFrom(curator, msg.sender, _tokenId);
