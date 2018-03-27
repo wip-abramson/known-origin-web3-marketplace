@@ -202,7 +202,9 @@
     }
 
     &.btn-sold {
-      color: $sold;
+      background: $sold;
+      color: $white;
+      border: solid $sold 3px;
     }
 
     &.btn-warning {
@@ -215,10 +217,21 @@
       background-color: $sold;
     }
 
+    &.btn-muted {
+      border: solid $normal-text 3px;
+      color: $normal-text;
+    }
+
     &.btn-success {
       background-color: $success;
       border: solid $success 3px;
       color: $white;
+
+      &:disabled {
+        background: $normal-text;
+        text-decoration: none;
+        border: solid $normal-text 3px;
+      }
     }
 
     &.btn-primary {

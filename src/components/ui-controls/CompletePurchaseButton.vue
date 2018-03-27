@@ -13,7 +13,7 @@
         </div>
 
         <div v-if="isPurchaseSuccessful(asset.id)">
-          Purchase complete!
+          Purchase completed
         </div>
 
         <div v-if="isPurchaseFailed(asset.id)">
@@ -35,6 +35,7 @@
 
       </div>
 
+
       <div v-if="isPurchaseFailed(asset.id) || !assetPurchaseState(asset.id)">
 
         <button type="button" class="btn btn-success"
@@ -54,9 +55,25 @@
         </div>
       </div>
 
-      <button v-if="asset.purchased !== 0" class="btn btn-sold" v-on:click.prevent>
-        SOLD
-      </button>
+      <div>
+        <button class="btn btn-sold" v-if="asset.purchased !== 0">
+          SOLD
+        </button>
+      </div>
+
+      <hr/>
+      <div>
+        <router-link v-if="asset.purchased !== 0" :to="{ name: 'account'}" class="btn">
+          View account
+        </router-link>
+      </div>
+
+      <hr/>
+      <div>
+        <router-link :to="{ name: 'gallery'}" class="btn btn-muted">
+          Back to gallery
+        </router-link>
+      </div>
 
     </form>
 

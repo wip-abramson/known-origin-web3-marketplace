@@ -30,13 +30,6 @@
 
             <complete-purchase-button :asset="asset" class="btn-center pad-bottom" @purchaseInitiated="onPurchaseInitiated">
             </complete-purchase-button>
-
-            <p class="padding-top" >
-              <router-link :to="{ name: 'gallery'}" class="btn">
-                Back to gallery
-              </router-link>
-            </p>
-
           </div>
         </div>
     </article>
