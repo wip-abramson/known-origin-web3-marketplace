@@ -22,6 +22,25 @@ const getNetIdString = () => {
     });
 };
 
+const getEtherscanAddress = () => {
+  return window.web3.eth.net.getId()
+    .then((id) => {
+      switch (id) {
+        case 1:
+          return 'http://etherscan.io';
+        case 3:
+          return 'http://ropsten.etherscan.io';
+        case 4:
+          return 'http://rinkeby.etherscan.io';
+        case 42:
+          return 'http://kovan.etherscan.io';
+        default:
+          return '';
+      }
+    });
+};
+
 export {
-  getNetIdString
+  getNetIdString,
+  getEtherscanAddress,
 };
