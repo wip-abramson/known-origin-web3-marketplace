@@ -257,7 +257,7 @@ const store = new Vuex.Store({
               purchased: assetInfo[2].toNumber(),
               priceInWei: assetInfo[3].toString(),
               priceInEther: Web3.utils.fromWei(assetInfo[3].toString(), 'ether').valueOf(),
-              auctionStartDate: assetInfo[4], // TODO handle auction start date
+              auctionStartDate: assetInfo[4].toString(10), // TODO handle auction start date
 
               type: mapType(Web3.utils.toAscii(editionInfo[1])),
               edition: editionInfo[2].toString(),
