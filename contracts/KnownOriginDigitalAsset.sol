@@ -28,16 +28,25 @@ contract KnownOriginDigitalAsset is ERC721Token {
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
+
   mapping (uint => string) internal tokenIdToEdition;
+
   mapping (uint => uint8) internal tokenIdToEditionNumber;
+
   mapping (uint => string) internal tokenIdToEditionName;
+
   mapping (uint => string) internal tokenIdToArtist;
+
   mapping (uint => string) internal tokenIdToType;
+
   mapping (uint => uint256) internal tokenIdToPriceInWei;
+
   mapping (uint => uint256) internal tokenIdToBuyFromDate;
 
   event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
+
   event PurchasedWithFiat(uint256 indexed _tokenId);
+
   event PurchasedWithFiatReversed(uint256 indexed _tokenId);
 
   modifier onlyCurator() {
@@ -88,7 +97,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
       uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
-//      super.approve(msg.sender, _tokenId);
+      //      super.approve(msg.sender, _tokenId);
       _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _type, _priceInWei, _auctionStartDate);
     }
   }
@@ -100,7 +109,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
-//    super.approve(msg.sender, _tokenId);
+    //    super.approve(msg.sender, _tokenId);
     _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _type, _priceInWei, _auctionStartDate);
   }
 
@@ -202,10 +211,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
     if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
 
       // approve sender as they have paid the required amount
-      super.approve(msg.sender, _tokenId);
-
+//      approve(msg.sender, _tokenId);
+//
       // transfer assets from contract creator (curator) to new owner
-      super.safeTransferFrom(curator, msg.sender, _tokenId);
+      safeTransferFrom(curator, msg.sender, _tokenId);
 
       // now purchased - don't allow re-purchase!
       tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
