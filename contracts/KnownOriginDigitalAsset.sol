@@ -28,11 +28,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
-  mapping (uint => string) internal tokenIdToEdition;
+  mapping (uint => bytes16) internal tokenIdToEdition;
   mapping (uint => uint8) internal tokenIdToEditionNumber;
   mapping (uint => string) internal tokenIdToEditionName;
   mapping (uint => string) internal tokenIdToArtist;
-  mapping (uint => bytes3) internal tokenIdToType;
   mapping (uint => uint256) internal tokenIdToPriceInWei;
   mapping (uint => uint32) internal tokenIdToAuctionStartDate;
 
@@ -81,7 +80,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     contractDeveloper = _contractDeveloper;
   }
 
-  function mintEdition(string _tokenURI, string _edition, string _artist, string _editionName, bytes3 _type, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
+  function mintEdition(string _tokenURI, bytes16 _edition, string _artist, string _editionName, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
   public
   onlyManagement {
 
@@ -90,28 +89,27 @@ contract KnownOriginDigitalAsset is ERC721Token {
       uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
-      _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _type, _priceInWei, _auctionStartDate);
+      _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _priceInWei, _auctionStartDate);
     }
   }
 
-  function mint(string _tokenURI, string _edition, string _artist, string _editionName, bytes3 _type, uint256 _priceInWei, uint32 _auctionStartDate)
+  function mint(string _tokenURI, bytes16 _edition, string _artist, string _editionName, uint256 _priceInWei, uint32 _auctionStartDate)
   public
   onlyManagement {
 
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
-    _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _type, _priceInWei, _auctionStartDate);
+    _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _priceInWei, _auctionStartDate);
   }
 
-  function _populateTokenData(uint _tokenId, string _edition, string _editionName, uint8 _editionNumber, string _artist, bytes3 _type, uint256 _priceInWei, uint32 _auctionStartDate)
+  function _populateTokenData(uint _tokenId, bytes16 _edition, string _editionName, uint8 _editionNumber, string _artist, uint256 _priceInWei, uint32 _auctionStartDate)
   internal
   {
     tokenIdToEdition[_tokenId] = _edition;
     tokenIdToEditionNumber[_tokenId] = _editionNumber;
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     tokenIdToAuctionStartDate[_tokenId] = _auctionStartDate;
-    tokenIdToType[_tokenId] = _type;
     tokenIdToArtist[_tokenId] = _artist;
     tokenIdToEditionName[_tokenId] = _editionName;
   }
@@ -151,7 +149,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   function editionOf(uint _tokenId)
   public
   view
-  returns (string _edition) {
+  returns (bytes16 _edition) {
     return tokenIdToEdition[_tokenId];
   }
 
@@ -211,7 +209,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   payable
   onlyUnsold(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool _success) {
+  returns (bool) {
 
     if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
 
@@ -256,7 +254,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   onlyManagement
   onlyUnsold(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool _success) {
+  returns (bool) {
 
     // now purchased - don't allow re-purchase!
     tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
@@ -273,7 +271,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   onlyManagement
   onlyFiatPurchased(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool _success) {
+  returns (bool) {
 
     // reset to Unsold
     tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
@@ -309,8 +307,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   view
   returns (
   uint256 _tokId,
-  bytes3 _type,
-  string _edition,
+  bytes16 _edition,
   string _editionName,
   uint8 _editionNumber,
   string _artist,
@@ -318,7 +315,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   ) {
     return (
     _tokenId,
-    tokenIdToType[_tokenId],
     tokenIdToEdition[_tokenId],
     tokenIdToEditionName[_tokenId],
     tokenIdToEditionNumber[_tokenId],

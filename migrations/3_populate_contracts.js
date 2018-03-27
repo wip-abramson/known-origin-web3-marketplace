@@ -61,7 +61,6 @@ const loadSeedData = (instance, _curatorAccount, _openingTime) => {
           insert.edition,
           insert.artistName,
           insert.artworkName,
-          insert.type,
           insert.numberOfEditions,
           insert.costInWei.toString(10),
           _openingTime,
@@ -85,8 +84,6 @@ const flattenTestData = () => {
       let artworkName = artwork.artworkName;
       let ipfsPath = artwork.ipfsPath;
 
-      let type = artwork.type;
-
       let numberOfEditions = artwork.numberOfEditions;
       let edition = artwork.edition;
 
@@ -100,7 +97,6 @@ const flattenTestData = () => {
         costInWei,
         ipfsPath,
         edition,
-        type,
         artistName
       });
 

@@ -249,7 +249,10 @@ const store = new Vuex.Store({
             let assetInfo = results[0];
             let editionInfo = results[1];
 
-            let tokenUri = editionInfo[6];
+            let tokenUri = editionInfo[5];
+
+            // should always be 16 chars long
+            const edition = Web3.utils.toAscii(editionInfo[1]);
 
             let fullAssetDetails = {
               id: assetInfo[0].toNumber(),
@@ -259,12 +262,15 @@ const store = new Vuex.Store({
               priceInEther: Web3.utils.fromWei(assetInfo[3].toString(), 'ether').valueOf(),
               auctionStartDate: assetInfo[4].toString(10), // TODO handle auction start date
 
-              type: mapType(Web3.utils.toAscii(editionInfo[1])),
-              edition: editionInfo[2].toString(),
-              editionName: editionInfo[3].toString(),
-              editionNumber: editionInfo[4].toNumber(),
-              artist: editionInfo[5].toString(),
-              artistCode: editionInfo[2].toString().substring(0, 3),
+              edition: edition,
+              // Last 3 chars of edition are type
+              type: mapType(edition.substring(13, 16)),
+              // First 3 chars of edition are artist code
+              artistCode: edition.substring(0, 3),
+
+              editionName: editionInfo[2].toString(),
+              editionNumber: editionInfo[3].toNumber(),
+              artist: editionInfo[4].toString(),
               tokenUri: tokenUri
             };
 
