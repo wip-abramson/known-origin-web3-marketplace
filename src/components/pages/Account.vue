@@ -6,10 +6,8 @@
       <img src="/../static/account.svg" style="height:50px"/>
     </p>
 
-    <p>
-      <!--My address:  -->
-      <address-icon :eth-address="account"></address-icon>
-    </p>
+    <h2>My Address</h2>
+    <address-icon :eth-address="account"></address-icon>
 
     <hr/>
 

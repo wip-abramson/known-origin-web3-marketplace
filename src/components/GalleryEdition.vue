@@ -10,7 +10,12 @@
           {{ availableAssetsForEdition(edition.edition).length }} available
         </p>
 
-        <p v-if="purchase">{{ edition.otherMeta.description }}</p>
+        <p v-if="purchase">
+          <strong>Artwork description</strong><br/>
+          {{ edition.otherMeta.description }}
+        </p>
+
+        <hr/>
 
         <price-in-eth :value="edition.priceInEther"></price-in-eth>
 

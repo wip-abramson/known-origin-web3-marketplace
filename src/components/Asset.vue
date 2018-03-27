@@ -8,7 +8,12 @@
 
         <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-        <p>{{ asset.otherMeta.description }}</p>
+        <p>
+          <strong>Artwork description</strong><br/>
+          {{ asset.otherMeta.description }}
+        </p>
+
+        <hr/>
 
         <price-in-eth :value="asset.priceInEther"></price-in-eth>
 

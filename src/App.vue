@@ -148,8 +148,8 @@
 
   h3 {
     font-size: 28px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     color: $strong-text;
     line-height: 1.25;
   }
@@ -252,6 +252,8 @@
   #header {
     color: $primary;
     padding-top: 25px;
+    padding-bottom: 25px;
+    background-color: $white !important;
 
     .header-branding {
       font-size: 18px;
@@ -394,12 +396,12 @@
 
   .edition-sold {
     position: absolute;
-    top: 100px;
-    right: 100px;
+    top: 0px;
+    right: 0px;
     background-color: $sold;
     color: $background;
     padding: 10px;
-    opacity: 0.9;
+    opacity: 0.6;
     font-size: 1.25em;
   }
 
