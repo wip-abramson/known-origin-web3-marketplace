@@ -849,9 +849,9 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = new BigNumber(3);
 
       beforeEach(async function () {
-        await this.token.mintEdition(_tokenURI, _edition1, _artist, _editionName, _typeDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {from: curator});
-
-        // await this.token.setApprovalForAll(curator, true);
+        await this.token.mintEdition(_tokenURI, _edition1, _artist, _editionName, _typeDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {
+          from: curator
+        });
 
         //Ensure all Unsold
         const range = _.range(0, NUMBER_OF_EDITIONS);
@@ -861,9 +861,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
           let ownerOf = await this.token.ownerOf(tokenId);
           ownerOf.should.be.equal(curator);
-
-          // let getApproved = await this.token.getApproved(tokenId);
-          // getApproved.should.be.equal(curator);
         }
 
         //Ensure all Ids as expected and owned by curator
@@ -874,34 +871,41 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('price in wei', function () {
         it.only('can only purchase if price equal to token value', async function () {
-          let {logs} = await this.token.purchaseWithEther(tokenToPurchase, {value: _priceInWei, from: buyer});
-
-          console.log(logs);
+          let {logs} = await this.token.purchaseWithEther(tokenToPurchase, {
+            value: _priceInWei,
+            from: buyer
+          });
 
           logs.length.should.be.equal(4);
 
+          // Approve new buyer
           logs[0].event.should.be.eq('Approval');
           logs[0].args._owner.should.be.equal(curator);
           logs[0].args._approved.should.be.equal(buyer);
           logs[0].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
-          // TODO I dont undertand when anonther approval is emitted to ZERO..?
-          // logs[1].event.should.be.eq('Approval');
-          // logs[1].args._owner.should.be.equal(curator);
-          // logs[1].args._approved.should.be.equal(ZERO_ADDRESS);
-          // logs[1].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
+          // Approval cleared on transfer
+          logs[1].event.should.be.eq('Approval');
+          logs[1].args._owner.should.be.equal(curator);
+          logs[1].args._approved.should.be.equal(ZERO_ADDRESS);
+          logs[1].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
+          // Transferred
           logs[2].event.should.be.eq('Transfer');
           logs[2].args._from.should.be.equal(curator);
           logs[2].args._to.should.be.equal(buyer);
           logs[2].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
+          // Internal event fired
           logs[3].event.should.be.eq('PurchasedWithEther');
           logs[3].args._buyer.should.be.equal(buyer);
           logs[3].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
           let isPurchased = await this.token.isPurchased(tokenToPurchase);
           isPurchased.should.be.bignumber.equal(EtherPurchase);
+
+          let ownerOf = await this.token.ownerOf(tokenToPurchase);
+          ownerOf.should.be.equal(buyer);
         });
 
         it('fails purchase is price less then', async function () {

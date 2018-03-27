@@ -90,10 +90,6 @@ contract ERC721BasicToken is ERC721Basic {
     address owner = ownerOf(_tokenId);
     require(_to != owner);
 
-    // TODO - FAILED - Why is this the case?
-    // I actually dont think its possible with making another call
-    // from the owner to approve the buyer which is never going to work...
-
      require(msg.sender == owner || isApprovedForAll(owner, msg.sender));
 
     if (getApproved(_tokenId) != address(0) || _to != address(0)) {

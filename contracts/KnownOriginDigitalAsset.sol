@@ -200,6 +200,24 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return true;
   }
 
+  /**
+   * TODO Andy this is the hack to allow approvals for out marketplace
+   * @dev Used to short circuit the approval process in order for internal purchase methods to succeed
+   * @param _tokenId uint256 ID of the token to query the approval of
+   * @return address currently approved for a the given token ID
+   */
+  function _shortCircuitApprove(address _to, uint _tokenId)
+  onlyManagementOwnedToken(_tokenId)
+  internal
+  {
+    address owner = ownerOf(_tokenId);
+    require(_to != owner);
+    require(_to != address(0));
+
+    tokenApprovals[_tokenId] = _to;
+    Approval(owner, _to, _tokenId);
+  }
+
   function purchaseWithEther(uint256 _tokenId)
   public
   payable
@@ -211,8 +229,11 @@ contract KnownOriginDigitalAsset is ERC721Token {
     if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
 
       // approve sender as they have paid the required amount
-//      approve(msg.sender, _tokenId);
-//
+      _shortCircuitApprove(msg.sender, _tokenId);
+
+      // TODO this is the old method?
+      // approve(msg.sender, _tokenId);
+
       // transfer assets from contract creator (curator) to new owner
       safeTransferFrom(curator, msg.sender, _tokenId);
 
