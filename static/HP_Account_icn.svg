@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="279px" height="247px" viewBox="0 0 279 247" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 7</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-2987.000000, -764.000000)">
+            <g id="Group-7" transform="translate(2955.000000, 724.000000)">
+                <g id="Group-4-Copy-2"></g>
+                <path d="M52.1728627,224.258065 L52.1612903,224.258065 L52.1612903,193.935484 L52.1728627,193.935484 C52.1652033,193.850487 52.1612903,193.76441 52.1612903,193.677419 C52.1612903,192.109643 53.4322239,190.83871 55,190.83871 C56.5677761,190.83871 57.8387097,192.109643 57.8387097,193.677419 C57.8387097,193.76441 57.8347967,193.850487 57.8271373,193.935484 L57.8387097,193.935484 L57.8387097,224.258065 L57.8271373,224.258065 C57.6967557,225.704903 56.4807852,226.83871 55,226.83871 C53.5192148,226.83871 52.3032443,225.704903 52.1728627,224.258065 Z" id="Combined-Shape" fill="#3D3BEE" transform="translate(55.000000, 208.838710) rotate(-90.000000) translate(-55.000000, -208.838710) "></path>
+                <path d="M143.172863,224.258065 L143.16129,224.258065 L143.16129,193.935484 L143.172863,193.935484 C143.165203,193.850487 143.16129,193.76441 143.16129,193.677419 C143.16129,192.109643 144.432224,190.83871 146,190.83871 C147.567776,190.83871 148.83871,192.109643 148.83871,193.677419 C148.83871,193.76441 148.834797,193.850487 148.827137,193.935484 L148.83871,193.935484 L148.83871,224.258065 L148.827137,224.258065 C148.696756,225.704903 147.480785,226.83871 146,226.83871 C144.519215,226.83871 143.303244,225.704903 143.172863,224.258065 Z" id="Combined-Shape-Copy-9" fill="#3D3BEE" transform="translate(146.000000, 208.838710) rotate(-90.000000) translate(-146.000000, -208.838710) "></path>
+                <path d="M240.011572,224.419355 L240,224.419355 L240,194.096774 L240.011572,194.096774 C240.003913,194.011778 240,193.925701 240,193.83871 C240,192.270934 241.270934,191 242.83871,191 C244.406486,191 245.677419,192.270934 245.677419,193.83871 C245.677419,193.925701 245.673506,194.011778 245.665847,194.096774 L245.677419,194.096774 L245.677419,224.419355 L245.665847,224.419355 C245.535465,225.866194 244.319495,227 242.83871,227 C241.357925,227 240.141954,225.866194 240.011572,224.419355 Z" id="Combined-Shape-Copy-10" fill="#3D3BEE" transform="translate(242.838710, 209.000000) rotate(-90.000000) translate(-242.838710, -209.000000) "></path>
+                <ellipse id="Oval" fill="#ACA8C3" cx="172.5" cy="278.5" rx="138.5" ry="8.5"></ellipse>
+                <text id="Jpg." font-family="AvenirNext-Medium, Avenir Next" font-size="22" font-weight="400" fill="#3D3BEE">
+                    <tspan x="54.269" y="151">Jpg.</tspan>
+                </text>
+                <text id="Jpg.-Copy" font-family="AvenirNext-Medium, Avenir Next" font-size="22" font-weight="400" fill="#3D3BEE">
+                    <tspan x="150.269" y="151">Jpg.</tspan>
+                </text>
+                <text id="Account" font-family="AvenirNext-Medium, Avenir Next" font-size="22" font-weight="400" fill="#3D3BEE">
+                    <tspan x="132.678" y="56">Account</tspan>
+                </text>
+                <text id="Jpg.-Copy-2" font-family="AvenirNext-Medium, Avenir Next" font-size="22" font-weight="400" fill="#3D3BEE">
+                    <tspan x="247.269" y="151">Jpg.</tspan>
+                </text>
+                <rect id="Rectangle-3" stroke="#3D3BEE" stroke-width="4" x="34" y="91" width="82" height="105" rx="20"></rect>
+                <rect id="Rectangle-3-Copy" stroke="#3D3BEE" stroke-width="4" x="130" y="91" width="82" height="105" rx="20"></rect>
+                <rect id="Rectangle-3-Copy-2" stroke="#3D3BEE" stroke-width="4" x="227" y="91" width="82" height="105" rx="20"></rect>
+                <path d="M39,97 L55.0147743,117.695484" id="Line-2" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M135,97 L151.014774,117.695484" id="Line-2-Copy-2" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M232,97 L248.014774,117.695484" id="Line-2-Copy-4" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M92,167 L110.359793,190.725893" id="Line-2-Copy" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M188,167 L206.359793,190.725893" id="Line-2-Copy-3" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M285,167 L303.359793,190.725893" id="Line-2-Copy-5" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+            </g>
+        </g>
+    </g>
+</svg>

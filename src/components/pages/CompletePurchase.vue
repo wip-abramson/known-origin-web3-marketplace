@@ -1,5 +1,6 @@
 <template>
   <div v-if="asset">
+
     <h1>
       <router-link
         :to="{ name: 'confirmPurchase',
@@ -9,50 +10,36 @@
       {{ asset.editionName }}
     </h1>
 
-    <div class="assets_to_buy centered">
-
-      <div class="centered">
-        <section>
-
-          <asset-figure :edition="asset" class="centered"></asset-figure>
-
+    <article class="card assets_to_buy centered">
+        <div>
           <div class="card-content">
 
             <token-id :value="asset.id"></token-id>
 
             <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-            <span v-if="asset.purchased == 0">
-              <hr/>
-
-              <div class="centered">
-                You: <address-icon :eth-address="account" :size="'small'"></address-icon>
-              </div>
-            </span>
-
-            <hr/>
+            <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
+              You: <address-icon :eth-address="account" :size="'small'"></address-icon>
+            </div>
 
             <price-in-eth :value="asset.priceInEther"></price-in-eth>
 
-            <hr/>
-
-            <div class="centered">
+            <div class="pad-top pad-bottom">
               Owner: <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
             </div>
-
-            <hr/>
 
             <complete-purchase-button :asset="asset" class="btn-center pad-bottom" @purchaseInitiated="onPurchaseInitiated">
             </complete-purchase-button>
 
+            <p class="padding-top" >
+              <router-link :to="{ name: 'gallery'}" class="btn">
+                Back to gallery
+              </router-link>
+            </p>
+
           </div>
-
-        </section>
-
-      </div>
-
-    </div>
-
+        </div>
+    </article>
 
   </div>
 </template>

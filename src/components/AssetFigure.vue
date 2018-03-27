@@ -5,7 +5,6 @@
     <span class="edition-sold-out" v-if="!isAsset && availableAssetsForEdition(edition.edition).length == 0">SOLD OUT</span>
     <span class="edition-sold" v-if="isAsset && edition.purchased != 0">SOLD</span>
     <span class="edition-run">1 of {{assetsForEdition(edition.edition).length}}</span>
-
   </figure>
 </template>
 

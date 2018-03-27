@@ -2,7 +2,9 @@
   <div id="app">
 
     <header id="header" class="centered">
-      <router-link :to="{ name: 'account' }" style="float: right" class="no-text-decoration">Account</router-link>
+      <router-link :to="{ name: 'account' }" style="float: right" class="no-text-decoration">
+          <img src="/../static/account.svg" style="height:25px"/>
+      </router-link>
       <div class="header-branding">
         <router-link :to="{ name: 'dashboard' }" class="no-text-decoration">KnownOrigin.io</router-link>
       </div>
@@ -86,17 +88,20 @@
 <style lang="scss">
 
   $primary: #3d3bee;
-  $background: #f0f0ff;
 
-  $success: #2ed573;
+  $background: #e1e1e1;
 
   $strong-text: #4f4f6f;
   $normal-text: #757587;
+
 
   $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
 
   $sold: red;
   $warning: darkorange;
+  $success: #2ed573;
+
+  $white: white;
 
   /*--------------------------------------------------------------
     Header styles minus menu
@@ -116,8 +121,8 @@
   h1 {
     display: block;
     font-size: 28px;
-    margin-top: 35px;
-    margin-bottom: 35px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     color: $strong-text;
     border-bottom: 1px;
   }
@@ -130,17 +135,30 @@
     color: $strong-text;
   }
 
+  h2 {
+    font-size: 28px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    color: $strong-text;
+  }
+
   h3 {
-    display: block;
-    font-size: 16px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    font-weight: bold;
+    font-size: 28px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    color: $strong-text;
+    line-height: 1.25;
+  }
+
+  h4 {
+    font-size: 28px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     color: $strong-text;
   }
 
   p {
-    font-size: 14px;
+    font-size: 18px;
     padding: 5px;
     line-height: 1.5em;
     color: $normal-text;
@@ -152,6 +170,7 @@
 
   a {
     color: $primary;
+    text-decoration: none;
   }
 
   img {
@@ -164,12 +183,14 @@
   }
 
   .btn {
-    background: $primary;
-    color: $background;
-    font-size: 20px;
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    color: $primary;
+    font-size: 18px;
     padding: 10px 20px 10px 20px;
+    border: solid $primary 3px;
     text-decoration: none;
-    margin: 5px;
 
     &:hover {
       text-decoration: none;
@@ -186,6 +207,8 @@
 
     &.btn-warning {
       background-color: $warning;
+      border: solid $warning 3px;
+      color: $white;
     }
 
     &.btn-danger {
@@ -194,20 +217,23 @@
 
     &.btn-success {
       background-color: $success;
+      border: solid $success 3px;
+      color: $white;
+    }
+
+    &.btn-primary {
+      background: $primary;
+      color: $white;
     }
   }
 
   #header {
     color: $primary;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding-top: 25px;
 
     .header-branding {
-      font-weight: 600;
-      font-style: normal;
-      font-size: 34px;
-      letter-spacing: 0em;
-      line-height: 1em;
+      font-size: 18px;
+      font-weight: bold;
       text-transform: none;
       color: $primary;
     }
@@ -232,6 +258,10 @@
   .centered {
     margin: 0 auto;
     padding: 0 1em;
+  }
+
+  .uppercase {
+    text-transform: uppercase;
   }
 
   .pad-top {
@@ -261,23 +291,25 @@
   .back-arrow {
     font-size: 1.25em;
     text-decoration: none;
-    padding-right: 20px;
+    color: $strong-text;
   }
 
   .token-id {
     font-weight: bold;
-    color: $primary;
+    color: $strong-text;
     font-size: 1.25em;
   }
 
   .card {
-    background: $background;
+    background: $white;
     margin-bottom: 2em;
     max-width: 400px;
   }
 
+
   .card-content {
     padding: 1.4em;
+    text-align: center;
     h2 {
       margin-top: 0;
       margin-bottom: .5em;
@@ -316,6 +348,16 @@
 
   .thumbnail {
     position: relative;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  #featured-artists {
+    .card {
+      background-color: $background !important;
+    }
   }
 
   .edition-type {
@@ -369,15 +411,27 @@
     }
   }
 
+  #how {
+    h3 {
+      font-size: 18px;
+      color: $normal-text;
+      margin-bottom: 0px;
+    }
+
+    h4 {
+      margin-top: 5px;
+    }
+  }
+
   .assets_to_buy {
-    background-color: $background;
+    background: $white;
     max-width: 400px;
   }
 
   .no-web3-found-container {
     padding: 20px;
     font-size: 30px;
-    color: red;
+    color: $sold;
     height: 400px;
   }
 

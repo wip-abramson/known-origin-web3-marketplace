@@ -3,7 +3,7 @@
     <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Gallery</h1>
 
     <div class="centered">
-      <section class="cards">
+      <section class="cards centered">
         <galleryEdition
           v-for="assetEdition, key in assetsByEditions"
           :edition="assetEdition[0]"

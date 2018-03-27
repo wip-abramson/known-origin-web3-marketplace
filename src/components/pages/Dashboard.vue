@@ -1,35 +1,33 @@
 <template>
   <div id="dashboard">
 
-    <h1>Buy original artwork and rare digital art</h1>
+    <h1 class="text-center">Buy original artwork and rare digital art</h1>
 
-    <div id="splash">
+    <div id="splash"></div>
 
-    </div>
-
-    <div>
+    <div class="text-center">
       <p>Buy original artwork and rare digital art</p>
-      <router-link :to="{ name: 'gallery' }" class="nav_link">View gallery</router-link>
+      <p class="pad-top"><router-link :to="{ name: 'gallery' }" class="nav_link btn">View gallery</router-link></p>
     </div>
 
     <section>
       <h2>What is KnownOrigin.io</h2>
       <p>We have built a platform that allows people to own original art linked to a digital asset.</p>
-      <router-link :to="{ name: 'gallery' }" class="nav_link">Get started</router-link>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <p class="text-center pad-top"><router-link :to="{ name: 'gallery' }" class="nav_link btn">Get started</router-link></p>
     </section>
 
     <section id="featured-artists">
       <h2>Featured artists</h2>
-      <div>
+      <div class="text-center">
         <section class="cards">
-            <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
+          <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
         </section>
-
-        <router-link :to="{ name: 'artists' }">View artists</router-link>
+        <p><router-link :to="{ name: 'artists' }" class="btn">View artists</router-link></p>
       </div>
     </section>
 
-    <section>
+    <section id="how">
       <h2>How KnownOrigin.io works</h2>
       <section>
         <p>
@@ -51,6 +49,7 @@
         <p>
           The artist defines the price in Ether that each asset is to be sold at.
         </p>
+        <p class="pad-top"><img src="/../static/HP_Rare_icn.svg" style="height: 250px"/></p>
       </section>
       <section>
         <h3>Step 2.</h3>
@@ -61,6 +60,7 @@
         <p>
           KnownOrigin.io use the latest ERC-721 compliant smart contract to manage asset identity and purchasing.
         </p>
+        <p class="pad-top"><img src="/../static/HP_Upload_icn.svg" style="height: 250px"/></p>
       </section>
       <section>
         <h3>Step 3.</h3>
@@ -71,6 +71,7 @@
         <p>
           The KODA smart contract provides proof of ownership as well as seamless and transparent transfers of assets.
         </p>
+        <p class="pad-top"><img src="/../static/HP_BuyETH_icn.svg" style="height: 250px"/></p>
       </section>
       <section>
         <h3>Step 4.</h3>
@@ -81,13 +82,14 @@
         <p>
           Each digital asset is traceable via Ethereum at all times, KODA does not own the rights to the digital asset once purchased.
         </p>
+        <p class="pad-top"><img src="/../static/HP_Account_icn.svg" style="height: 250px"/></p>
       </section>
     </section>
 
-    <section>
-      <h2>Our partners</h2>
-      <img src="../../../static/Partner_Footer2.png" style="max-width: 100%"/>
-    </section>
+    <!--<section>-->
+      <!--<h2>Our partners</h2>-->
+      <!--<img src="../../../static/Partner_Footer2.png" style="max-width: 100%"/>-->
+    <!--</section>-->
 
   </div>
 </template>

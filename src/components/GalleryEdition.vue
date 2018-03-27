@@ -1,7 +1,7 @@
 <template>
   <article class="card" v-if="edition">
     <div>
-      <asset-figure :edition="edition" class="centered"></asset-figure>
+      <asset-figure :edition="edition"></asset-figure>
       <div class="card-content">
 
         <edition-name-by-artist :edition="edition"></edition-name-by-artist>
@@ -10,12 +10,12 @@
           {{ availableAssetsForEdition(edition.edition).length }} available
         </p>
 
-        <p>{{ edition.otherMeta.description }}</p>
+        <p v-if="purchase">{{ edition.otherMeta.description }}</p>
 
         <price-in-eth :value="edition.priceInEther"></price-in-eth>
 
-        <p class="btn-center" v-if="!purchase">
-          <router-link :to="{ name: 'confirmPurchase', params: { artistCode: edition.edition.substring(0, 3), edition: edition.edition }}">
+        <p v-if="!purchase">
+          <router-link :to="{ name: 'confirmPurchase', params: { artistCode: edition.edition.substring(0, 3), edition: edition.edition }}" class="btn">
             View details
           </router-link>
         </p>

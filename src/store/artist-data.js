@@ -32,14 +32,16 @@ const artists = [
     strapline: 'Prize-winning professional portrait painter',
     bio: 'I am a prize-winning professional portrait painter and elected member of the Manchester Academy of Fine Arts (MAFA). My aim, as a social realist painter, is to capture the spirit of the age and create contemporary portraiture that tells stories about my sitters through a strong visual narrative.',
     img: 'static/artists/PeterD_profile.png',
-    featured: true
+    featured: false
   },
   {
     artistCode: 'STA',
     name: 'Sam Taylor',
     twitter: '@SptSam',
+    strapline: 'Outrageous colour schemes',
     bio: 'Sam Taylor is known for his bold, unbrartistCodeled and explosive artworks. Outrageous colour schemes and intricate line-work are partnered up with characters and motifs to create his fun, mad world.Originally from Leicester, he\'s worked with a wealth of impressive clients since moving to London many moons ago – including Google, The New Yorker, Vans and Nickelodeon.',
-    img: 'static/artists/SamT_profile.png'
+    img: 'static/artists/SamT_profile.png',
+    featured: true
   },
   {
     artistCode: 'JBO',

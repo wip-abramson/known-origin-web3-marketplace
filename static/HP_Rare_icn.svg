@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="198px" height="287px" viewBox="0 0 198 287" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-2453.000000, -724.000000)">
+            <g id="Group-4" transform="translate(2451.000000, 724.000000)">
+                <circle id="Oval-2" fill="#ACA8C3" cx="10" cy="61" r="7"></circle>
+                <circle id="Oval-2-Copy-4" fill="#ACA8C3" cx="168" cy="25" r="7"></circle>
+                <circle id="Oval-2-Copy-3" fill="#ACA8C3" cx="16.5" cy="3.5" r="3.5"></circle>
+                <circle id="Oval-2-Copy-5" fill="#ACA8C3" cx="143.5" cy="26.5" r="3.5"></circle>
+                <circle id="Oval-2-Copy-6" fill="#ACA8C3" cx="190" cy="59" r="4"></circle>
+                <path d="M41.0224215,28 L41,28 L41,8 L41.0224215,8 C41.0075813,7.83531898 41,7.66854485 41,7.5 C41,4.46243388 43.4624339,2 46.5,2 C49.5375661,2 52,4.46243388 52,7.5 C52,7.66854485 51.9924187,7.83531898 51.9775785,8 L52,8 L52,28 L51.9775785,28 C51.7249641,30.80325 49.3690213,33 46.5,33 C43.6309787,33 41.2750359,30.80325 41.0224215,28 Z" id="Combined-Shape" fill="#ACA8C3"></path>
+                <path d="M8.84223915,41.8063232 L8.81981764,41.8063232 L8.81981764,21.8063232 L8.84223915,21.8063232 C8.82739895,21.6416421 8.81981764,21.474868 8.81981764,21.3063232 C8.81981764,18.268757 11.2822515,15.8063232 14.3198176,15.8063232 C17.3573838,15.8063232 19.8198176,18.268757 19.8198176,21.3063232 C19.8198176,21.474868 19.8122363,21.6416421 19.7973961,21.8063232 L19.8198176,21.8063232 L19.8198176,41.8063232 L19.7973961,41.8063232 C19.5447817,44.6095732 17.1888389,46.8063232 14.3198176,46.8063232 C11.4507964,46.8063232 9.09485354,44.6095732 8.84223915,41.8063232 Z" id="Combined-Shape-Copy" fill="#ACA8C3" transform="translate(14.319818, 31.306323) rotate(-41.000000) translate(-14.319818, -31.306323) "></path>
+                <path d="M181.842239,46.8063232 L181.819818,46.8063232 L181.819818,26.8063232 L181.842239,26.8063232 C181.827399,26.6416421 181.819818,26.474868 181.819818,26.3063232 C181.819818,23.268757 184.282252,20.8063232 187.319818,20.8063232 C190.357384,20.8063232 192.819818,23.268757 192.819818,26.3063232 C192.819818,26.474868 192.812236,26.6416421 192.797396,26.8063232 L192.819818,26.8063232 L192.819818,46.8063232 L192.797396,46.8063232 C192.544782,49.6095732 190.188839,51.8063232 187.319818,51.8063232 C184.450796,51.8063232 182.094854,49.6095732 181.842239,46.8063232 Z" id="Combined-Shape-Copy-2" fill="#ACA8C3" transform="translate(187.319818, 36.306323) scale(-1, 1) rotate(-41.000000) translate(-187.319818, -36.306323) "></path>
+                <ellipse id="Oval" fill="#ACA8C3" cx="101.5" cy="278.5" rx="67.5" ry="8.5"></ellipse>
+                <text id="Rare-Jpg." font-family="AvenirNext-Medium, Avenir Next" font-size="22" font-weight="400" fill="#3D3BEE">
+                    <tspan x="52.018" y="149">Rare Jpg.</tspan>
+                </text>
+                <rect id="Rectangle-3" stroke="#3D3BEE" stroke-width="4" x="34" y="56" width="134" height="171" rx="20"></rect>
+                <path d="M39.4092343,62.6979411 L80.8994837,116.314732" id="Line-2" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M120,166 L162.117888,220.427872" id="Line-2-Copy" stroke="#3D3BEE" stroke-width="4" stroke-linecap="square"></path>
+            </g>
+        </g>
+    </g>
+</svg>

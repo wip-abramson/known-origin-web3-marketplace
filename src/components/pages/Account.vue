@@ -10,7 +10,7 @@
     <h2>My collection (<strong>{{assetsPurchasedByAccount.length}}</strong>)</h2>
 
     <div class="centered">
-      <section class="cards" v-if="assetsPurchasedByAccount">
+      <section class="cards centered" v-if="assetsPurchasedByAccount">
         <asset v-for="tokenId, key in assetsPurchasedByAccount"
                :asset="assetById(tokenId)"
                :key="key">

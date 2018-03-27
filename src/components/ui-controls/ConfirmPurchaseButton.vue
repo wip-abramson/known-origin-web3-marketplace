@@ -1,6 +1,6 @@
 <template>
   <div class="confirm_purchase_container">
-    <button type="button" v-on:click="confirmPurchase" class="btn" v-if="findNextAssetToPurchase(edition)">
+    <button type="button" v-on:click="confirmPurchase" class="btn btn-primary" v-if="findNextAssetToPurchase(edition)">
       Buy Now
     </button>
 
