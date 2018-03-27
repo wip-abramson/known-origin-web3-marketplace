@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const _ = require('lodash');
 const Eth = require('ethjs');
 
@@ -7,19 +8,34 @@ const ipfsUploader = require('../scripts/ipfs-uploader');
 
 const galleryData = require('../config/data/gallery.json');
 
+let promisifyGetBlockNumber = Promise.promisify(web3.eth.getBlockNumber);
+let promisifyGetBlock = Promise.promisify(web3.eth.getBlock);
+
 module.exports = function (deployer, network, accounts) {
 
   let _curatorAccount = accounts[0];
 
   deployer
     .then(() => KnownOriginDigitalAsset.deployed())
-    .then((instance) => {
+    .then((instance) => promisifyGetBlockNumber()
+      .then((blockNumber) => {
+        return promisifyGetBlock(blockNumber)
+          .then((block) => {
+            return {
+              block, instance
+            };
+          });
+      }))
+    .then(({instance, block}) => {
 
       console.log(`Deployed contract to address = [${instance.address}] to network [${network}]`);
 
       if (network === 'ganache' || network === 'ropsten' || network === 'rinkeby') {
         console.log(`Loading in seed data`);
-        return loadSeedData(instance, _curatorAccount);
+
+        const _openingTime = block.timestamp + 1; // one second in the future
+
+        return loadSeedData(instance, _curatorAccount, _openingTime);
       } else {
         console.log(`SKIPPING loading seed data as running on ${network}`);
       }
@@ -29,7 +45,7 @@ module.exports = function (deployer, network, accounts) {
 
 };
 
-const loadSeedData = (instance, _curatorAccount) => {
+const loadSeedData = (instance, _curatorAccount, _openingTime) => {
 
   let flatInserts = flattenTestData();
 
@@ -48,7 +64,7 @@ const loadSeedData = (instance, _curatorAccount) => {
           insert.type,
           insert.numberOfEditions,
           insert.costInWei.toString(10),
-          insert.auctionStartDate,
+          _openingTime,
           {
             from: _curatorAccount,
           }
@@ -77,14 +93,11 @@ const flattenTestData = () => {
       let fiatCost = artwork.fiatCost;
       let costInWei = Eth.toWei(artwork.costInEth, 'ether');
 
-      let auctionStartDate = 123; // TODO ability to convert start date to timestamp
-
       flatInserts.push({
         numberOfEditions,
         artworkName,
         fiatCost,
         costInWei,
-        auctionStartDate,
         ipfsPath,
         edition,
         type,
