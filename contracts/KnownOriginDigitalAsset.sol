@@ -97,7 +97,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
       uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
-      //      super.approve(msg.sender, _tokenId);
       _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _type, _priceInWei, _auctionStartDate);
     }
   }
@@ -109,7 +108,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
-    //    super.approve(msg.sender, _tokenId);
     _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _type, _priceInWei, _auctionStartDate);
   }
 
@@ -201,17 +199,14 @@ contract KnownOriginDigitalAsset is ERC721Token {
   }
 
   /**
-   * TODO Andy this is the hack to allow approvals for out marketplace
-   * @dev Used to short circuit the approval process in order for internal purchase methods to succeed
+   * @dev Used to force set an approval in order for internal purchase methods to succeed
    * @param _tokenId uint256 ID of the token to query the approval of
    * @return address currently approved for a the given token ID
    */
-  function _shortCircuitApprove(address _to, uint _tokenId)
-  onlyManagementOwnedToken(_tokenId)
+  function _forceApproval(address _to, uint _tokenId)
   internal
   {
     address owner = ownerOf(_tokenId);
-    require(_to != owner);
     require(_to != address(0));
 
     tokenApprovals[_tokenId] = _to;
@@ -224,15 +219,12 @@ contract KnownOriginDigitalAsset is ERC721Token {
   onlyUnsold(_tokenId)
   onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  returns (bool _success) {
 
     if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
 
       // approve sender as they have paid the required amount
-      _shortCircuitApprove(msg.sender, _tokenId);
-
-      // TODO this is the old method?
-      // approve(msg.sender, _tokenId);
+      _forceApproval(msg.sender, _tokenId);
 
       // transfer assets from contract creator (curator) to new owner
       safeTransferFrom(curator, msg.sender, _tokenId);
@@ -273,7 +265,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   onlyUnsold(_tokenId)
   onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  returns (bool _success) {
 
     // now purchased - don't allow re-purchase!
     tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
@@ -291,7 +283,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   onlyFiatPurchased(_tokenId)
   onlyManagementOwnedToken(_tokenId)
   onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  returns (bool _success) {
 
     // reset to Unsold
     tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
