@@ -10,6 +10,11 @@ import "./ERC721Token.sol";
 contract KnownOriginDigitalAsset is ERC721Token {
   using SafeMath for uint;
 
+  struct CommissionStructure {
+    uint8 curator;
+    uint8 developer;
+  }
+
   // creates and owns the original assets all primary purchases transferred to this account
   address public curator;
 
@@ -69,11 +74,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   modifier onlyWhenBuyDateOpen(uint256 _tokenId) {
     require(tokenIdToAuctionStartDate[_tokenId] <= block.timestamp);
     _;
-  }
-
-  struct CommissionStructure {
-    uint8 curator;
-    uint8 developer;
   }
 
   function KnownOriginDigitalAsset(address _commissionAccount, address _contractDeveloper)
@@ -175,6 +175,19 @@ contract KnownOriginDigitalAsset is ERC721Token {
     require((_curator + _developer) < 100);
 
     tokenIdToCommission[_type] = CommissionStructure({curator: _curator, developer: _developer});
+  }
+
+  function getCommissionForType(string _type)
+  public
+  view
+  onlyManagement
+  returns (uint8 _curator, uint8 _developer)
+  {
+    CommissionStructure storage commission = tokenIdToCommission[_type];
+    return (
+      commission.curator,
+      commission.developer
+    );
   }
 
   function purchaseWithEther(uint256 _tokenId)

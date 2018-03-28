@@ -61,6 +61,16 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   });
 
   describe.only('', function () {
+    it.only('should get default commission for contract', async function () {
+      let commission = await this.token.getCommissionForType("DIG");
+      commission[0].should.be.bignumber.equal(12);
+      commission[1].should.be.bignumber.equal(12);
+
+      commission = await this.token.getCommissionForType("PHY");
+      commission[0].should.be.bignumber.equal(24);
+      commission[1].should.be.bignumber.equal(15);
+    });
+
     it('should get type from edition', async function () {
       let type = await this.token.getTypeFromEdition('ABC0000000000DIG');
       type.should.be.equal("DIG");
