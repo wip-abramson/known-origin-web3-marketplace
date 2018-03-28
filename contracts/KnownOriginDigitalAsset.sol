@@ -1,5 +1,6 @@
 pragma solidity ^0.4.18;
 
+import "./strings.sol";
 
 import "./ERC721Token.sol";
 
@@ -11,6 +12,7 @@ import "./ERC721Token.sol";
 */
 contract KnownOriginDigitalAsset is ERC721Token {
   using SafeMath for uint;
+  using strings for *;
 
   // creates and owns the original assets all primary purchases transferred to this account
   address public curator;
@@ -71,6 +73,34 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _;
   }
 
+  struct CommissionStructure {
+  uint8 curatorCommission;
+  uint8 contractCommission;
+  }
+
+  mapping (bytes3 => CommissionStructure) internal tokenIdToEdition;
+
+  function _getCommissionForEdition(bytes16 _edition)
+  internal
+  {
+    bytes3 typeCode = substring(_edition, 13, 16);
+    CommissionStructure type = tokenIdToEdition[typeCode];
+    if (type != 0) {
+      return type;
+    }
+    // default to 10% for both parties on error
+    return CommissionStructure({curatorCommission : 10, contractCommission : 10});
+  }
+
+  function substring(string str, uint startIndex, uint endIndex) constant returns (bytes) {
+    bytes memory strBytes = bytes(str);
+    bytes memory result = new bytes(endIndex-startIndex);
+    for(uint i = startIndex; i < endIndex; i++) {
+      result[i-startIndex] = strBytes[i];
+    }
+    return bytes(result);
+  }
+
   function KnownOriginDigitalAsset(address _commissionAccount, address _contractDeveloper)
   public
   ERC721Token("KnownOriginDigitalAsset", "KODA")
@@ -78,6 +108,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
     curator = msg.sender;
     commissionAccount = _commissionAccount;
     contractDeveloper = _contractDeveloper;
+
+    // Setup default commission structures
+    tokenIdToEdition["DIG"] = CommissionStructure({curatorCommission : 12.5, contractCommission : 12.5});
+    tokenIdToEdition["PHY"] = CommissionStructure({curatorCommission : 24, contractCommission : 15});
   }
 
   function mintEdition(string _tokenURI, bytes16 _edition, string _artist, string _editionName, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
@@ -131,54 +165,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _setTokenURI(_tokenId, _uri);
   }
 
-  function getOwnerTokens(address _owner)
-  public
-  view
-  returns (uint[] _tokenIds)
-  {
-    return ownedTokens[_owner];
-  }
-
-  function isPurchased(uint256 _tokenId)
-  public
-  view
-  returns (PurchaseState _purchased) {
-    return tokenIdToPurchased[_tokenId];
-  }
-
-  function editionOf(uint _tokenId)
-  public
-  view
-  returns (bytes16 _edition) {
-    return tokenIdToEdition[_tokenId];
-  }
-
-  function auctionOpened(uint _tokenId)
-  public
-  view
-  returns (bool) {
-    return tokenIdToAuctionStartDate[_tokenId] <= block.timestamp;
-  }
-
-  function tokenAuctionOpenDate(uint _tokenId)
-  public
-  view
-  returns (uint32 _auctionStartDate) {
-    return tokenIdToAuctionStartDate[_tokenId];
-  }
-
-  // Utility function to get current block.timestamp = now() - good for testing with remix/truffle
-  function getNow() public constant returns (uint) {
-    return now;
-  }
-
-  function priceInWei(uint _tokenId)
-  public
-  view
-  returns (uint256 _priceInWei) {
-    return tokenIdToPriceInWei[_tokenId];
-  }
-
   function setPriceInWei(uint _tokenId, uint256 _priceInWei)
   public
   onlyManagement
@@ -204,6 +190,18 @@ contract KnownOriginDigitalAsset is ERC721Token {
     Approval(owner, _to, _tokenId);
   }
 
+  function updateCommission(bytes3 _type, uint8 _curatorCommission, uint8 _contractCommission)
+  public
+  onlyManagement
+  {
+    require(_curatorCommission >= 0); // TODO is this needed
+    require(_contractCommission >= 0); // TODO is this needed
+    require((_curatorCommission + _contractCommission) <= 99); // max allowed 99 % of commission
+
+    // Update commission
+    tokenIdToEdition[type] = CommissionStructure({curatorCommission: _curatorCommission, contractCommission: _contractCommission});
+  }
+
   function purchaseWithEther(uint256 _tokenId)
   public
   payable
@@ -226,6 +224,11 @@ contract KnownOriginDigitalAsset is ERC721Token {
       totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
       // TODO provide config for fee split
+      
+      // TODO
+      // get type from last tree char of edition
+      // look up commission structure from map
+      // apply commission
 
       // split & transfer 15% fee for curator
       uint commissionAccountFee = msg.value / 100 * 15;
@@ -323,4 +326,52 @@ contract KnownOriginDigitalAsset is ERC721Token {
     );
   }
 
+
+  function getOwnerTokens(address _owner)
+  public
+  view
+  returns (uint[] _tokenIds)
+  {
+    return ownedTokens[_owner];
+  }
+
+  function isPurchased(uint256 _tokenId)
+  public
+  view
+  returns (PurchaseState _purchased) {
+    return tokenIdToPurchased[_tokenId];
+  }
+
+  function editionOf(uint _tokenId)
+  public
+  view
+  returns (bytes16 _edition) {
+    return tokenIdToEdition[_tokenId];
+  }
+
+  function auctionOpened(uint _tokenId)
+  public
+  view
+  returns (bool) {
+    return tokenIdToAuctionStartDate[_tokenId] <= block.timestamp;
+  }
+
+  function tokenAuctionOpenDate(uint _tokenId)
+  public
+  view
+  returns (uint32 _auctionStartDate) {
+    return tokenIdToAuctionStartDate[_tokenId];
+  }
+
+  // Utility function to get current block.timestamp = now() - good for testing with remix/truffle
+  function getNow() public constant returns (uint) {
+    return now;
+  }
+
+  function priceInWei(uint _tokenId)
+  public
+  view
+  returns (uint256 _priceInWei) {
+    return tokenIdToPriceInWei[_tokenId];
+  }
 }
