@@ -4,7 +4,7 @@
       <asset-figure :edition="edition"></asset-figure>
       <div class="card-content">
 
-        <edition-name-by-artist :edition="edition"></edition-name-by-artist>
+        <edition-name-by-artist :edition="edition" :purchase="purchase"></edition-name-by-artist>
 
         <p class="muted">
           {{ availableAssetsForEdition(edition.edition).length }} available

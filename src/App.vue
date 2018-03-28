@@ -90,7 +90,7 @@
 
   $primary: #3d3bee;
 
-  $background: #e1e1e1;
+  $background: #f8f8f8;
 
   $strong-text: #4f4f6f;
   $normal-text: #757587;
@@ -255,7 +255,7 @@
 
     .header-branding {
       font-size: 26px;
-      font-weight: 400;
+      font-weight: 200;
       text-transform: none;
       color: $primary;
     }

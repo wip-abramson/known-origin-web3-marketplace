@@ -18,7 +18,7 @@
 
             <token-id :value="asset.id"></token-id>
 
-            <edition-name-by-artist :edition="asset"></edition-name-by-artist>
+            <edition-name-by-artist :edition="asset" :purchase="true"></edition-name-by-artist>
 
             <hr/>
 
