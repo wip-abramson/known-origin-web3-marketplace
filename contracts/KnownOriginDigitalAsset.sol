@@ -27,7 +27,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
-  mapping (bytes3 => CommissionStructure) internal tokenIdToEdition;
+  mapping (bytes3 => CommissionStructure) internal tokenIdToCommission;
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
 
   mapping (uint => bytes16) internal tokenIdToEdition;
@@ -74,8 +74,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
   }
 
   struct CommissionStructure {
-  uint8 curatorCommission;
-  uint8 contractCommission;
+    uint8 curator;
+    uint8 developer;
   }
 
   function KnownOriginDigitalAsset(address _commissionAccount, address _contractDeveloper)
@@ -87,8 +87,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
     contractDeveloper = _contractDeveloper;
 
     // Setup default commission structures
-    tokenIdToEdition["DIG"] = CommissionStructure({curatorCommission : 12.5, contractCommission : 12.5});
-    tokenIdToEdition["PHY"] = CommissionStructure({curatorCommission : 24, contractCommission : 15});
+    tokenIdToCommission["DIG"] = CommissionStructure({curator : 12.5, developer : 12.5});
+    tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
   function mintEdition(string _tokenURI, bytes16 _edition, string _artist, string _editionName, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
@@ -155,12 +155,12 @@ contract KnownOriginDigitalAsset is ERC721Token {
   internal
   {
     bytes3 typeCode = substring(_edition, 13, 16);
-    CommissionStructure type = tokenIdToEdition[typeCode];
+    CommissionStructure type = tokenIdToCommission[typeCode];
     if (type != 0) {
       return type;
     }
     // default to 10% for both parties on error
-    return CommissionStructure({curatorCommission : 10, contractCommission : 10});
+    return CommissionStructure({curatorCommission : 10, developer : 10});
   }
 
   /**
@@ -179,16 +179,15 @@ contract KnownOriginDigitalAsset is ERC721Token {
     Approval(owner, _to, _tokenId);
   }
 
-  function updateCommission(bytes3 _type, uint8 _curatorCommission, uint8 _contractCommission)
+  function updateCommission(bytes3 _type, uint8 _curator, uint8 _developer)
   public
   onlyManagement
   {
-    require(_curatorCommission >= 0); // TODO is this needed
-    require(_contractCommission >= 0); // TODO is this needed
-    require((_curatorCommission + _contractCommission) <= 99); // max allowed 99 % of commission
+    require(_curator > 0);
+    require(_developer > 0);
+    require((_curator + _developer) < 100);
 
-    // Update commission
-    tokenIdToEdition[type] = CommissionStructure({curatorCommission: _curatorCommission, contractCommission: _contractCommission});
+    tokenIdToCommission[type] = CommissionStructure({curatorCommission: _curatorCommission, developer: _developer});
   }
 
   function purchaseWithEther(uint256 _tokenId)
@@ -212,31 +211,35 @@ contract KnownOriginDigitalAsset is ERC721Token {
       totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
       totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
-      // TODO Refactor to common method
-
-      bytes16 edition = tokenIdToEdition[_tokenId];
-      CommissionStructure commission = _getCommissionForEdition(edition);
-
-      // split & transfer fee for curator
-      uint commissionAccountFee = msg.value / 100 * commission.curatorCommission;
-      commissionAccount.transfer(commissionAccountFee);
-
-      // split & transfer fee for creator
-      uint contractDeveloperFee = msg.value / 100 * commission.contractCommission;
-      contractDeveloper.transfer(contractDeveloperFee);
-
-      // final payment to curator would be the remaining value
-      uint curatorTotal = msg.value - (commissionAccountFee + contractDeveloperFee);
-
-      // send ether to owner instantly
-      curator.transfer(curatorTotal);
+      _applyCommission(_tokenId);
 
       PurchasedWithEther(_tokenId, msg.sender);
 
       return true;
     }
-
     return false;
+  }
+
+  function _applyCommission(uint256 _tokenId)
+  internal
+  {
+    bytes16 edition = tokenIdToEdition[_tokenId];
+
+    CommissionStructure commission = _getCommissionForEdition(edition);
+
+    // split & transfer fee for curator
+    uint curatorAccountFee = msg.value / 100 * commission.curator;
+    curator.transfer(curator);
+
+    // split & transfer fee for developer
+    uint contractDeveloperFee = msg.value / 100 * commission.developer;
+    contractDeveloper.transfer(contractDeveloperFee);
+
+    // final payment to commission would be the remaining value
+    uint finalCommissionTotal = msg.value - (curatorAccountFee + contractDeveloperFee);
+
+    // send ether
+    commissionAccount.transfer(finalCommissionTotal);
   }
 
   function purchaseWithFiat(uint _tokenId)
