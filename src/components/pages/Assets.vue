@@ -1,6 +1,10 @@
 <template>
   <div id="account">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Assets</h1>
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
+    <h1>Assets</h1>
 
     <h2 v-if="assets">{{ assets.length }} assets</h2>
 

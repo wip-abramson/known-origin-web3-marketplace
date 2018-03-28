@@ -2,26 +2,7 @@
   <div class="complete_purchase_container">
     <form v-if="account">
 
-      <div id="purchase-state-feedback-container" class="pad-top pad-bottom">
-
-        <div v-if="isPurchaseTriggered(asset.id)">
-          Transaction Triggered
-        </div>
-
-        <div v-if="isPurchaseStarted(asset.id)">
-          Transaction Submitted
-        </div>
-
-        <div v-if="isPurchaseSuccessful(asset.id)">
-          Purchase completed
-        </div>
-
-        <div v-if="isPurchaseFailed(asset.id)">
-          Purchase Rejected
-        </div>
-      </div>
-
-      <div v-if="isPurchaseFailed(asset.id) || !assetPurchaseState(asset.id)">
+      <div v-if="!assetPurchaseState(asset.id)">
 
         <div class="pad-bottom" v-if="isUnsold">
           <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
@@ -50,11 +31,11 @@
         </div>
       </div>
 
-      <div>
-        <button class="btn btn-sold" v-if="asset.purchased !== 0">
-          SOLD
-        </button>
-      </div>
+      <!--<div>-->
+        <!--<button class="btn btn-sold" v-if="asset.purchased !== 0">-->
+          <!--SOLD-->
+        <!--</button>-->
+      <!--</div>-->
 
       <div>
         <router-link v-if="asset.purchased !== 0" :to="{ name: 'account'}" class="btn">

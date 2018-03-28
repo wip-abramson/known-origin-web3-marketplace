@@ -1,6 +1,10 @@
 <template>
   <div class="artists">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Artists</h1>
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
+    <h1>Artists</h1>
 
     <div class="centered">
       <section class="cards">

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>
-      {{ edition.editionName }}
+      <span v-if="!purchase">{{ edition.editionName }}</span>
       by
       {{ edition.artist }}
     </h3>
@@ -12,7 +12,7 @@
 <script>
   export default {
     name: 'editionNameByArtist',
-    props: ['edition'],
+    props: ['edition', 'purchase'],
   };
 </script>
 

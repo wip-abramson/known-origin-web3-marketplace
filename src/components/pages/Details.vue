@@ -1,6 +1,10 @@
 <template>
   <div id="details">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> KODA smart contract</h1>
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
+    <h1>KODA smart contract</h1>
 
     <h2>
       Contract address:

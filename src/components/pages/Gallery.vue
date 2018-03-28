@@ -1,8 +1,12 @@
 <template>
   <div id="gallery">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Gallery</h1>
+   <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+     <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+   </router-link>
 
-    <div class="centered">
+    <h1>Gallery</h1>
+
+    <div class="">
       <section class="cards centered">
         <galleryEdition
           v-for="assetEdition, key in assetsByEditions"

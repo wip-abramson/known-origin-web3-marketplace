@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="29px" viewBox="0 0 42 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Arrow_back</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-1738.000000, -746.000000)" stroke="#3E27D9">
+            <g id="Arrow-Circle-Left" transform="translate(1725.000000, 724.000000)">
+                <g>
+                    <polyline id="Path-181-Copy-4" stroke-width="2" transform="translate(22.016401, 36.453855) rotate(-180.000000) translate(-22.016401, -36.453855) " points="15.1578947 22.7368421 28.8749072 36.8372528 15.1578947 50.170867"></polyline>
+                    <path d="M17,36 L53.9473684,36" id="Line" stroke-width="2" stroke-linecap="square"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

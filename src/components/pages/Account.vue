@@ -1,10 +1,14 @@
 <template>
   <div id="account">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> My Account</h1>
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
 
-    <p>
-      <img src="/../static/account.svg" style="height:50px"/>
-    </p>
+    <h1>My Account</h1>
+
+    <!--<p>-->
+      <!--<img src="/../static/account.svg" style="height:50px"/>-->
+    <!--</p>-->
 
     <h2>My Address</h2>
     <address-icon :eth-address="account"></address-icon>

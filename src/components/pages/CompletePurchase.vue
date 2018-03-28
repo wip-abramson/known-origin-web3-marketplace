@@ -1,31 +1,64 @@
 <template>
   <div v-if="asset">
 
-    <h1>
-      <router-link
-        :to="{ name: 'confirmPurchase',
+    <router-link
+      :to="{ name: 'confirmPurchase',
         params: { edition: asset.edition }}"
-        class="back-arrow">&lt;
-      </router-link>
+      class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
+    <h1>
       {{ asset.editionName }}
     </h1>
 
-    <article class="card assets_to_buy centered">
+    <article class="card assets_to_buy">
         <div>
           <div class="card-content">
 
             <token-id :value="asset.id"></token-id>
 
-            <edition-name-by-artist :edition="asset"></edition-name-by-artist>
+            <edition-name-by-artist :edition="asset" :purchase="true"></edition-name-by-artist>
 
-            <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
-              You: <address-icon :eth-address="account" :size="'small'"></address-icon>
+            <hr/>
+
+            <div v-if="isPurchaseTriggered(asset.id)">
+              <h2>Your purchase is being initiated</h2>
             </div>
 
-            <price-in-eth :value="asset.priceInEther"></price-in-eth>
+            <div v-if="isPurchaseStarted(asset.id)">
+              <h2>Your purchase is being mined on the Blockchain...</h2>
+            </div>
 
-            <div class="pad-top pad-bottom">
-              Owner: <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+            <div v-if="isPurchaseSuccessful(asset.id)">
+              <img src="../../../static/GreenTick.svg" style="width: 150px"/>
+              <h2 class="text-success pad-top">Your purchase was successful</h2>
+            </div>
+
+            <div v-if="isPurchaseFailed(asset.id)">
+              <img src="../../../static/Failure.svg" style="width: 150px"/>
+              <h2 class="text-danger pad-top">Your purchase failed</h2>
+            </div>
+
+            <div v-if="!assetPurchaseState(asset.id)">
+              <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
+                <p>You:<br/><address-icon :eth-address="account" :size="'small'"></address-icon></p>
+              </div>
+
+              <price-in-eth :value="asset.priceInEther"></price-in-eth>
+
+              <div class="pad-top pad-bottom">
+                <p>Transfer to:<br/><address-icon :eth-address="asset.owner" :size="'small'"></address-icon></p>
+              </div>
+              <hr/>
+            </div>
+
+            <p>Total ETH: {{ asset.priceInEther }}</p>
+
+            <div v-if="isPurchaseFailed(asset.id)">
+              <router-link :to="{ name: 'gallery'}" class="btn btn-muted">
+                Retry
+              </router-link>
             </div>
 
             <complete-purchase-button :asset="asset" class="btn-center pad-bottom" @purchaseInitiated="onPurchaseInitiated">
@@ -73,7 +106,12 @@
       ...mapGetters([
         'assetsForEdition',
         'firstAssetForEdition',
-        'isCurator'
+        'isCurator',
+        'assetPurchaseState',
+        'isPurchaseTriggered',
+        'isPurchaseStarted',
+        'isPurchaseSuccessful',
+        'isPurchaseFailed',
       ]),
       ...mapState([
         'account'
