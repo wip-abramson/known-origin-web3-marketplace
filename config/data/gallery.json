@@ -80,7 +80,7 @@
         {
           "artworkName": "Functional Flattery",
           "ipfsPath": "functional_flattery",
-          "edition": "JOCFUNFLT001PHY",
+          "edition": "JOCFUNCFLT001PHY",
           "numberOfEditions": 1,
           "fiatCost": 65,
           "costInEth": 0.11

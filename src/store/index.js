@@ -7,7 +7,7 @@ import Web3 from 'web3';
 import axios from 'axios';
 import artistData from './artist-data';
 import createLogger from 'vuex/dist/logger';
-import { getNetIdString } from '../utils';
+import { getNetIdString, getEtherscanAddress } from '../utils';
 
 import { KnownOriginDigitalAsset } from '../contracts/index';
 
@@ -20,6 +20,7 @@ const store = new Vuex.Store({
     account: null,
     accountBalance: null,
     currentNetwork: null,
+    etherscanBase: null,
     assetsPurchasedByAccount: [],
 
     // contract metadata
@@ -136,6 +137,9 @@ const store = new Vuex.Store({
     [mutations.SET_CURRENT_NETWORK] (state, currentNetwork) {
       state.currentNetwork = currentNetwork;
     },
+    [mutations.SET_ETHERSCAN_NETWORK] (state, etherscanBase) {
+      state.etherscanBase = etherscanBase;
+    },
     [mutations.PURCHASE_TRIGGERED] (state, {tokenId, buyer}) {
       state.purchaseState = {
         ...state.purchaseState,
@@ -179,6 +183,10 @@ const store = new Vuex.Store({
       getNetIdString()
         .then((currentNetwork) => {
           commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
+        });
+      getEtherscanAddress()
+        .then((etherscanBase) => {
+          commit(mutations.SET_ETHERSCAN_NETWORK, etherscanBase);
         });
     },
     [actions.INIT_APP] ({commit, dispatch, state}, account) {

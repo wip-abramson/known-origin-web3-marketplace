@@ -86,6 +86,9 @@ const flattenTestData = () => {
 
       let numberOfEditions = artwork.numberOfEditions;
       let edition = artwork.edition;
+      if (edition.length !== 16) {
+        throw new Error(`Edition ${edition} not 16 chars long`);
+      }
 
       let fiatCost = artwork.fiatCost;
       let costInWei = Eth.toWei(artwork.costInEth, 'ether');
