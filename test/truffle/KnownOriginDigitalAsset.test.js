@@ -1341,6 +1341,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe.only('allocating commissions', function () {
 
+      const tokenToPurchase = 0;
+
       beforeEach(async function () {
         await this.token.mint(_tokenURI, _editionDigital, _artist, _editionName, _priceInWei, _auctionStartDate, {
           from: _curator
@@ -1348,30 +1350,40 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         this.curatorBalance = await web3.eth.getBalance(_curator);
         this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
         this.commissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
-        this.buyerBalance = await web3.eth.getBalance(buyer);
-      });
 
-      it('commission account receives correct value', async function () {
-
-        await this.token.purchaseWithEther(tokenToPurchase, {
+        let test = await this.token.purchaseWithEther(tokenToPurchase, {
           value: _priceInWei,
           from: buyer
         });
 
-        let updatedBuyerBalance = await web3.eth.getBalance(buyer);
+        let ownerOf = await this.token.ownerOf(tokenToPurchase);
+        ownerOf.should.be.equal(buyer);
 
-
-        // asset
-
+        let isPurchased = await this.token.isPurchased(tokenToPurchase);
+        isPurchased.should.be.bignumber.equal(EtherPurchase);
       });
 
       it('_curator account receives correct value', async function () {
-
+        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        updatedCuratorBalance.should.be.bignumber.equal(
+          this.curatorBalance.add(_priceInWei.dividedBy(100).times(12)) // 12%
+        );
       });
 
       it('developer account receives correct value', async function () {
-
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        updatedContractDeveloperBalance.should.be.bignumber.equal(
+          this.contractDeveloperBalance.add(_priceInWei.dividedBy(100).times(12))// 12%
+        );
       });
+
+      it('commission account receives correct value', async function () {
+        let updatedCommissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
+        updatedCommissionAccountBalance.should.be.bignumber.equal(
+          this.commissionAccountBalance.add(_priceInWei.dividedBy(100).times(76))// 76%
+        );
+      });
+
     });
 
   });
