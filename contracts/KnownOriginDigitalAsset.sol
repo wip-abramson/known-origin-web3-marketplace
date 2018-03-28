@@ -2,7 +2,6 @@ pragma solidity ^0.4.18;
 
 import "./ERC721Token.sol";
 
-
 /**
 * @title KnownOriginDigitalAsset
 *
@@ -10,7 +9,6 @@ import "./ERC721Token.sol";
 */
 contract KnownOriginDigitalAsset is ERC721Token {
   using SafeMath for uint;
-  using strings for *;
 
   // creates and owns the original assets all primary purchases transferred to this account
   address public curator;
@@ -27,7 +25,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
-  mapping (bytes3 => CommissionStructure) internal tokenIdToCommission;
+  mapping (string => CommissionStructure) internal tokenIdToCommission;
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
 
   mapping (uint => bytes16) internal tokenIdToEdition;
@@ -86,8 +84,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
     commissionAccount = _commissionAccount;
     contractDeveloper = _contractDeveloper;
 
+    // TODO work out how to do floating point division
     // Setup default commission structures
-    tokenIdToCommission["DIG"] = CommissionStructure({curator : 12.5, developer : 12.5});
+    tokenIdToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
     tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
@@ -151,18 +150,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return true;
   }
 
-  function _getCommissionForEdition(bytes16 _edition)
-  internal
-  {
-    bytes3 typeCode = substring(_edition, 13, 16);
-    CommissionStructure type = tokenIdToCommission[typeCode];
-    if (type != 0) {
-      return type;
-    }
-    // default to 10% for both parties on error
-    return CommissionStructure({curatorCommission : 10, developer : 10});
-  }
-
   /**
    * @dev Used to pre-approve a purchaser in order for internal purchase methods
    * to succeed without calling approve() directly
@@ -179,7 +166,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     Approval(owner, _to, _tokenId);
   }
 
-  function updateCommission(bytes3 _type, uint8 _curator, uint8 _developer)
+  function updateCommission(string _type, uint8 _curator, uint8 _developer)
   public
   onlyManagement
   {
@@ -187,7 +174,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     require(_developer > 0);
     require((_curator + _developer) < 100);
 
-    tokenIdToCommission[type] = CommissionStructure({curatorCommission: _curatorCommission, developer: _developer});
+    tokenIdToCommission[_type] = CommissionStructure({curator: _curator, developer: _developer});
   }
 
   function purchaseWithEther(uint256 _tokenId)
@@ -225,11 +212,14 @@ contract KnownOriginDigitalAsset is ERC721Token {
   {
     bytes16 edition = tokenIdToEdition[_tokenId];
 
-    CommissionStructure commission = _getCommissionForEdition(edition);
+    string memory typeCode = getTypeFromEdition(edition);
+
+    // TODO handle not found?
+    CommissionStructure memory commission = tokenIdToCommission[typeCode];
 
     // split & transfer fee for curator
     uint curatorAccountFee = msg.value / 100 * commission.curator;
-    curator.transfer(curator);
+    curator.transfer(curatorAccountFee);
 
     // split & transfer fee for developer
     uint contractDeveloperFee = msg.value / 100 * commission.developer;
@@ -316,7 +306,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
     );
   }
 
-
   function getOwnerTokens(address _owner)
   public
   view
@@ -365,12 +354,13 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return tokenIdToPriceInWei[_tokenId];
   }
 
-  function substring(string str, uint startIndex, uint endIndex) constant returns (bytes) {
-    bytes memory strBytes = bytes(str);
-    bytes memory result = new bytes(endIndex-startIndex);
-    for(uint i = startIndex; i < endIndex; i++) {
-      result[i-startIndex] = strBytes[i];
+  function getTypeFromEdition(bytes16 _bytes16) public pure returns (string){
+    bytes memory bytesArray = new bytes(3);
+    uint pos = 0;
+    for (uint256 i = 13; i < 16; i++) {
+      bytesArray[pos] = _bytes16[i];
+      pos++;
     }
-    return bytes(result);
+    return string(bytesArray);
   }
 }

@@ -60,6 +60,27 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     await increaseTimeTo(_auctionStartDate + duration.seconds(1)); // force time to move 1 seconds so normal tests pass
   });
 
+  describe.only('', function () {
+    it('should get type from edition', async function () {
+      let type = await this.token.getTypeFromEdition('ABC0000000000DIG');
+      type.should.be.equal("DIG");
+
+      type = await this.token.getTypeFromEdition('ABC0000000000PHY');
+      type.should.be.equal("PHY");
+
+      type = await this.token.getTypeFromEdition('ABC0000000000ABC');
+      type.should.be.equal("ABC");
+
+      console.log(web3.fromAscii('DIG'));
+      console.log(web3.fromAscii('PHY'));
+    });
+
+    it('convert DIG to bytes', async function () {
+      console.log(web3.fromAscii('DIG')); // 0x444947
+      console.log(web3.fromAscii('PHY')); // 0x504859
+    });
+  });
+
   describe('like a ERC721BasicToken', function () {
     beforeEach(async function () {
       await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _priceInWei, _auctionStartDate, {from: curator});
