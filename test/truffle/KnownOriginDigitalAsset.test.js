@@ -60,37 +60,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     await increaseTimeTo(_auctionStartDate + duration.seconds(1)); // force time to move 1 seconds so normal tests pass
   });
 
-  describe.only('', function () {
-    it.only('should get default commission for contract', async function () {
-      let commission = await this.token.getCommissionForType("DIG");
-      commission[0].should.be.bignumber.equal(12);
-      commission[1].should.be.bignumber.equal(12);
-
-      commission = await this.token.getCommissionForType("PHY");
-      commission[0].should.be.bignumber.equal(24);
-      commission[1].should.be.bignumber.equal(15);
-    });
-
-    it('should get type from edition', async function () {
-      let type = await this.token.getTypeFromEdition('ABC0000000000DIG');
-      type.should.be.equal("DIG");
-
-      type = await this.token.getTypeFromEdition('ABC0000000000PHY');
-      type.should.be.equal("PHY");
-
-      type = await this.token.getTypeFromEdition('ABC0000000000ABC');
-      type.should.be.equal("ABC");
-
-      console.log(web3.fromAscii('DIG'));
-      console.log(web3.fromAscii('PHY'));
-    });
-
-    it('convert DIG to bytes', async function () {
-      console.log(web3.fromAscii('DIG')); // 0x444947
-      console.log(web3.fromAscii('PHY')); // 0x504859
-    });
-  });
-
   describe('like a ERC721BasicToken', function () {
     beforeEach(async function () {
       await this.token.mint(_tokenURI, _edition1, _artist, _editionName, _priceInWei, _auctionStartDate, {from: curator});
@@ -1283,4 +1252,92 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     });
 
   });
+
+  describe('commission structure', function () {
+
+    it('should get default commission for contract', async function () {
+      let commission = await this.token.getCommissionForType('DIG');
+      commission[0].should.be.bignumber.equal(12);
+      commission[1].should.be.bignumber.equal(12);
+
+      commission = await this.token.getCommissionForType('PHY');
+      commission[0].should.be.bignumber.equal(24);
+      commission[1].should.be.bignumber.equal(15);
+    });
+
+    describe('updating commission', function () {
+
+      it('should be able to update as curator', async function () {
+        let commission = await this.token.getCommissionForType('DIG');
+        commission[0].should.be.bignumber.equal(12);
+        commission[1].should.be.bignumber.equal(12);
+
+        await this.token.updateCommission('DIG', 5, 5, {from: curator});
+
+        commission = await this.token.getCommissionForType('DIG');
+        commission[0].should.be.bignumber.equal(5);
+        commission[1].should.be.bignumber.equal(5);
+      });
+
+      it('should be able to update as develoepr', async function () {
+        let commission = await this.token.getCommissionForType('DIG');
+        commission[0].should.be.bignumber.equal(12);
+        commission[1].should.be.bignumber.equal(12);
+
+        await this.token.updateCommission('DIG', 1, 2, {from: _contractDeveloper});
+
+        commission = await this.token.getCommissionForType('DIG');
+        commission[0].should.be.bignumber.equal(1);
+        commission[1].should.be.bignumber.equal(2);
+      });
+
+      it('should fail when buyer', async function () {
+        await assertRevert(this.token.updateCommission('ABC', 50, 0, {from: buyer}));
+      });
+
+      it('should fail when curator commission is zero', async function () {
+        await assertRevert(this.token.updateCommission('ABC', 0, 50, {from: curator}));
+      });
+
+      it('should fail when developer commission is zero', async function () {
+        await assertRevert(this.token.updateCommission('ABC', 50, 0, {from: curator}));
+      });
+
+      it('should fail when both commissions are greater than 99', async function () {
+        await assertRevert(this.token.updateCommission('ABC', 98, 2, {from: curator}));
+      });
+
+      it('should be able to add a new commission', async function () {
+        let commission = await this.token.getCommissionForType('ABC');
+        commission[0].should.be.bignumber.equal(12);
+        commission[1].should.be.bignumber.equal(12);
+
+        await this.token.updateCommission('ABC', 30, 20, {from: _contractDeveloper});
+
+        commission = await this.token.getCommissionForType('ABC');
+        commission[0].should.be.bignumber.equal(30);
+        commission[1].should.be.bignumber.equal(20);
+      });
+    });
+
+    it('should get type from edition', async function () {
+      let type = await this.token.getTypeFromEdition('ABC0000000000DIG');
+      type.should.be.equal('DIG');
+
+      type = await this.token.getTypeFromEdition('ABC0000000000PHY');
+      type.should.be.equal('PHY');
+
+      type = await this.token.getTypeFromEdition('ABC0000000000ABC');
+      type.should.be.equal('ABC');
+
+      console.log(web3.fromAscii('DIG'));
+      console.log(web3.fromAscii('PHY'));
+    });
+
+    it('convert DIG to bytes', async function () {
+      console.log(web3.fromAscii('DIG')); // 0x444947
+      console.log(web3.fromAscii('PHY')); // 0x504859
+    });
+  });
+
 });

@@ -169,18 +169,18 @@ contract KnownOriginDigitalAsset is ERC721Token {
   function updateCommission(string _type, uint8 _curator, uint8 _developer)
   public
   onlyManagement
-  {
+  returns (bool) {
     require(_curator > 0);
     require(_developer > 0);
     require((_curator + _developer) < 100);
 
     tokenIdToCommission[_type] = CommissionStructure({curator: _curator, developer: _developer});
+    return true;
   }
 
   function getCommissionForType(string _type)
   public
   view
-  onlyManagement
   returns (uint8 _curator, uint8 _developer)
   {
     CommissionStructure storage commission = tokenIdToCommission[_type];
