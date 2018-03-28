@@ -6,7 +6,7 @@
     <div id="splash"></div>
 
     <div class="text-center">
-      <p>Buy original artwork and rare digital art</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
       <p><router-link :to="{ name: 'gallery' }" class="nav_link btn">View gallery</router-link></p>
     </div>
 
