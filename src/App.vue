@@ -314,9 +314,7 @@
   }
 
   .token-id {
-    font-weight: bold;
     color: $strong-text;
-    font-size: 1.25em;
   }
 
   .card {
