@@ -1,7 +1,5 @@
 pragma solidity ^0.4.18;
 
-import "./strings.sol";
-
 import "./ERC721Token.sol";
 
 
@@ -29,7 +27,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
+  mapping (bytes3 => CommissionStructure) internal tokenIdToEdition;
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
+
   mapping (uint => bytes16) internal tokenIdToEdition;
   mapping (uint => uint8) internal tokenIdToEditionNumber;
   mapping (uint => string) internal tokenIdToEditionName;
@@ -76,29 +76,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   struct CommissionStructure {
   uint8 curatorCommission;
   uint8 contractCommission;
-  }
-
-  mapping (bytes3 => CommissionStructure) internal tokenIdToEdition;
-
-  function _getCommissionForEdition(bytes16 _edition)
-  internal
-  {
-    bytes3 typeCode = substring(_edition, 13, 16);
-    CommissionStructure type = tokenIdToEdition[typeCode];
-    if (type != 0) {
-      return type;
-    }
-    // default to 10% for both parties on error
-    return CommissionStructure({curatorCommission : 10, contractCommission : 10});
-  }
-
-  function substring(string str, uint startIndex, uint endIndex) constant returns (bytes) {
-    bytes memory strBytes = bytes(str);
-    bytes memory result = new bytes(endIndex-startIndex);
-    for(uint i = startIndex; i < endIndex; i++) {
-      result[i-startIndex] = strBytes[i];
-    }
-    return bytes(result);
   }
 
   function KnownOriginDigitalAsset(address _commissionAccount, address _contractDeveloper)
@@ -174,6 +151,18 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return true;
   }
 
+  function _getCommissionForEdition(bytes16 _edition)
+  internal
+  {
+    bytes3 typeCode = substring(_edition, 13, 16);
+    CommissionStructure type = tokenIdToEdition[typeCode];
+    if (type != 0) {
+      return type;
+    }
+    // default to 10% for both parties on error
+    return CommissionStructure({curatorCommission : 10, contractCommission : 10});
+  }
+
   /**
    * @dev Used to pre-approve a purchaser in order for internal purchase methods
    * to succeed without calling approve() directly
@@ -223,22 +212,20 @@ contract KnownOriginDigitalAsset is ERC721Token {
       totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
       totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
-      // TODO provide config for fee split
-      
-      // TODO
-      // get type from last tree char of edition
-      // look up commission structure from map
-      // apply commission
+      // TODO Refactor to common method
 
-      // split & transfer 15% fee for curator
-      uint commissionAccountFee = msg.value / 100 * 15;
+      bytes16 edition = tokenIdToEdition[_tokenId];
+      CommissionStructure commission = _getCommissionForEdition(edition);
+
+      // split & transfer fee for curator
+      uint commissionAccountFee = msg.value / 100 * commission.curatorCommission;
       commissionAccount.transfer(commissionAccountFee);
 
-      // split out 15% fee for creator of the contract
-      uint contractDeveloperFee = msg.value / 100 * 15;
+      // split & transfer fee for creator
+      uint contractDeveloperFee = msg.value / 100 * commission.contractCommission;
       contractDeveloper.transfer(contractDeveloperFee);
 
-      // final payment to curator would be 70% of initial price
+      // final payment to curator would be the remaining value
       uint curatorTotal = msg.value - (commissionAccountFee + contractDeveloperFee);
 
       // send ether to owner instantly
@@ -373,5 +360,14 @@ contract KnownOriginDigitalAsset is ERC721Token {
   view
   returns (uint256 _priceInWei) {
     return tokenIdToPriceInWei[_tokenId];
+  }
+
+  function substring(string str, uint startIndex, uint endIndex) constant returns (bytes) {
+    bytes memory strBytes = bytes(str);
+    bytes memory result = new bytes(endIndex-startIndex);
+    for(uint i = startIndex; i < endIndex; i++) {
+      result[i-startIndex] = strBytes[i];
+    }
+    return bytes(result);
   }
 }
