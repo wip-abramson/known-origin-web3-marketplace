@@ -3,8 +3,9 @@
     <form v-if="account">
 
       <div id="purchase-state-feedback-container" class="pad-top pad-bottom">
+
         <div v-if="isPurchaseTriggered(asset.id)">
-          Purchased Triggered
+          Transaction Triggered
         </div>
 
         <div v-if="isPurchaseStarted(asset.id)">
@@ -31,11 +32,6 @@
           By choosing <strong>I agree</strong>, you understand and agree to KnownOrigin's term of service and usage license.
           <router-link :to="{ name: 'license' }">Read license</router-link>
         </div>
-
-      </div>
-
-
-      <div v-if="isPurchaseFailed(asset.id) || !assetPurchaseState(asset.id)">
 
         <button type="button" class="btn btn-success"
                 :disabled="!confirm_terms || isPurchaseTriggered(asset.id)"

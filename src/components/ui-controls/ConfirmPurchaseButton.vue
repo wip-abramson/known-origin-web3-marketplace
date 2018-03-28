@@ -4,10 +4,9 @@
       Buy Now
     </a>
 
-    <p v-if="!findNextAssetToPurchase(edition)">
+    <h3 v-if="!findNextAssetToPurchase(edition)">
        SOLD
-    </p>
-
+    </h3>
   </div>
 </template>
 

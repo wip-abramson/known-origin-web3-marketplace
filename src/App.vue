@@ -95,13 +95,13 @@
   $normal-text: #757587;
 
 
-  $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
+  $font_family_1: 'Avenir Light', Helvetica, Arial, sans-serif;
 
   $sold: red;
   $warning: darkorange;
   $success: #2ed573;
 
-  $white: white;
+  $white: #fff;
 
   /*--------------------------------------------------------------
     Header styles minus menu
@@ -125,8 +125,8 @@
   h1 {
     display: block;
     font-size: 28px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     color: $strong-text;
     border-bottom: 1px;
   }
@@ -134,19 +134,14 @@
   h2 {
     display: block;
     font-size: 28px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     color: $strong-text;
   }
 
-  h2 {
-    font-size: 28px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    color: $strong-text;
-  }
 
   h3 {
+    display: block;
     font-size: 28px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -155,7 +150,7 @@
   }
 
   h4 {
-    font-size: 28px;
+    font-size: 24px;
     margin-top: 25px;
     margin-bottom: 25px;
     color: $strong-text;
@@ -256,8 +251,8 @@
     background-color: $white !important;
 
     .header-branding {
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 26px;
+      font-weight: 400;
       text-transform: none;
       color: $primary;
     }
@@ -319,21 +314,18 @@
   }
 
   .token-id {
-    font-weight: bold;
     color: $strong-text;
-    font-size: 1.25em;
   }
 
   .card {
     background: $white;
-    margin-bottom: 2em;
-    max-width: 400px;
+    margin-bottom: 10px;
   }
-
 
   .card-content {
     padding: 1.4em;
     text-align: center;
+    box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);
     h2 {
       margin-top: 0;
       margin-bottom: .5em;
@@ -376,6 +368,14 @@
 
   .text-center {
     text-align: center;
+  }
+
+  .text-warning {
+    color: $sold;
+  }
+
+  .text-success {
+   color: $success;
   }
 
   #featured-artists {
@@ -426,6 +426,7 @@
     text-align: center;
     background-image: url('../static/background.jpg');
     min-height: 300px;
+    margin: 0 10px;
 
     .strap {
       margin: 50px;
