@@ -3,21 +3,18 @@
     <form v-if="account">
 
       <div id="purchase-state-feedback-container" class="pad-top pad-bottom">
-
-        <div v-if="isPurchaseTriggered(asset.id)">
-          Transaction Triggered
-        </div>
-
-        <div v-if="isPurchaseStarted(asset.id)">
-          Transaction Submitted
+        <div v-if="isPurchaseStarted(asset.id) || isPurchaseTriggered(asset.id)">
+          <h2>Your purchase is being mined on the Blockchain</h2>
         </div>
 
         <div v-if="isPurchaseSuccessful(asset.id)">
-          Purchase completed
+          <img src="../../../static/GreenTick.svg"/>
+          <h2 class="text-success">Your purchase was successful</h2>
         </div>
 
         <div v-if="isPurchaseFailed(asset.id)">
-          Purchase Rejected
+          <img src="../../../static/GreenTick.svg"/>
+          <h2 class="text-danger">Your purchase failed</h2>
         </div>
       </div>
 
@@ -50,11 +47,11 @@
         </div>
       </div>
 
-      <div>
-        <button class="btn btn-sold" v-if="asset.purchased !== 0">
-          SOLD
-        </button>
-      </div>
+      <!--<div>-->
+        <!--<button class="btn btn-sold" v-if="asset.purchased !== 0">-->
+          <!--SOLD-->
+        <!--</button>-->
+      <!--</div>-->
 
       <div>
         <router-link v-if="asset.purchased !== 0" :to="{ name: 'account'}" class="btn">

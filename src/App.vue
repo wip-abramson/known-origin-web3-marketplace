@@ -191,10 +191,12 @@
     border-radius: 28px;
     color: $primary;
     font-size: 18px;
-    padding: 10px 20px 10px 20px;
+    padding: 5px 10px 5px 10px;
     border: solid $primary 3px;
     text-decoration: none;
     display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
 
     &:hover {
       text-decoration: none;
@@ -370,7 +372,7 @@
     text-align: center;
   }
 
-  .text-warning {
+  .text-danger {
     color: $sold;
   }
 
