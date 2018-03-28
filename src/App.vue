@@ -19,6 +19,7 @@
             You need to install <a href='https://metmask.io' target="_blank">MetaMask </a> to use this feature. <a
             href='https://metmask.io' target="_blank">https://metamask.io</a>
           </p>
+
         </div>
         <div>
           <img src="../static/pay_with_metamask.png"/>
@@ -129,6 +130,7 @@
     margin-bottom: 30px;
     color: $strong-text;
     border-bottom: 1px;
+    text-align: center;
   }
 
   h2 {
@@ -182,19 +184,18 @@
   }
 
   button {
-    width: 100%;
   }
 
   .btn {
-    -webkit-border-radius: 28;
-    -moz-border-radius: 28;
-    border-radius: 28px;
+    -webkit-border-radius: 16;
+    -moz-border-radius: 16;
+    border-radius: 16px;
     color: $primary;
     font-size: 18px;
     padding: 5px 10px 5px 10px;
     border: solid $primary 3px;
     text-decoration: none;
-    display: block;
+    /*display: block;*/
     margin-top: 10px;
     margin-bottom: 10px;
 
@@ -277,8 +278,8 @@
   }
 
   .centered {
-    margin: 0 auto;
-    padding: 0 1em;
+    /*margin: 0 auto;*/
+    /*padding: 0 1em;*/
   }
 
   .uppercase {
@@ -327,7 +328,8 @@
   .card-content {
     padding: 1.4em;
     text-align: center;
-    box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);
+    /*display: flex;*/
+    /*<!--box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);-->*/
     h2 {
       margin-top: 0;
       margin-bottom: .5em;
@@ -351,6 +353,10 @@
       display: flex;
       flex: 0 1 calc(50% - 0.5em);
     }
+    .centered {
+      margin: 0 auto;
+      padding: 0 1em;
+    }
   }
 
   @media screen and (min-width: 60em) {
@@ -361,6 +367,10 @@
       margin-bottom: 2em;
       display: flex;
       flex: 0 1 calc(33% - 0.5em);
+    }
+    .centered {
+      margin: 0 auto;
+      padding: 0 1em;
     }
   }
 
@@ -453,6 +463,7 @@
   .assets_to_buy {
     background: $white;
     max-width: 400px;
+    margin: auto;
   }
 
   .no-web3-found-container {

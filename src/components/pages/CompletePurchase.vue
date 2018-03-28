@@ -1,16 +1,18 @@
 <template>
   <div v-if="asset">
 
-    <h1>
-      <router-link
-        :to="{ name: 'confirmPurchase',
+    <router-link
+      :to="{ name: 'confirmPurchase',
         params: { edition: asset.edition }}"
-        class="back-arrow">&lt;
-      </router-link>
+      class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
+    <h1>
       {{ asset.editionName }}
     </h1>
 
-    <article class="card assets_to_buy centered">
+    <article class="card assets_to_buy">
         <div>
           <div class="card-content">
 
@@ -30,12 +32,12 @@
 
             <div v-if="isPurchaseSuccessful(asset.id)">
               <img src="../../../static/GreenTick.svg" style="width: 150px"/>
-              <h2 class="text-success">Your purchase was successful</h2>
+              <h2 class="text-success pad-top">Your purchase was successful</h2>
             </div>
 
             <div v-if="isPurchaseFailed(asset.id)">
-              <img src="../../../static/GreenTick.svg" style="width: 150px"/>
-              <h2 class="text-danger">Your purchase failed</h2>
+              <img src="../../../static/Failure.svg" style="width: 150px"/>
+              <h2 class="text-danger pad-top">Your purchase failed</h2>
             </div>
 
             <div v-if="!assetPurchaseState(asset.id)">
@@ -52,6 +54,13 @@
             </div>
 
             <p>Total ETH: {{ asset.priceInEther }}</p>
+
+            <div v-if="isPurchaseFailed(asset.id)">
+              <router-link :to="{ name: 'gallery'}" class="btn btn-muted">
+                Retry
+              </router-link>
+            </div>
+
             <complete-purchase-button :asset="asset" class="btn-center pad-bottom" @purchaseInitiated="onPurchaseInitiated">
             </complete-purchase-button>
           </div>

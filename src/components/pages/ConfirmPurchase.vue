@@ -1,9 +1,12 @@
 <template>
   <div v-if="edition">
-    <!--<h1><router-link :to="{ name: 'artist', params: { id: edition.artistCode } }" class="back-arrow">&lt;</router-link>  {{ edition.editionName }}</h1>-->
-    <h1><router-link :to="{ name: 'gallery' }" class="back-arrow">&lt;</router-link>  {{ edition.editionName }}</h1>
+    <router-link :to="{ name: 'gallery' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
 
-    <div class="assets_to_buy centered">
+    <h1>{{ edition.editionName }}</h1>
+
+    <div class="assets_to_buy">
         <gallery-edition :edition="edition" :purchase="true"></gallery-edition>
     </div>
 
