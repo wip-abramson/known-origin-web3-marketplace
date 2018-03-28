@@ -355,7 +355,7 @@
     }
     .centered {
       margin: 0 auto;
-      padding: 0 1em;
+      padding: 0 10px;
     }
   }
 
@@ -370,7 +370,7 @@
     }
     .centered {
       margin: 0 auto;
-      padding: 0 1em;
+      padding: 0 10px;
     }
   }
 

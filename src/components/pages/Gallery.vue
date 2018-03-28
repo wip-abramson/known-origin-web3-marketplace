@@ -6,7 +6,7 @@
 
     <h1>Gallery</h1>
 
-    <div class="centered">
+    <div class="">
       <section class="cards centered">
         <galleryEdition
           v-for="assetEdition, key in assetsByEditions"
