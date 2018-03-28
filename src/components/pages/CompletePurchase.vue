@@ -18,16 +18,40 @@
 
             <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-            <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
-              You: <address-icon :eth-address="account" :size="'small'"></address-icon>
+            <hr/>
+
+            <div v-if="isPurchaseTriggered(asset.id)">
+              <h2>Your purchase is being initiated</h2>
             </div>
 
-            <price-in-eth :value="asset.priceInEther"></price-in-eth>
-
-            <div class="pad-top pad-bottom">
-              Owner: <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+            <div v-if="isPurchaseStarted(asset.id)">
+              <h2>Your purchase is being mined on the Blockchain...</h2>
             </div>
 
+            <div v-if="isPurchaseSuccessful(asset.id)">
+              <img src="../../../static/GreenTick.svg" style="width: 150px"/>
+              <h2 class="text-success">Your purchase was successful</h2>
+            </div>
+
+            <div v-if="isPurchaseFailed(asset.id)">
+              <img src="../../../static/GreenTick.svg" style="width: 150px"/>
+              <h2 class="text-danger">Your purchase failed</h2>
+            </div>
+
+            <div v-if="!assetPurchaseState(asset.id)">
+              <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
+                <p>You:<br/><address-icon :eth-address="account" :size="'small'"></address-icon></p>
+              </div>
+
+              <price-in-eth :value="asset.priceInEther"></price-in-eth>
+
+              <div class="pad-top pad-bottom">
+                <p>Transfer to:<br/><address-icon :eth-address="asset.owner" :size="'small'"></address-icon></p>
+              </div>
+              <hr/>
+            </div>
+
+            <p>Total ETH: {{ asset.priceInEther }}</p>
             <complete-purchase-button :asset="asset" class="btn-center pad-bottom" @purchaseInitiated="onPurchaseInitiated">
             </complete-purchase-button>
           </div>
@@ -73,7 +97,12 @@
       ...mapGetters([
         'assetsForEdition',
         'firstAssetForEdition',
-        'isCurator'
+        'isCurator',
+        'assetPurchaseState',
+        'isPurchaseTriggered',
+        'isPurchaseStarted',
+        'isPurchaseSuccessful',
+        'isPurchaseFailed',
       ]),
       ...mapState([
         'account'

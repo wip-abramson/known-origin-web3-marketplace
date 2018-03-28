@@ -2,23 +2,7 @@
   <div class="complete_purchase_container">
     <form v-if="account">
 
-      <div id="purchase-state-feedback-container" class="pad-top pad-bottom">
-        <div v-if="isPurchaseStarted(asset.id) || isPurchaseTriggered(asset.id)">
-          <h2>Your purchase is being mined on the Blockchain</h2>
-        </div>
-
-        <div v-if="isPurchaseSuccessful(asset.id)">
-          <img src="../../../static/GreenTick.svg"/>
-          <h2 class="text-success">Your purchase was successful</h2>
-        </div>
-
-        <div v-if="isPurchaseFailed(asset.id)">
-          <img src="../../../static/GreenTick.svg"/>
-          <h2 class="text-danger">Your purchase failed</h2>
-        </div>
-      </div>
-
-      <div v-if="isPurchaseFailed(asset.id) || !assetPurchaseState(asset.id)">
+      <div v-if="!assetPurchaseState(asset.id)">
 
         <div class="pad-bottom" v-if="isUnsold">
           <input type="checkbox" :id="'confirm_terms'" v-model="confirm_terms">
