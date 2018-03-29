@@ -1479,5 +1479,46 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     });
 
+    describe('if the artwork is free, no commission is applied', function () {
+
+      const tokenToPurchase = 0;
+
+      beforeEach(async function () {
+        await this.token.mint(_tokenURI, _editionPhysical, _artist, _editionName, 0, _auctionStartDate, {
+          from: _curator
+        });
+        this.curatorBalance = await web3.eth.getBalance(_curator);
+        this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        this.commissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
+
+        await this.token.purchaseWithEther(tokenToPurchase, {
+          value: _priceInWei,
+          from: buyer
+        });
+
+        let ownerOf = await this.token.ownerOf(tokenToPurchase);
+        ownerOf.should.be.equal(buyer);
+
+        let isPurchased = await this.token.isPurchased(tokenToPurchase);
+        isPurchased.should.be.bignumber.equal(EtherPurchase);
+      });
+
+      it('curator account receives correct value of zero', async function () {
+        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        updatedCuratorBalance.should.be.bignumber.equal(this.curatorBalance);
+      });
+
+      it('developer account receives correct value of zero', async function () {
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        updatedContractDeveloperBalance.should.be.bignumber.equal(this.contractDeveloperBalance);
+      });
+
+      it('commission account receives correct value of zero', async function () {
+        let updatedCommissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
+        updatedCommissionAccountBalance.should.be.bignumber.equal(this.commissionAccountBalance);
+      });
+
+    });
+
   });
 });

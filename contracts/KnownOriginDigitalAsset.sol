@@ -1,6 +1,8 @@
 pragma solidity ^0.4.18;
 
+
 import "./ERC721Token.sol";
+
 
 /**
 * @title KnownOriginDigitalAsset
@@ -84,7 +86,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
     commissionAccount = _commissionAccount;
     contractDeveloper = _contractDeveloper;
 
-    // TODO work out how to do floating point division
     // Setup default commission structures
     tokenIdToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
     tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
@@ -174,7 +175,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     require(_developer > 0);
     require((_curator + _developer) < 100);
 
-    tokenIdToCommission[_type] = CommissionStructure({curator: _curator, developer: _developer});
+    tokenIdToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
     return true;
   }
 
@@ -197,7 +198,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
   onlyWhenBuyDateOpen(_tokenId)
   returns (bool) {
 
-    if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
+    uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
+
+    if (msg.value >= priceInWei) {
 
       // approve sender as they have paid the required amount
       _approvePurchaser(msg.sender, _tokenId);
@@ -211,7 +214,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
       totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
       totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
-      _applyCommission(_tokenId);
+      // Only apply commission if the art work has value
+      if (priceInWei != 0 && msg.value != 0) {
+        _applyCommission(_tokenId);
+      }
 
       PurchasedWithEther(_tokenId, msg.sender);
 
