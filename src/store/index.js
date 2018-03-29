@@ -158,10 +158,10 @@ const store = new Vuex.Store({
         [tokenId]: {tokenId, buyer, state: 'PURCHASE_SUCCESSFUL'}
       };
     },
-    [mutations.PURCHASE_STARTED] (state, {tokenId, buyer}) {
+    [mutations.PURCHASE_STARTED] (state, {tokenId, buyer, data}) {
       state.purchaseState = {
         ...state.purchaseState,
-        [tokenId]: {tokenId, buyer, state: 'PURCHASE_STARTED'}
+        [tokenId]: {tokenId, buyer, data, state: 'PURCHASE_STARTED'}
       };
     },
   },
@@ -211,7 +211,6 @@ const store = new Vuex.Store({
         .catch(function (error) {
           console.log('ERROR - account locked', error);
           // TODO handle locked metamask account
-
         });
     },
     [actions.GET_ALL_ASSETS] ({commit, dispatch, state}) {
@@ -237,7 +236,7 @@ const store = new Vuex.Store({
           });
       };
 
-      const mapType = (rawType) => {
+      const mapAssetType = (rawType) => {
         switch (rawType) {
           case 'DIG':
             return 'digital';
@@ -272,7 +271,7 @@ const store = new Vuex.Store({
 
               edition: edition,
               // Last 3 chars of edition are type
-              type: mapType(edition.substring(13, 16)),
+              type: mapAssetType(edition.substring(13, 16)),
               // First 3 chars of edition are artist code
               artistCode: edition.substring(0, 3),
 
@@ -486,7 +485,7 @@ const store = new Vuex.Store({
             .then((data) => {
               // 2) Purchase transaction submitted
               console.log('Purchase transaction submitted', data);
-              commit(mutations.PURCHASE_STARTED, {tokenId: _tokenId, buyer: _buyer});
+              commit(mutations.PURCHASE_STARTED, {tokenId: _tokenId, buyer: _buyer, data: data});
             })
             .catch((error) => {
               // Purchase failure

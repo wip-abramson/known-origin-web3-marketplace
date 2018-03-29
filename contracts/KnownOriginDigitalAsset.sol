@@ -12,11 +12,16 @@ import "./ERC721Token.sol";
 contract KnownOriginDigitalAsset is ERC721Token {
   using SafeMath for uint;
 
+  struct CommissionStructure {
+    uint8 curator;
+    uint8 developer;
+  }
+
   // creates and owns the original assets all primary purchases transferred to this account
-  address public curator;
+  address public curatorAccount;
 
   // the person who is responsible for designing and building the contract
-  address public contractDeveloper;
+  address public developerAccount;
 
   // the person who puts on the event
   address public commissionAccount;
@@ -27,7 +32,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
+  mapping (string => CommissionStructure) internal tokenIdToCommission;
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
+
   mapping (uint => bytes16) internal tokenIdToEdition;
   mapping (uint => uint8) internal tokenIdToEditionNumber;
   mapping (uint => string) internal tokenIdToEditionName;
@@ -42,7 +49,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   event PurchasedWithFiatReversed(uint256 indexed _tokenId);
 
   modifier onlyCurator() {
-    require(msg.sender == curator);
+    require(msg.sender == curatorAccount);
     _;
   }
 
@@ -57,12 +64,12 @@ contract KnownOriginDigitalAsset is ERC721Token {
   }
 
   modifier onlyManagementOwnedToken(uint256 _tokenId) {
-    require(tokenOwner[_tokenId] == curator || tokenOwner[_tokenId] == contractDeveloper);
+    require(tokenOwner[_tokenId] == curatorAccount || tokenOwner[_tokenId] == developerAccount);
     _;
   }
 
   modifier onlyManagement() {
-    require(msg.sender == curator || msg.sender == contractDeveloper);
+    require(msg.sender == curatorAccount || msg.sender == developerAccount);
     _;
   }
 
@@ -71,13 +78,17 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _;
   }
 
-  function KnownOriginDigitalAsset(address _commissionAccount, address _contractDeveloper)
+  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount)
   public
   ERC721Token("KnownOriginDigitalAsset", "KODA")
   {
-    curator = msg.sender;
+    curatorAccount = msg.sender;
     commissionAccount = _commissionAccount;
-    contractDeveloper = _contractDeveloper;
+    developerAccount = _developerAccount;
+
+    // Setup default commission structures
+    tokenIdToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
+    tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
   function mintEdition(string _tokenURI, bytes16 _edition, string _artist, string _editionName, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
@@ -131,54 +142,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _setTokenURI(_tokenId, _uri);
   }
 
-  function getOwnerTokens(address _owner)
-  public
-  view
-  returns (uint[] _tokenIds)
-  {
-    return ownedTokens[_owner];
-  }
-
-  function isPurchased(uint256 _tokenId)
-  public
-  view
-  returns (PurchaseState _purchased) {
-    return tokenIdToPurchased[_tokenId];
-  }
-
-  function editionOf(uint _tokenId)
-  public
-  view
-  returns (bytes16 _edition) {
-    return tokenIdToEdition[_tokenId];
-  }
-
-  function auctionOpened(uint _tokenId)
-  public
-  view
-  returns (bool) {
-    return tokenIdToAuctionStartDate[_tokenId] <= block.timestamp;
-  }
-
-  function tokenAuctionOpenDate(uint _tokenId)
-  public
-  view
-  returns (uint32 _auctionStartDate) {
-    return tokenIdToAuctionStartDate[_tokenId];
-  }
-
-  // Utility function to get current block.timestamp = now() - good for testing with remix/truffle
-  function getNow() public constant returns (uint) {
-    return now;
-  }
-
-  function priceInWei(uint _tokenId)
-  public
-  view
-  returns (uint256 _priceInWei) {
-    return tokenIdToPriceInWei[_tokenId];
-  }
-
   function setPriceInWei(uint _tokenId, uint256 _priceInWei)
   public
   onlyManagement
@@ -204,6 +167,30 @@ contract KnownOriginDigitalAsset is ERC721Token {
     Approval(owner, _to, _tokenId);
   }
 
+  function updateCommission(string _type, uint8 _curator, uint8 _developer)
+  public
+  onlyManagement
+  returns (bool) {
+    require(_curator > 0);
+    require(_developer > 0);
+    require((_curator + _developer) < 100);
+
+    tokenIdToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
+    return true;
+  }
+
+  function getCommissionForType(string _type)
+  public
+  view
+  returns (uint8 _curator, uint8 _developer)
+  {
+    CommissionStructure storage commission = tokenIdToCommission[_type];
+    return (
+      commission.curator,
+      commission.developer
+    );
+  }
+
   function purchaseWithEther(uint256 _tokenId)
   public
   payable
@@ -211,13 +198,15 @@ contract KnownOriginDigitalAsset is ERC721Token {
   onlyWhenBuyDateOpen(_tokenId)
   returns (bool) {
 
-    if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
+    uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
+
+    if (msg.value >= priceInWei) {
 
       // approve sender as they have paid the required amount
       _approvePurchaser(msg.sender, _tokenId);
 
       // transfer assets from contract creator (curator) to new owner
-      safeTransferFrom(curator, msg.sender, _tokenId);
+      safeTransferFrom(curatorAccount, msg.sender, _tokenId);
 
       // now purchased - don't allow re-purchase!
       tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
@@ -225,28 +214,40 @@ contract KnownOriginDigitalAsset is ERC721Token {
       totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
       totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
-      // TODO provide config for fee split
-
-      // split & transfer 15% fee for curator
-      uint commissionAccountFee = msg.value / 100 * 15;
-      commissionAccount.transfer(commissionAccountFee);
-
-      // split out 15% fee for creator of the contract
-      uint contractDeveloperFee = msg.value / 100 * 15;
-      contractDeveloper.transfer(contractDeveloperFee);
-
-      // final payment to curator would be 70% of initial price
-      uint curatorTotal = msg.value - (commissionAccountFee + contractDeveloperFee);
-
-      // send ether to owner instantly
-      curator.transfer(curatorTotal);
+      // Only apply commission if the art work has value
+      if (priceInWei > 0) {
+        _applyCommission(_tokenId);
+      }
 
       PurchasedWithEther(_tokenId, msg.sender);
 
       return true;
     }
-
     return false;
+  }
+
+  function _applyCommission(uint256 _tokenId)
+  internal
+  {
+    bytes16 edition = tokenIdToEdition[_tokenId];
+
+    string memory typeCode = getTypeFromEdition(edition);
+
+    CommissionStructure memory commission = tokenIdToCommission[typeCode];
+
+    // split & transfer fee for curator
+    uint curatorAccountFee = msg.value / 100 * commission.curator;
+    curatorAccount.transfer(curatorAccountFee);
+
+    // split & transfer fee for developer
+    uint developerAccountFee = msg.value / 100 * commission.developer;
+    developerAccount.transfer(developerAccountFee);
+
+    // final payment to commission would be the remaining value
+    uint finalCommissionTotal = msg.value - (curatorAccountFee + developerAccountFee);
+
+    // send ether
+    commissionAccount.transfer(finalCommissionTotal);
   }
 
   function purchaseWithFiat(uint _tokenId)
@@ -323,4 +324,49 @@ contract KnownOriginDigitalAsset is ERC721Token {
     );
   }
 
+  function getOwnerTokens(address _owner)
+  public
+  view
+  returns (uint[] _tokenIds)
+  {
+    return ownedTokens[_owner];
+  }
+
+  function isPurchased(uint256 _tokenId)
+  public
+  view
+  returns (PurchaseState _purchased) {
+    return tokenIdToPurchased[_tokenId];
+  }
+
+  function editionOf(uint _tokenId)
+  public
+  view
+  returns (bytes16 _edition) {
+    return tokenIdToEdition[_tokenId];
+  }
+
+  function tokenAuctionOpenDate(uint _tokenId)
+  public
+  view
+  returns (uint32 _auctionStartDate) {
+    return tokenIdToAuctionStartDate[_tokenId];
+  }
+
+  function priceInWei(uint _tokenId)
+  public
+  view
+  returns (uint256 _priceInWei) {
+    return tokenIdToPriceInWei[_tokenId];
+  }
+
+  function getTypeFromEdition(bytes16 _bytes16) public pure returns (string){
+    bytes memory bytesArray = new bytes(3);
+    uint pos = 0;
+    for (uint256 i = 13; i < 16; i++) {
+      bytesArray[pos] = _bytes16[i];
+      pos++;
+    }
+    return string(bytesArray);
+  }
 }
