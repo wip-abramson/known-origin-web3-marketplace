@@ -227,8 +227,15 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
     string memory typeCode = getTypeFromEdition(edition);
 
-    // TODO handle not found?
     CommissionStructure memory commission = tokenIdToCommission[typeCode];
+
+    // Handle missing commission, defaults to 2% for both parties
+    if (commission.curator == 0) {
+      commission.curator = 2;
+    }
+    if (commission.developer == 0) {
+      commission.developer = 2;
+    }
 
     // split & transfer fee for curator
     uint curatorAccountFee = msg.value / 100 * commission.curator;
@@ -355,16 +362,16 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return tokenIdToAuctionStartDate[_tokenId];
   }
 
-  // Utility function to get current block.timestamp = now() - good for testing with remix/truffle
-  function getNow() public constant returns (uint) {
-    return now;
-  }
-
   function priceInWei(uint _tokenId)
   public
   view
   returns (uint256 _priceInWei) {
     return tokenIdToPriceInWei[_tokenId];
+  }
+
+  // Utility function to get current block.timestamp = now() - good for testing with remix/truffle
+  function getNow() public constant returns (uint) {
+    return now;
   }
 
   function getTypeFromEdition(bytes16 _bytes16) public pure returns (string){
