@@ -581,7 +581,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
   describe('like a mintable and burnable ERC721Token', function () {
     beforeEach(async function () {
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
+      const result =await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
         from: _curator
       });
       await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, {
@@ -594,7 +594,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('when successful', function () {
         beforeEach(async function () {
-          const result = await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
+          const result = await this.token.mint(_tokenURI, 'XYZ0000000000DIG', _priceInWei, _purchaseFromTime, {
             from: _curator
           });
           logs = result.logs;
@@ -807,7 +807,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           web3.toAscii(edition).should.be.equal(_editionDigital);
 
           let editionNumber = editionInfo[2];
-          editionNumber.should.be.bignumber.equal(id + 1);
+          editionNumber.should.be.bignumber.equal(NUMBER_OF_EDITIONS);
 
           let tokenUri = editionInfo[3];
           tokenUri.toString().should.be.equal(_tokenURI);

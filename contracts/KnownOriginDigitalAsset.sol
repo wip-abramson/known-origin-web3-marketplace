@@ -28,17 +28,18 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   uint256 public totalPurchaseValueInWei;
 
-  uint32 public totalNumberOfPurchases;
+  uint256 public totalNumberOfPurchases;
 
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
   mapping (string => CommissionStructure) internal editionTypeToCommission;
-  mapping (uint => PurchaseState) internal tokenIdToPurchased;
+  mapping (uint256 => PurchaseState) internal tokenIdToPurchased;
 
-  mapping (uint => bytes16) internal tokenIdToEdition;
-  mapping (uint => uint8) internal tokenIdToEditionNumber;
-  mapping (uint => uint256) internal tokenIdToPriceInWei;
-  mapping (uint => uint32) internal tokenIdToPurchaseFromTime;
+  mapping (uint256 => bytes16) internal tokenIdToEdition;
+  mapping (uint256 => uint256) internal tokenIdToPriceInWei;
+  mapping (uint256 => uint32) internal tokenIdToPurchaseFromTime;
+
+  mapping (bytes16 => uint8) internal editionToEditionNumber;
 
   event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
 
@@ -76,6 +77,11 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _;
   }
 
+  modifier onlyNewEditions(bytes16 _edition) {
+    require(editionToEditionNumber[_edition] == 0);
+    _;
+  }
+
   function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount)
   public
   ERC721Token("KnownOriginDigitalAsset", "KODA")
@@ -91,7 +97,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _purchaseFromTime)
   public
-  onlyManagement {
+  onlyManagement
+  onlyNewEditions(_edition) {
 
     uint256 offset = allTokens.length;
     for (uint8 i = 0; i < _totalEdition; i++) {
@@ -104,7 +111,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate)
   public
-  onlyManagement {
+  onlyManagement
+  onlyNewEditions(_edition) {
 
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
@@ -116,7 +124,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   internal
   {
     tokenIdToEdition[_tokenId] = _edition;
-    tokenIdToEditionNumber[_tokenId] = _editionNumber;
+    editionToEditionNumber[_edition] = _editionNumber;
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     tokenIdToPurchaseFromTime[_tokenId] = _purchaseFromTime;
   }
@@ -153,7 +161,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
    * @param _tokenId uint256 ID of the token to query the approval of
    * @return address currently approved for a the given token ID
    */
-  function _approvePurchaser(address _to, uint _tokenId)
+  function _approvePurchaser(address _to, uint256 _tokenId)
   internal
   {
     address owner = ownerOf(_tokenId);
@@ -246,7 +254,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     commissionAccount.transfer(finalCommissionTotal);
   }
 
-  function purchaseWithFiat(uint _tokenId)
+  function purchaseWithFiat(uint256 _tokenId)
   public
   onlyManagement
   onlyUnsold(_tokenId)
@@ -263,7 +271,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return true;
   }
 
-  function reverseFiatPurchase(uint _tokenId)
+  function reverseFiatPurchase(uint256 _tokenId)
   public
   onlyManagement
   onlyFiatPurchased(_tokenId)
@@ -299,7 +307,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     );
   }
 
-  function editionInfo(uint _tokenId)
+  function editionInfo(uint256 _tokenId)
   public
   view
   returns (
@@ -308,10 +316,12 @@ contract KnownOriginDigitalAsset is ERC721Token {
     uint8 _editionNumber,
     string _tokenURI
   ) {
+
+    bytes16 edition = tokenIdToEdition[_tokenId];
     return (
     _tokenId,
-    tokenIdToEdition[_tokenId],
-    tokenIdToEditionNumber[_tokenId],
+    edition,
+    editionToEditionNumber[edition],
     tokenURI(_tokenId)
     );
   }
@@ -319,7 +329,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   function tokensOf(address _owner)
   public
   view
-  returns (uint[] _tokenIds)
+  returns (uint256[] _tokenIds)
   {
     return ownedTokens[_owner];
   }
@@ -331,21 +341,21 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return tokenIdToPurchased[_tokenId];
   }
 
-  function editionOf(uint _tokenId)
+  function editionOf(uint256 _tokenId)
   public
   view
   returns (bytes16 _edition) {
     return tokenIdToEdition[_tokenId];
   }
 
-  function purchaseFromTime(uint _tokenId)
+  function purchaseFromTime(uint256 _tokenId)
   public
   view
   returns (uint32 _auctionStartDate) {
     return tokenIdToPurchaseFromTime[_tokenId];
   }
 
-  function priceInWei(uint _tokenId)
+  function priceInWei(uint256 _tokenId)
   public
   view
   returns (uint256 _priceInWei) {
