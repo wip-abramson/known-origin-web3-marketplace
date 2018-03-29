@@ -9,7 +9,7 @@
     </router-link>
 
     <h1>
-      {{ asset.editionName }}
+      {{ asset.otherMeta.artworkName }}
     </h1>
 
     <article class="card assets_to_buy pad-bottom">

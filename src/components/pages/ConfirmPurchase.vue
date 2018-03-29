@@ -4,7 +4,7 @@
       <img src="../../../static/back_arrow.svg" style="width: 50px"/>
     </router-link>
 
-    <h1>{{ edition.editionName }}</h1>
+    <h1>{{ edition.otherMeta.artworkName }}</h1>
 
     <div class="assets_to_buy">
         <gallery-edition :edition="edition" :purchase="true"></gallery-edition>

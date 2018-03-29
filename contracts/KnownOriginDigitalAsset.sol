@@ -37,8 +37,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   mapping (uint => bytes16) internal tokenIdToEdition;
   mapping (uint => uint8) internal tokenIdToEditionNumber;
-  mapping (uint => string) internal tokenIdToEditionName;
-  mapping (uint => string) internal tokenIdToArtist;
   mapping (uint => uint256) internal tokenIdToPriceInWei;
   mapping (uint => uint32) internal tokenIdToAuctionStartDate;
 
@@ -91,7 +89,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
-  function mintEdition(string _tokenURI, bytes16 _edition, string _artist, string _editionName, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
+  function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
   public
   onlyManagement {
 
@@ -100,29 +98,27 @@ contract KnownOriginDigitalAsset is ERC721Token {
       uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
-      _populateTokenData(_tokenId, _edition, _editionName, i + 1, _artist, _priceInWei, _auctionStartDate);
+      _populateTokenData(_tokenId, _edition, i + 1, _priceInWei, _auctionStartDate);
     }
   }
 
-  function mint(string _tokenURI, bytes16 _edition, string _artist, string _editionName, uint256 _priceInWei, uint32 _auctionStartDate)
+  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate)
   public
   onlyManagement {
 
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
-    _populateTokenData(_tokenId, _edition, _editionName, 1, _artist, _priceInWei, _auctionStartDate);
+    _populateTokenData(_tokenId, _edition, 1, _priceInWei, _auctionStartDate);
   }
 
-  function _populateTokenData(uint _tokenId, bytes16 _edition, string _editionName, uint8 _editionNumber, string _artist, uint256 _priceInWei, uint32 _auctionStartDate)
+  function _populateTokenData(uint _tokenId, bytes16 _edition, uint8 _editionNumber, uint256 _priceInWei, uint32 _auctionStartDate)
   internal
   {
     tokenIdToEdition[_tokenId] = _edition;
     tokenIdToEditionNumber[_tokenId] = _editionNumber;
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     tokenIdToAuctionStartDate[_tokenId] = _auctionStartDate;
-    tokenIdToArtist[_tokenId] = _artist;
-    tokenIdToEditionName[_tokenId] = _editionName;
   }
 
   function burn(uint256 _tokenId)
@@ -309,17 +305,13 @@ contract KnownOriginDigitalAsset is ERC721Token {
   returns (
   uint256 _tokId,
   bytes16 _edition,
-  string _editionName,
   uint8 _editionNumber,
-  string _artist,
   string _tokenURI
   ) {
     return (
     _tokenId,
     tokenIdToEdition[_tokenId],
-    tokenIdToEditionName[_tokenId],
     tokenIdToEditionNumber[_tokenId],
-    tokenIdToArtist[_tokenId],
     tokenURI(_tokenId)
     );
   }
@@ -346,7 +338,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return tokenIdToEdition[_tokenId];
   }
 
-  function tokenAuctionOpenDate(uint _tokenId)
+  function tokenAuctionStartDate(uint _tokenId)
   public
   view
   returns (uint32 _auctionStartDate) {

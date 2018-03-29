@@ -1,9 +1,9 @@
 <template>
   <div>
     <h3>
-      <span v-if="!purchase">{{ edition.editionName }}</span>
+      <span v-if="!purchase">{{ edition.otherMeta.artworkName }}</span>
       by
-      {{ edition.artist }}
+      {{ edition.otherMeta.artist }}
     </h3>
     <p class="edition-code">{{ edition.edition }}</p>
   </div>

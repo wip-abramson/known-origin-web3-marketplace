@@ -59,8 +59,6 @@ const loadSeedData = (instance, _curatorAccount, _openingTime) => {
         return instance.mintEdition(
           tokenUri,
           insert.edition,
-          insert.artistName,
-          insert.artworkName,
           insert.numberOfEditions,
           insert.costInWei.toString(10),
           _openingTime,
