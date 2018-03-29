@@ -1339,7 +1339,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe('allocating commissions', function () {
+    describe('allocating commissions - digital', function () {
 
       const tokenToPurchase = 0;
 
@@ -1383,7 +1383,52 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           this.commissionAccountBalance.add(_priceInWei.dividedBy(100).times(76))// 76%
         );
       });
+    });
 
+    describe('allocating commissions - physical', function () {
+
+      const tokenToPurchase = 0;
+
+      beforeEach(async function () {
+        await this.token.mint(_tokenURI, _editionPhysical, _artist, _editionName, _priceInWei, _auctionStartDate, {
+          from: _curator
+        });
+        this.curatorBalance = await web3.eth.getBalance(_curator);
+        this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        this.commissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
+
+        await this.token.purchaseWithEther(tokenToPurchase, {
+          value: _priceInWei,
+          from: buyer
+        });
+
+        let ownerOf = await this.token.ownerOf(tokenToPurchase);
+        ownerOf.should.be.equal(buyer);
+
+        let isPurchased = await this.token.isPurchased(tokenToPurchase);
+        isPurchased.should.be.bignumber.equal(EtherPurchase);
+      });
+
+      it('curator account receives correct value', async function () {
+        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        updatedCuratorBalance.should.be.bignumber.equal(
+          this.curatorBalance.add(_priceInWei.dividedBy(100).times(24)) // 24%
+        );
+      });
+
+      it('developer account receives correct value', async function () {
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        updatedContractDeveloperBalance.should.be.bignumber.equal(
+          this.contractDeveloperBalance.add(_priceInWei.dividedBy(100).times(15))// 15%
+        );
+      });
+
+      it('commission account receives correct value', async function () {
+        let updatedCommissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
+        updatedCommissionAccountBalance.should.be.bignumber.equal(
+          this.commissionAccountBalance.add(_priceInWei.dividedBy(100).times(61))// 61%
+        );
+      });
     });
 
     describe('missing commission rates default to 2%', function () {
@@ -1428,7 +1473,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       it('commission account receives correct value', async function () {
         let updatedCommissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
         updatedCommissionAccountBalance.should.be.bignumber.equal(
-          this.commissionAccountBalance.add(_priceInWei.dividedBy(100).times(90))
+          this.commissionAccountBalance.add(_priceInWei.dividedBy(100).times(96))
         );
       });
 
