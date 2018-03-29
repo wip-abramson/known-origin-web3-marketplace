@@ -972,6 +972,51 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           isPurchased.should.be.bignumber.equal(EtherPurchase);
         });
       });
+
+      describe('should not transfer ownership if artwork has value and purchaser sends zero', function () {
+        it('should fail with invalid amount', async function () {
+          await this.token.purchaseWithEther(tokenToPurchase, {
+            value: _priceInWei.sub(1),
+            from: buyer
+          });
+
+          let ownerOf = await this.token.ownerOf(tokenToPurchase);
+          ownerOf.should.be.equal(_curator);
+
+          let isPurchased = await this.token.isPurchased(tokenToPurchase);
+          isPurchased.should.be.bignumber.equal(Unsold);
+        });
+      });
+
+      describe('should transfer ownership if artwork has value is the same', function () {
+        it('should transfer ownership', async function () {
+          await this.token.purchaseWithEther(tokenToPurchase, {
+            value: _priceInWei,
+            from: buyer
+          });
+
+          let ownerOf = await this.token.ownerOf(tokenToPurchase);
+          ownerOf.should.be.equal(buyer);
+
+          let isPurchased = await this.token.isPurchased(tokenToPurchase);
+          isPurchased.should.be.bignumber.equal(EtherPurchase);
+        });
+      });
+
+      describe('should transfer ownership if artwork has value is greater', function () {
+        it('should transfer ownership', async function () {
+          await this.token.purchaseWithEther(tokenToPurchase, {
+            value: _priceInWei.add(1),
+            from: buyer
+          });
+
+          let ownerOf = await this.token.ownerOf(tokenToPurchase);
+          ownerOf.should.be.equal(buyer);
+
+          let isPurchased = await this.token.isPurchased(tokenToPurchase);
+          isPurchased.should.be.bignumber.equal(EtherPurchase);
+        });
+      });
     });
 
     describe('can only purchase if auction date open', function () {
@@ -1492,7 +1537,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         this.commissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
-          value: _priceInWei,
           from: buyer
         });
 

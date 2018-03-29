@@ -215,7 +215,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
       totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
       // Only apply commission if the art work has value
-      if (priceInWei != 0 && msg.value != 0) {
+      if (priceInWei > 0) {
         _applyCommission(_tokenId);
       }
 
