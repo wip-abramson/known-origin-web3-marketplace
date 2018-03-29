@@ -18,10 +18,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
   }
 
   // creates and owns the original assets all primary purchases transferred to this account
-  address public curator;
+  address public curatorAccount;
 
   // the person who is responsible for designing and building the contract
-  address public contractDeveloper;
+  address public developerAccount;
 
   // the person who puts on the event
   address public commissionAccount;
@@ -49,7 +49,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   event PurchasedWithFiatReversed(uint256 indexed _tokenId);
 
   modifier onlyCurator() {
-    require(msg.sender == curator);
+    require(msg.sender == curatorAccount);
     _;
   }
 
@@ -64,12 +64,12 @@ contract KnownOriginDigitalAsset is ERC721Token {
   }
 
   modifier onlyManagementOwnedToken(uint256 _tokenId) {
-    require(tokenOwner[_tokenId] == curator || tokenOwner[_tokenId] == contractDeveloper);
+    require(tokenOwner[_tokenId] == curatorAccount || tokenOwner[_tokenId] == developerAccount);
     _;
   }
 
   modifier onlyManagement() {
-    require(msg.sender == curator || msg.sender == contractDeveloper);
+    require(msg.sender == curatorAccount || msg.sender == developerAccount);
     _;
   }
 
@@ -78,13 +78,13 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _;
   }
 
-  function KnownOriginDigitalAsset(address _commissionAccount, address _contractDeveloper)
+  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount)
   public
   ERC721Token("KnownOriginDigitalAsset", "KODA")
   {
-    curator = msg.sender;
+    curatorAccount = msg.sender;
     commissionAccount = _commissionAccount;
-    contractDeveloper = _contractDeveloper;
+    developerAccount = _developerAccount;
 
     // Setup default commission structures
     tokenIdToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
@@ -206,7 +206,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
       _approvePurchaser(msg.sender, _tokenId);
 
       // transfer assets from contract creator (curator) to new owner
-      safeTransferFrom(curator, msg.sender, _tokenId);
+      safeTransferFrom(curatorAccount, msg.sender, _tokenId);
 
       // now purchased - don't allow re-purchase!
       tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
@@ -235,24 +235,16 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
     CommissionStructure memory commission = tokenIdToCommission[typeCode];
 
-    // Handle missing commission, defaults to 2% for both parties
-    if (commission.curator == 0) {
-      commission.curator = 2;
-    }
-    if (commission.developer == 0) {
-      commission.developer = 2;
-    }
-
     // split & transfer fee for curator
     uint curatorAccountFee = msg.value / 100 * commission.curator;
-    curator.transfer(curatorAccountFee);
+    curatorAccount.transfer(curatorAccountFee);
 
     // split & transfer fee for developer
-    uint contractDeveloperFee = msg.value / 100 * commission.developer;
-    contractDeveloper.transfer(contractDeveloperFee);
+    uint developerAccountFee = msg.value / 100 * commission.developer;
+    developerAccount.transfer(developerAccountFee);
 
     // final payment to commission would be the remaining value
-    uint finalCommissionTotal = msg.value - (curatorAccountFee + contractDeveloperFee);
+    uint finalCommissionTotal = msg.value - (curatorAccountFee + developerAccountFee);
 
     // send ether
     commissionAccount.transfer(finalCommissionTotal);
@@ -354,13 +346,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return tokenIdToEdition[_tokenId];
   }
 
-  function auctionOpened(uint _tokenId)
-  public
-  view
-  returns (bool) {
-    return tokenIdToAuctionStartDate[_tokenId] <= block.timestamp;
-  }
-
   function tokenAuctionOpenDate(uint _tokenId)
   public
   view
@@ -373,11 +358,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   view
   returns (uint256 _priceInWei) {
     return tokenIdToPriceInWei[_tokenId];
-  }
-
-  // Utility function to get current block.timestamp = now() - good for testing with remix/truffle
-  function getNow() public constant returns (uint) {
-    return now;
   }
 
   function getTypeFromEdition(bytes16 _bytes16) public pure returns (string){

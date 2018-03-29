@@ -1476,7 +1476,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe('missing commission rates default to 2%', function () {
+    describe('missing commission rates still allow purchase', function () {
 
       const tokenToPurchase = 0;
       const _editionWithMissingType = "ABC0000000000MIA";
@@ -1503,22 +1503,18 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       it('curator account receives correct value', async function () {
         let updatedCuratorBalance = await web3.eth.getBalance(_curator);
-        updatedCuratorBalance.should.be.bignumber.equal(
-          this.curatorBalance.add(_priceInWei.dividedBy(100).times(2))
-        );
+        updatedCuratorBalance.should.be.bignumber.equal(this.curatorBalance);
       });
 
       it('developer account receives correct value', async function () {
         let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
-        updatedContractDeveloperBalance.should.be.bignumber.equal(
-          this.contractDeveloperBalance.add(_priceInWei.dividedBy(100).times(2))
-        );
+        updatedContractDeveloperBalance.should.be.bignumber.equal(this.contractDeveloperBalance);
       });
 
       it('commission account receives correct value', async function () {
         let updatedCommissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
         updatedCommissionAccountBalance.should.be.bignumber.equal(
-          this.commissionAccountBalance.add(_priceInWei.dividedBy(100).times(96))
+          this.commissionAccountBalance.add(_priceInWei)
         );
       });
 
