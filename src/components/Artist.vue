@@ -1,16 +1,19 @@
 <template>
   <article class="card" v-if="artist">
-    <router-link :to="{ name: 'artist', params: { artistCode: artist.artistCode} }">
-      <div class="card-content">
+    <div class="card-content">
+      <router-link :to="{ name: 'artist', params: { artistCode: artist.artistCode} }">
         <figure class="thumbnail">
           <img :src="artist.img"/>
         </figure>
+      </router-link>
 
         <h3 class="uppercase">{{ artist.name }}</h3>
 
         <p>{{ artist.strapline }}</p>
+        <p v-if="artist.twitter">
+          <a :href="'http://twitter.com/' + artist.twitter" target="_blank">{{ artist.twitter }}</a>
+        </p>
       </div>
-    </router-link>
     <!-- .card-content -->
   </article>
 </template>

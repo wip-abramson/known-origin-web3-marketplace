@@ -182,8 +182,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
   {
     CommissionStructure storage commission = tokenIdToCommission[_type];
     return (
-      commission.curator,
-      commission.developer
+    commission.curator,
+    commission.developer
     );
   }
 
@@ -284,11 +284,11 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   view
   returns (
-  uint256 _tokId,
-  address _owner,
-  PurchaseState _purchaseState,
-  uint256 _priceInWei,
-  uint32 _purchaseFromTime
+    uint256 _tokId,
+    address _owner,
+    PurchaseState _purchaseState,
+    uint256 _priceInWei,
+    uint32 _purchaseFromTime
   ) {
     return (
     _tokenId,
@@ -303,10 +303,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   view
   returns (
-  uint256 _tokId,
-  bytes16 _edition,
-  uint8 _editionNumber,
-  string _tokenURI
+    uint256 _tokId,
+    bytes16 _edition,
+    uint8 _editionNumber,
+    string _tokenURI
   ) {
     return (
     _tokenId,
@@ -338,7 +338,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return tokenIdToEdition[_tokenId];
   }
 
-  function getPurchaseFromTime(uint _tokenId)
+  function purchaseFromTime(uint _tokenId)
   public
   view
   returns (uint32 _auctionStartDate) {

@@ -1,6 +1,6 @@
 <template>
   <div v-if="artist">
-      <h1><router-link :to="{ name: 'artists' }" class="back-arrow">&lt;</router-link>{{ artist.name }}</h1>
+      <h1>{{ artist.name }}</h1>
 
       <!--<img :src="artist.img"/>-->
   </div>

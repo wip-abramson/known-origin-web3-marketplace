@@ -834,14 +834,17 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           ownerOf.should.be.equal(_curator);
         }
 
+
+
         //Ensure all Ids as expected and owned by _curator
-        let ownerTokens = await this.token.ownerOf(_curator);
+        let ownerTokens = await this.token.tokensOf(_curator);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
         ownerTokens.should.be.deep.equal(range);
       });
 
       describe('price in wei', function () {
         it('can only purchase if price equal to token value', async function () {
+
           let {logs} = await this.token.purchaseWithEther(tokenToPurchase, {
             value: _priceInWei,
             from: buyer
@@ -885,7 +888,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           getApproved.should.be.equal(ZERO_ADDRESS);
 
           //Ensure _curator still owns all bu the purchased token
-          let ownerTokens = await this.token.getOwnerTokens(_curator);
+          let ownerTokens = await this.token.tokensOf(_curator);
           ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
           ownerTokens.sort().should.be.deep.equal([0, 1, 2, 4, 5, 6, 7, 8, 9]);
         });
