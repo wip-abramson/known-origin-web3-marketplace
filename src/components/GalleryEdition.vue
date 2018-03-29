@@ -12,7 +12,7 @@
 
         <p v-if="purchase">
           <strong>Artwork description</strong><br/>
-          {{ edition.otherMeta.description }}
+          {{ edition.description }}
         </p>
 
         <hr/>

@@ -264,7 +264,7 @@ const store = new Vuex.Store({
             let assetInfo = results[0];
             let editionInfo = results[1];
 
-            let tokenUri = editionInfo[5];
+            let tokenUri = editionInfo[3];
 
             // should always be 16 chars long
             const edition = Web3.utils.toAscii(editionInfo[1]);
@@ -282,18 +282,15 @@ const store = new Vuex.Store({
               type: mapAssetType(edition.substring(13, 16)),
               // First 3 chars of edition are artist code
               artistCode: edition.substring(0, 3),
-
-              editionName: editionInfo[2].toString(),
-              editionNumber: editionInfo[3].toNumber(),
-              artist: editionInfo[4].toString(),
+              editionNumber: editionInfo[2].toNumber(),
               tokenUri: tokenUri
             };
 
-            return lookupIPFSData(tokenUri).then((ipfsMeata) => {
+            return lookupIPFSData(tokenUri).then((ipfsMeta) => {
               // set IPFS lookup back on object
-              _.set(fullAssetDetails, 'otherMeta', ipfsMeata.otherMeta);
-              _.set(fullAssetDetails, 'description', ipfsMeata.description);
-              _.set(fullAssetDetails, 'lowResImg', ipfsMeata.lowResImg);
+              _.set(fullAssetDetails, 'otherMeta', ipfsMeta.otherMeta);
+              _.set(fullAssetDetails, 'description', ipfsMeta.description);
+              _.set(fullAssetDetails, 'lowResImg', ipfsMeta.lowResImg);
               return fullAssetDetails;
             });
           });
