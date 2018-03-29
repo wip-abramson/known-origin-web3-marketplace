@@ -1563,5 +1563,30 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     });
 
+    describe('can not re-use edition', function () {
+
+      beforeEach(async function () {
+        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
+          from: _curator
+        });
+
+        await this.token.mint(_tokenURI, _editionDigital, 0, _purchaseFromTime, {
+          from: _curator
+        });
+      });
+
+      it('physical edition already exists so revert', async function () {
+        await assertRevert(this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
+          from: _curator
+        }));
+      });
+
+      it('digital edition already exists so revert', async function () {
+        await assertRevert(this.token.mint(_tokenURI, _editionDigital, 0, _purchaseFromTime, {
+          from: _curator
+        }));
+      });
+    });
+
   });
 });
