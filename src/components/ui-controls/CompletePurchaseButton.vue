@@ -22,11 +22,11 @@
 
         <div class="pad-top">
           <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator && !soldAsFiat">
-            FIAT Purchase
+            FIAT purchase
           </button>
 
           <button type="button" v-on:click="reverseFiatPurchase" class="btn btn-danger" v-if="isCurator && soldAsFiat">
-            Reverse FIAT Purchase
+            Reverse FIAT purchase
           </button>
         </div>
       </div>

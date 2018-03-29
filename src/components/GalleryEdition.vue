@@ -25,7 +25,7 @@
           </router-link>
         </p>
 
-        <confirm-purchase-button :edition="edition" class="btn-center" v-if="purchase"></confirm-purchase-button>
+        <confirm-purchase-button :edition="edition" class="" v-if="purchase"></confirm-purchase-button>
       </div>
     </div>
     <!-- .card-content -->

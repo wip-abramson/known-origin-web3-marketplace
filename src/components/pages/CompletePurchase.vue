@@ -12,10 +12,9 @@
       {{ asset.editionName }}
     </h1>
 
-    <article class="card assets_to_buy">
+    <article class="card assets_to_buy pad-bottom">
         <div>
           <div class="card-content">
-
             <token-id :value="asset.id"></token-id>
 
             <edition-name-by-artist :edition="asset" :purchase="true"></edition-name-by-artist>
@@ -61,7 +60,7 @@
               </router-link>
             </div>
 
-            <complete-purchase-button :asset="asset" class="btn-center pad-bottom" @purchaseInitiated="onPurchaseInitiated">
+            <complete-purchase-button :asset="asset" class="pad-bottom" @purchaseInitiated="onPurchaseInitiated">
             </complete-purchase-button>
           </div>
         </div>

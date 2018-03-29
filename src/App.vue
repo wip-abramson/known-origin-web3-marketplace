@@ -183,21 +183,20 @@
     font-weight: bold;
   }
 
-  button {
-  }
 
   .btn {
-    -webkit-border-radius: 16;
-    -moz-border-radius: 16;
-    border-radius: 16px;
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
     color: $primary;
     font-size: 18px;
     padding: 5px 10px 5px 10px;
-    border: solid $primary 3px;
+    border: solid $primary 2px;
     text-decoration: none;
-    /*display: block;*/
+    display: block;
     margin-top: 10px;
     margin-bottom: 10px;
+    width: 150px;
 
     &:hover {
       text-decoration: none;
@@ -211,12 +210,12 @@
     &.btn-sold {
       background: $sold;
       color: $white;
-      border: solid $sold 3px;
+      border: solid $sold 2px;
     }
 
     &.btn-warning {
       background-color: $warning;
-      border: solid $warning 3px;
+      border: solid $warning 2px;
       color: $white;
     }
 
@@ -225,19 +224,19 @@
     }
 
     &.btn-muted {
-      border: solid $normal-text 3px;
+      border: solid $normal-text 2px;
       color: $normal-text;
     }
 
     &.btn-success {
       background-color: $success;
-      border: solid $success 3px;
+      border: solid $success 2px;
       color: $white;
 
       &:disabled {
         background: $normal-text;
         text-decoration: none;
-        border: solid $normal-text 3px;
+        border: solid $normal-text 2px;
       }
     }
 
@@ -302,9 +301,9 @@
     color: $normal-text;
   }
 
-  .btn-center {
-    text-align: center;
-  }
+  /*.btn-center {*/
+    /*text-align: center;*/
+  /*}*/
 
   .no-text-decoration {
     text-decoration: none;
@@ -322,7 +321,7 @@
 
   .card {
     background: $white;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
   }
 
   .card-content {
@@ -330,6 +329,7 @@
     text-align: center;
     /*display: flex;*/
     /*<!--box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);-->*/
+    margin-bottom: 0;
     h2 {
       margin-top: 0;
       margin-bottom: .5em;
@@ -349,7 +349,7 @@
       flex-wrap: wrap;
     }
     .card {
-      margin-bottom: 1em;
+      margin-bottom: 25px;
       display: flex;
       flex: 0 1 calc(50% - 0.5em);
     }
@@ -364,7 +364,7 @@
       margin-top: inherit;
     }
     .card {
-      margin-bottom: 2em;
+      margin-bottom: 25px;
       display: flex;
       flex: 0 1 calc(33% - 0.5em);
     }
@@ -393,6 +393,7 @@
   #featured-artists {
     .card {
       background-color: $background !important;
+      box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);
     }
   }
 
