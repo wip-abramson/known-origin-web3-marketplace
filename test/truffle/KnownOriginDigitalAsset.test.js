@@ -1253,7 +1253,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
   });
 
-  describe.only('commission structure', function () {
+  describe('commission structure', function () {
 
     it('should get default commission for contract', async function () {
       let commission = await this.token.getCommissionForType('DIG');

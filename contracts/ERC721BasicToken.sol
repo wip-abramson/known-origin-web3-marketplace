@@ -1,9 +1,9 @@
 pragma solidity ^0.4.18;
 
 import "./ERC721Basic.sol";
-import "./ERC721Receiver.sol"; // TODO what is this and do I need it?
+import "./ERC721Receiver.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "./AddressUtils.sol";
+import "zeppelin-solidity/contracts/AddressUtils.sol";
 
 /**
  * @title ERC721 Non-Fungible Token Standard basic implementation
