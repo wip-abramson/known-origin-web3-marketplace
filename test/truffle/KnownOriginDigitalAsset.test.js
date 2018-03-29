@@ -1343,7 +1343,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         commission[1].should.be.bignumber.equal(5);
       });
 
-      it('should be able to update as develoepr', async function () {
+      it('should be able to update as developer', async function () {
         let commission = await this.token.getCommissionForType('DIG');
         commission[0].should.be.bignumber.equal(12);
         commission[1].should.be.bignumber.equal(12);
@@ -1381,6 +1381,20 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         commission = await this.token.getCommissionForType('ABC');
         commission[0].should.be.bignumber.equal(30);
         commission[1].should.be.bignumber.equal(20);
+      });
+
+      it('should fail when updating curator commission with decimals', async function () {
+        this.token.updateCommission('EFG', 98, 1.9, {from: _curator});
+        let commission = await this.token.getCommissionForType('EFG');
+        commission[0].should.be.bignumber.equal(98);
+        commission[1].should.be.bignumber.equal(1);
+      });
+
+      it('should fail when updating developer commission with decimals', async function () {
+        this.token.updateCommission('EFG', 1.9, 98, {from: _curator});
+        let commission = await this.token.getCommissionForType('EFG');
+        commission[0].should.be.bignumber.equal(1);
+        commission[1].should.be.bignumber.equal(98);
       });
     });
 
@@ -1479,7 +1493,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     describe('missing commission rates still allow purchase', function () {
 
       const tokenToPurchase = 0;
-      const _editionWithMissingType = "ABC0000000000MIA";
+      const _editionWithMissingType = 'ABC0000000000MIA';
 
       beforeEach(async function () {
         await this.token.mint(_tokenURI, _editionWithMissingType, _artist, _editionName, _priceInWei, _auctionStartDate, {
