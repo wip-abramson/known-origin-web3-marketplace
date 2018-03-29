@@ -13,57 +13,61 @@
     </h1>
 
     <article class="card assets_to_buy pad-bottom">
-        <div>
-          <div class="card-content">
-            <token-id :value="asset.id"></token-id>
+      <div>
+        <div class="card-content">
+          <token-id :value="asset.id"></token-id>
 
-            <edition-name-by-artist :edition="asset" :purchase="true"></edition-name-by-artist>
+          <edition-name-by-artist :edition="asset" :purchase="true"></edition-name-by-artist>
 
-            <hr/>
+          <hr/>
 
-            <div v-if="isPurchaseTriggered(asset.id)">
-              <h2>Your purchase is being initiated</h2>
-            </div>
-
-            <div v-if="isPurchaseStarted(asset.id)">
-              <h2>Your purchase is being mined on the Blockchain...</h2>
-            </div>
-
-            <div v-if="isPurchaseSuccessful(asset.id)">
-              <img src="../../../static/GreenTick.svg" style="width: 150px"/>
-              <h2 class="text-success pad-top">Your purchase was successful</h2>
-            </div>
-
-            <div v-if="isPurchaseFailed(asset.id)">
-              <img src="../../../static/Failure.svg" style="width: 150px"/>
-              <h2 class="text-danger pad-top">Your purchase failed</h2>
-            </div>
-
-            <div v-if="!assetPurchaseState(asset.id)">
-              <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
-                <p>You:<br/><address-icon :eth-address="account" :size="'small'"></address-icon></p>
-              </div>
-
-              <price-in-eth :value="asset.priceInEther"></price-in-eth>
-
-              <div class="pad-top pad-bottom">
-                <p>Transfer to:<br/><address-icon :eth-address="asset.owner" :size="'small'"></address-icon></p>
-              </div>
-              <hr/>
-            </div>
-
-            <p>Total ETH: {{ asset.priceInEther }}</p>
-
-            <div v-if="isPurchaseFailed(asset.id)">
-              <router-link :to="{ name: 'gallery'}" class="btn btn-muted">
-                Retry
-              </router-link>
-            </div>
-
-            <complete-purchase-button :asset="asset" class="pad-bottom" @purchaseInitiated="onPurchaseInitiated">
-            </complete-purchase-button>
+          <div v-if="isPurchaseTriggered(asset.id)">
+            <h2>Your purchase is being initiated</h2>
           </div>
+
+          <div v-if="isPurchaseStarted(asset.id)">
+            <h2>Your purchase is being mined on the Blockchain...</h2>
+          </div>
+
+          <div v-if="isPurchaseSuccessful(asset.id)">
+            <img src="../../../static/GreenTick.svg" style="width: 150px"/>
+            <h2 class="text-success pad-top">Your purchase was successful</h2>
+          </div>
+
+          <div v-if="isPurchaseFailed(asset.id)">
+            <img src="../../../static/Failure.svg" style="width: 150px"/>
+            <h2 class="text-danger pad-top">Your purchase failed</h2>
+          </div>
+
+          <div v-if="!assetPurchaseState(asset.id)">
+            <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
+              <p>You:<br/>
+                <address-icon :eth-address="account" :size="'small'"></address-icon>
+              </p>
+            </div>
+
+            <price-in-eth :value="asset.priceInEther"></price-in-eth>
+
+            <div class="pad-top pad-bottom">
+              <p>Transfer to:<br/>
+                <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+              </p>
+            </div>
+            <hr/>
+          </div>
+
+          <p>Total ETH: {{ asset.priceInEther }}</p>
+
+          <div v-if="isPurchaseFailed(asset.id)">
+            <button type="button" v-on:click="retryPurchase" class="btn">
+              Retry
+            </button>
+          </div>
+
+          <complete-purchase-button :asset="asset" class="pad-bottom" @purchaseInitiated="onPurchaseInitiated">
+          </complete-purchase-button>
         </div>
+      </div>
     </article>
 
   </div>
@@ -83,6 +87,7 @@
   import EditionNameByArtist from '../ui-controls/EditionNameByArtist';
   import * as mutations from '../../store/mutation-types';
   import { KnownOriginDigitalAsset } from '../../contracts/index';
+  import * as actions from '../../store/actions';
 
   export default {
     name: 'completePurchase',
@@ -129,6 +134,9 @@
       onPurchaseInitiated: function () {
         console.log('onPurchaseInitiated');
       },
+      retryPurchase: function () {
+        this.$store.dispatch(actions.RESET_PURCHASE_STATE, this.asset);
+      }
     },
     updated: function () {
 

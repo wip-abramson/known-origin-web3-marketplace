@@ -164,6 +164,10 @@ const store = new Vuex.Store({
         [tokenId]: {tokenId, buyer, data, state: 'PURCHASE_STARTED'}
       };
     },
+    [mutations.UPDATE_PURCHASE_STATE] (state, {tokenId}) {
+      delete state.purchaseState[tokenId];
+      state.purchaseState = {...state.purchaseState};
+    },
   },
   actions: {
     [actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT] ({commit, dispatch, state}) {
@@ -188,6 +192,10 @@ const store = new Vuex.Store({
         .then((etherscanBase) => {
           commit(mutations.SET_ETHERSCAN_NETWORK, etherscanBase);
         });
+    },
+    [actions.RESET_PURCHASE_STATE]: function ({commit, dispatch, state}, asset) {
+      dispatch(actions.GET_ALL_ASSETS);
+      commit(mutations.UPDATE_PURCHASE_STATE, {tokenId: asset.id});
     },
     [actions.INIT_APP] ({commit, dispatch, state}, account) {
       web3.eth.getAccounts()
@@ -313,7 +321,7 @@ const store = new Vuex.Store({
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
 
-          Promise.all([contract.curator(), contract.commissionAccount(), contract.contractDeveloper(), contract.address])
+          Promise.all([contract.curatorAccount(), contract.commissionAccount(), contract.developerAccount(), contract.address])
             .then((results) => {
               commit(mutations.SET_COMMISSION_ADDRESSES, {
                 curatorAddress: results[0],
