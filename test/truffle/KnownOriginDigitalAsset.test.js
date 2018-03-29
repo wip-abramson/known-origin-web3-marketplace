@@ -44,7 +44,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   const _editionPhysical = 'ABC0000000000PHY';
 
   const _priceInWei = etherToWei(0.5);
-  let _auctionStartDate;
+  let _purchaseFromTime;
 
   before(async function () {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
@@ -53,15 +53,15 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
   beforeEach(async function () {
     this.token = await KnownOriginDigitalAsset.new(_commissionAccount, _contractDeveloper, {from: _curator});
-    _auctionStartDate = latestTime(); // opens immediately
+    _purchaseFromTime = latestTime(); // opens immediately
 
-    await increaseTimeTo(_auctionStartDate + duration.seconds(1)); // force time to move 1 seconds so normal tests pass
+    await increaseTimeTo(_purchaseFromTime + duration.seconds(1)); // force time to move 1 seconds so normal tests pass
   });
 
   describe('like a ERC721BasicToken', function () {
     beforeEach(async function () {
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {from: _curator});
-      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _auctionStartDate, {from: _curator});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {from: _curator});
+      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, {from: _curator});
     });
 
     describe('balanceOf', function () {
@@ -581,10 +581,10 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
   describe('like a mintable and burnable ERC721Token', function () {
     beforeEach(async function () {
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
         from: _curator
       });
-      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _auctionStartDate, {
+      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, {
         from: _curator
       });
     });
@@ -594,7 +594,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('when successful', function () {
         beforeEach(async function () {
-          const result = await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+          const result = await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
             from: _curator
           });
           logs = result.logs;
@@ -682,7 +682,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('mint()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
       });
@@ -719,7 +719,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         priceInWei.should.be.bignumber.equal(_priceInWei);
 
         let auctionStartDate = assetInfo[4];
-        auctionStartDate.should.be.bignumber.equal(_auctionStartDate);
+        auctionStartDate.should.be.bignumber.equal(_purchaseFromTime);
 
         // Edition info
         const editionInfo = await this.token.editionInfo(firstTokenId);
@@ -743,8 +743,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('tokenAuctionOpenDate()', async function () {
-        const tokenAuctionOpenDate = await this.token.tokenAuctionStartDate(firstTokenId);
-        tokenAuctionOpenDate.should.be.bignumber.equal(_auctionStartDate);
+        const purchaseFromTime = await this.token.purchaseFromTime(firstTokenId);
+        purchaseFromTime.should.be.bignumber.equal(_purchaseFromTime);
       });
 
       it('priceInWei()', async function () {
@@ -757,7 +757,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const NUMBER_OF_EDITIONS = 10;
 
       beforeEach(async function () {
-        await this.token.mintEdition(_tokenURI, _editionDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {
+        await this.token.mintEdition(_tokenURI, _editionDigital, NUMBER_OF_EDITIONS, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
       });
@@ -796,7 +796,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           priceInWei.should.be.bignumber.equal(_priceInWei);
 
           let auctionStartDate = assetInfo[4];
-          auctionStartDate.should.be.bignumber.equal(_auctionStartDate);
+          auctionStartDate.should.be.bignumber.equal(_purchaseFromTime);
 
           let editionInfo = await this.token.editionInfo(id);
 
@@ -820,7 +820,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = new BigNumber(3);
 
       beforeEach(async function () {
-        await this.token.mintEdition(_tokenURI, _editionDigital, NUMBER_OF_EDITIONS, _priceInWei, _auctionStartDate, {
+        await this.token.mintEdition(_tokenURI, _editionDigital, NUMBER_OF_EDITIONS, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
 
@@ -835,7 +835,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         }
 
         //Ensure all Ids as expected and owned by _curator
-        let ownerTokens = await this.token.getOwnerTokens(_curator);
+        let ownerTokens = await this.token.ownerOf(_curator);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
         ownerTokens.should.be.deep.equal(range);
       });
@@ -1008,8 +1008,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     describe('can only purchase if auction date open', function () {
 
       beforeEach(async function () {
-        _auctionStartDate += duration.seconds(30);
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+        _purchaseFromTime += duration.seconds(30);
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
       });
@@ -1025,7 +1025,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       describe('purchaseWithFiat()', async function () {
 
         beforeEach(async function () {
-          await increaseTimeTo(_auctionStartDate + duration.seconds(60));
+          await increaseTimeTo(_purchaseFromTime + duration.seconds(60));
         });
 
         it('should be able to buy once open', async function () {
@@ -1044,7 +1044,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       describe('purchaseWithEther()', async function () {
 
         beforeEach(async function () {
-          await increaseTimeTo(_auctionStartDate + duration.seconds(60));
+          await increaseTimeTo(_purchaseFromTime + duration.seconds(60));
         });
 
         it('should be able to buy once open', async function () {
@@ -1065,7 +1065,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('purchaseWithFiat()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
 
@@ -1139,7 +1139,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('reverseFiatPurchase()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
       });
@@ -1205,7 +1205,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     describe('setTokenURI()', function () {
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
       });
@@ -1238,7 +1238,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('setPriceInWei()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
       });
@@ -1389,7 +1389,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = 0;
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
         this.curatorBalance = await web3.eth.getBalance(_curator);
@@ -1435,7 +1435,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = 0;
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
         this.curatorBalance = await web3.eth.getBalance(_curator);
@@ -1482,7 +1482,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const _editionWithMissingType = 'ABC0000000000MIA';
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionWithMissingType, _priceInWei, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionWithMissingType, _priceInWei, _purchaseFromTime, {
           from: _curator
         });
         this.curatorBalance = await web3.eth.getBalance(_curator);
@@ -1525,7 +1525,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = 0;
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionPhysical, 0, _auctionStartDate, {
+        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
           from: _curator
         });
         this.curatorBalance = await web3.eth.getBalance(_curator);

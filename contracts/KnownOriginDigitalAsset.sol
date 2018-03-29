@@ -38,7 +38,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   mapping (uint => bytes16) internal tokenIdToEdition;
   mapping (uint => uint8) internal tokenIdToEditionNumber;
   mapping (uint => uint256) internal tokenIdToPriceInWei;
-  mapping (uint => uint32) internal tokenIdToAuctionStartDate;
+  mapping (uint => uint32) internal tokenIdToPurchaseFromTime;
 
   event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
 
@@ -71,8 +71,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _;
   }
 
-  modifier onlyWhenBuyDateOpen(uint256 _tokenId) {
-    require(tokenIdToAuctionStartDate[_tokenId] <= block.timestamp);
+  modifier onlyAfterPurchaseFromTime(uint256 _tokenId) {
+    require(tokenIdToPurchaseFromTime[_tokenId] <= block.timestamp);
     _;
   }
 
@@ -89,7 +89,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
-  function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
+  function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _purchaseFromTime)
   public
   onlyManagement {
 
@@ -98,7 +98,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
       uint256 _tokenId = offset + i;
       super._mint(msg.sender, _tokenId);
       super._setTokenURI(_tokenId, _tokenURI);
-      _populateTokenData(_tokenId, _edition, i + 1, _priceInWei, _auctionStartDate);
+      _populateTokenData(_tokenId, _edition, i + 1, _priceInWei, _purchaseFromTime);
     }
   }
 
@@ -112,13 +112,13 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _populateTokenData(_tokenId, _edition, 1, _priceInWei, _auctionStartDate);
   }
 
-  function _populateTokenData(uint _tokenId, bytes16 _edition, uint8 _editionNumber, uint256 _priceInWei, uint32 _auctionStartDate)
+  function _populateTokenData(uint _tokenId, bytes16 _edition, uint8 _editionNumber, uint256 _priceInWei, uint32 _purchaseFromTime)
   internal
   {
     tokenIdToEdition[_tokenId] = _edition;
     tokenIdToEditionNumber[_tokenId] = _editionNumber;
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
-    tokenIdToAuctionStartDate[_tokenId] = _auctionStartDate;
+    tokenIdToPurchaseFromTime[_tokenId] = _purchaseFromTime;
   }
 
   function burn(uint256 _tokenId)
@@ -191,7 +191,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   payable
   onlyUnsold(_tokenId)
-  onlyWhenBuyDateOpen(_tokenId)
+  onlyAfterPurchaseFromTime(_tokenId)
   returns (bool) {
 
     uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
@@ -250,7 +250,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyUnsold(_tokenId)
-  onlyWhenBuyDateOpen(_tokenId)
+  onlyAfterPurchaseFromTime(_tokenId)
   returns (bool) {
 
     // now purchased - don't allow re-purchase!
@@ -267,7 +267,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   public
   onlyManagement
   onlyFiatPurchased(_tokenId)
-  onlyWhenBuyDateOpen(_tokenId)
+  onlyAfterPurchaseFromTime(_tokenId)
   returns (bool) {
 
     // reset to Unsold
@@ -288,14 +288,14 @@ contract KnownOriginDigitalAsset is ERC721Token {
   address _owner,
   PurchaseState _purchaseState,
   uint256 _priceInWei,
-  uint32 _auctionStartDate
+  uint32 _purchaseFromTime
   ) {
     return (
     _tokenId,
     ownerOf(_tokenId),
     tokenIdToPurchased[_tokenId],
     tokenIdToPriceInWei[_tokenId],
-    tokenIdToAuctionStartDate[_tokenId]
+    tokenIdToPurchaseFromTime[_tokenId]
     );
   }
 
@@ -316,7 +316,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     );
   }
 
-  function getOwnerTokens(address _owner)
+  function tokensOf(address _owner)
   public
   view
   returns (uint[] _tokenIds)
@@ -338,11 +338,11 @@ contract KnownOriginDigitalAsset is ERC721Token {
     return tokenIdToEdition[_tokenId];
   }
 
-  function tokenAuctionStartDate(uint _tokenId)
+  function getPurchaseFromTime(uint _tokenId)
   public
   view
   returns (uint32 _auctionStartDate) {
-    return tokenIdToAuctionStartDate[_tokenId];
+    return tokenIdToPurchaseFromTime[_tokenId];
   }
 
   function priceInWei(uint _tokenId)
