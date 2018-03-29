@@ -26,6 +26,9 @@ contract KnownOriginDigitalAsset is ERC721Token {
   // the person who puts on the event
   address public commissionAccount;
 
+  // root of tokenUri - allows resetting
+  string public tokenMetadataBaseURI = "https://ipfs.infura.io/";
+
   uint256 public totalPurchaseValueInWei;
 
   uint256 public totalNumberOfPurchases;
@@ -371,4 +374,19 @@ contract KnownOriginDigitalAsset is ERC721Token {
     }
     return string(bytesArray);
   }
+
+//  function tokenURI(uint256 _tokenId)
+//  external
+//  view
+//  returns (string infoUrl)
+//  {
+//    require(exists(_tokenId));
+//    return Strings.strConcat(tokenMetadataBaseURI, tokenURIs[_tokenId]);
+//  }
+//
+//  function setTokenMetadataBaseURI(string _newBaseURI)
+//  external
+//  onlyManagement {
+//    tokenMetadataBaseURI = _newBaseURI;
+//  }
 }
