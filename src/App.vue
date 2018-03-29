@@ -390,10 +390,13 @@
    color: $success;
   }
 
-  #featured-artists {
+  #featured-artists, #artists {
     .card {
       background-color: $background !important;
       box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);
+      img {
+        width: 50%;
+      }
     }
   }
 
