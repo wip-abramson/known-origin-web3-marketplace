@@ -1,5 +1,10 @@
 <template>
   <div class="centered">
+
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
     <artist-short-bio :artist="lookupArtist()"></artist-short-bio>
 
     <div class="centered">
