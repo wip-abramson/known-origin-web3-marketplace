@@ -28,11 +28,11 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   uint256 public totalPurchaseValueInWei;
 
-  uint public totalNumberOfPurchases;
+  uint32 public totalNumberOfPurchases;
 
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
-  mapping (string => CommissionStructure) internal tokenIdToCommission;
+  mapping (string => CommissionStructure) internal editionTypeToCommission;
   mapping (uint => PurchaseState) internal tokenIdToPurchased;
 
   mapping (uint => bytes16) internal tokenIdToEdition;
@@ -85,8 +85,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
     developerAccount = _developerAccount;
 
     // Setup default commission structures
-    tokenIdToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
-    tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
+    editionTypeToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
+    editionTypeToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
   function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _purchaseFromTime)
@@ -171,7 +171,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     require(_developer > 0);
     require((_curator + _developer) < 100);
 
-    tokenIdToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
+    editionTypeToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
     return true;
   }
 
@@ -180,7 +180,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   view
   returns (uint8 _curator, uint8 _developer)
   {
-    CommissionStructure storage commission = tokenIdToCommission[_type];
+    CommissionStructure storage commission = editionTypeToCommission[_type];
     return (
     commission.curator,
     commission.developer
@@ -229,7 +229,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
     string memory typeCode = getTypeFromEdition(edition);
 
-    CommissionStructure memory commission = tokenIdToCommission[typeCode];
+    CommissionStructure memory commission = editionTypeToCommission[typeCode];
 
     // split & transfer fee for curator
     uint curatorAccountFee = msg.value / 100 * commission.curator;
