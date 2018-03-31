@@ -33,8 +33,8 @@
     "vue-swal": "^0.1.0",
     "vuejs-logger": "1.3.4",
     "vuex": "^3.0.1",
-    "zeppelin-solidity": "^1.8.0",
-    "web3": "^1.0.0-beta.30"
+    "web3": "^1.0.0-beta.30",
+    "zeppelin-solidity": "^1.8.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
