@@ -27,8 +27,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
   // the person who puts on the event
   address public commissionAccount;
 
-  // root of tokenUri - allows resetting
-  string public tokenMetadataBaseURI = "https://ipfs.infura.io/";
+  // base of tokenUri - allows resetting
+  string public tokenBaseURI = "https://ipfs.infura.io/";
 
   uint256 public totalPurchaseValueInWei;
 
@@ -99,7 +99,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     editionTypeToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
-  // FIXME add test - OK?
+  // don't accept payment directly to contract
   function () public payable {
     revert() ;
   }
@@ -324,10 +324,10 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   function tokenURI(uint256 _tokenId) public view returns (string) {
     require(exists(_tokenId));
-    return Strings.strConcat(tokenMetadataBaseURI, tokenURIs[_tokenId]);
+    return Strings.strConcat(tokenBaseURI, tokenURIs[_tokenId]);
   }
 
-  function setTokenMetadataBaseURI(string _newBaseURI) external onlyManagement {
-    tokenMetadataBaseURI = _newBaseURI;
+  function setTokenBaseURI(string _newBaseURI) external onlyManagement {
+    tokenBaseURI = _newBaseURI;
   }
 }

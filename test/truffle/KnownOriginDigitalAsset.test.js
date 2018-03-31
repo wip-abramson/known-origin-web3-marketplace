@@ -1589,5 +1589,25 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
+    describe('can re-set token base URI', function () {
+
+      beforeEach(async function () {
+        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
+          from: _curator
+        });
+      });
+
+      it('should adjust base URI', async function () {
+        let uri = await this.token.tokenURI(0);
+        uri.should.be.equal(_baseUri + _tokenURI);
+
+        const newBaseUri = 'http://custom.com';
+        await this.token.setTokenBaseURI(newBaseUri);
+
+        uri = await this.token.tokenURI(0);
+        uri.should.be.equal(newBaseUri + _tokenURI);
+      });
+    });
+
   });
 });
