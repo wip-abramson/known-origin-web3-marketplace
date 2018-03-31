@@ -34,7 +34,7 @@
         <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
       </section>
     </div>
-    <router-link :to="{ name: 'artists' }" tag="button" class="btn btn-center">View all artists</router-link>
+    <router-link :to="{ name: 'artists' }" class="viewAllArtists">View all artists</router-link>
     <div id="how-ko-works">
       <h2>How KnownOrigin.io works</h2>
       <div>
