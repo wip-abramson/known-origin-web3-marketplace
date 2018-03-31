@@ -4,22 +4,28 @@
       <asset-figure :edition="edition"></asset-figure>
       <div class="card-content">
 
-        <edition-name-by-artist :edition="edition"></edition-name-by-artist>
+        <edition-name-by-artist :edition="edition" :purchase="purchase"></edition-name-by-artist>
 
         <p class="muted">
           {{ availableAssetsForEdition(edition.edition).length }} available
         </p>
 
+        <p v-if="purchase">
+          <strong>Artwork description</strong><br/>
+          {{ edition.description }}
+        </p>
+
+        <hr/>
+
         <price-in-eth :value="edition.priceInEther"></price-in-eth>
 
-        <p class="btn-center">
-          <router-link
-            :to="{ name: 'confirmPurchase', params: { edition: edition.edition}}"
-            tag="button" class="btn btn-center">
+        <p v-if="!purchase">
+          <router-link :to="{ name: 'confirmPurchase', params: { artistCode: edition.edition.substring(0, 3), edition: edition.edition }}" class="btn">
             View details
           </router-link>
         </p>
 
+        <confirm-purchase-button :edition="edition" class="" v-if="purchase"></confirm-purchase-button>
       </div>
     </div>
     <!-- .card-content -->
@@ -32,15 +38,19 @@
   import _ from 'lodash';
   import PriceInEth from './ui-controls/PriceInEth.vue';
   import EditionNameByArtist from './ui-controls/EditionNameByArtist.vue';
+  import ConfirmPurchaseButton from './ui-controls/ConfirmPurchaseButton';
   import AssetFigure from './AssetFigure.vue';
 
   export default {
     name: 'galleryEdition',
-    components: {PriceInEth, AssetFigure, EditionNameByArtist},
+    components: {PriceInEth, AssetFigure, EditionNameByArtist, ConfirmPurchaseButton},
     props: {
       edition: {
         required: true,
         type: Object
+      },
+      purchase: {
+        type: Boolean
       },
     },
     computed: {

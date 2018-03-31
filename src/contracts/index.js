@@ -7,7 +7,10 @@ import knownOriginDigitalAsset from '../../build/contracts/KnownOriginDigitalAss
 
 // create contracts
 const KnownOriginDigitalAsset = contract(knownOriginDigitalAsset);
-KnownOriginDigitalAsset.setProvider(web3.currentProvider);
+
+if (typeof web3 !== 'undefined') {
+  KnownOriginDigitalAsset.setProvider(web3.currentProvider);
+}
 
 export {
   KnownOriginDigitalAsset

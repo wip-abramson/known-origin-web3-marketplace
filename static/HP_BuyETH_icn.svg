@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="222px" height="186px" viewBox="0 0 222 186" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 9</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-2716.000000, -825.000000)">
+            <g id="Group-9" transform="translate(2688.000000, 815.000000)">
+                <text id="Eth-1.57" font-family="AvenirNext-Medium, Avenir Next" font-size="42" font-weight="400" fill="#3D3BEE">
+                    <tspan x="58.511" y="42">Eth 1.57</tspan>
+                </text>
+                <g id="Group-Copy-3" transform="translate(28.000000, 69.000000)" fill="#3D3BEE">
+                    <rect id="Rectangle-3-Copy-4" x="0" y="0" width="221.35" height="67" rx="33.5"></rect>
+                </g>
+                <ellipse id="Oval" fill="#ACA8C3" cx="138.5" cy="187.5" rx="67.5" ry="8.5"></ellipse>
+                <text id="Buy-now" font-family="AvenirNext-Medium, Avenir Next" font-size="24" font-weight="400" fill="#FFFFFF">
+                    <tspan x="91.184" y="111">Buy now</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

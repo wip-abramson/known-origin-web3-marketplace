@@ -1,10 +1,14 @@
 <template>
   <div id="details">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> KODA smart contract</h1>
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
+    <h1>KODA smart contract</h1>
 
     <h2>
       Contract address:
-      <address-icon :eth-address="contractAddress"></address-icon>
+      <clickable-address :eth-address="contractAddress"></clickable-address>
     </h2>
 
     <div v-if="contractName && contractSymbol" class="message is-primary">
@@ -14,15 +18,15 @@
     <div v-if="curatorAddress" class="message is-primary">
         <p>
           Curator:
-          <address-icon :eth-address="curatorAddress"></address-icon>
+          <clickable-address :eth-address="curatorAddress"></clickable-address>
         </p>
         <p>
           Commission:
-          <address-icon :eth-address="commissionAddress"></address-icon>
+          <clickable-address :eth-address="commissionAddress"></clickable-address>
         </p>
         <p>
           Smart contract partner:
-          <address-icon :eth-address="contractDeveloperAddress"></address-icon>
+          <clickable-address :eth-address="contractDeveloperAddress"></clickable-address>
         </p>
     </div>
 
@@ -42,10 +46,11 @@
 
   import {mapGetters, mapState} from 'vuex';
   import AddressIcon from '../ui-controls/AddressIcon';
+  import ClickableAddress from '../ui-controls/ClickableAddress';
 
   export default {
     name: 'dashboard',
-    components: {AddressIcon},
+    components: {AddressIcon, ClickableAddress},
     computed: {
       ...mapState([
         'curatorAddress',

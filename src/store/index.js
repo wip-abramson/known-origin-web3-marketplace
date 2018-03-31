@@ -7,7 +7,7 @@ import Web3 from 'web3';
 import axios from 'axios';
 import artistData from './artist-data';
 import createLogger from 'vuex/dist/logger';
-import { getNetIdString } from '../utils';
+import { getNetIdString, getEtherscanAddress } from '../utils';
 
 import { KnownOriginDigitalAsset } from '../contracts/index';
 
@@ -20,6 +20,7 @@ const store = new Vuex.Store({
     account: null,
     accountBalance: null,
     currentNetwork: null,
+    etherscanBase: null,
     assetsPurchasedByAccount: [],
 
     // contract metadata
@@ -42,7 +43,7 @@ const store = new Vuex.Store({
     artists: artistData,
     assets: [],
     assetsByEditions: [],
-    assetsByArtists: [],
+    assetsByArtistCode: [],
 
     // Frontend state
     purchaseState: {}
@@ -69,10 +70,8 @@ const store = new Vuex.Store({
     assetById: (state) => (tokenId) => {
       return _.find(state.assets, (asset) => asset.id.toString() === tokenId.toString());
     },
-    findArtist: (state) => (artistId) => {
-      return _.find(state.artists, function (artist) {
-        return artist.id.toString() === artistId;
-      });
+    findArtist: (state) => (artistCode) => {
+      return _.find(state.artists, (artist) => artist.artistCode.toString() === artistCode);
     },
     featuredArtists: (state) => {
       return state.artists.filter((a) => a.featured);
@@ -82,6 +81,24 @@ const store = new Vuex.Store({
         return state.curatorAddress.toLowerCase() === state.account.toLowerCase();
       }
       return false;
+    },
+    lookupAssetsByArtistCode: (state) => (artistCode) => {
+      return _.filter(state.assetsByEditions, (key, value) => value.startsWith(artistCode));
+    },
+    assetPurchaseState: (state) => (assetId) => {
+      return _.get(state.purchaseState, assetId);
+    },
+    isPurchaseTriggered: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_TRIGGERED;
+    },
+    isPurchaseStarted: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_STARTED;
+    },
+    isPurchaseSuccessful: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_SUCCESSFUL;
+    },
+    isPurchaseFailed: (state, getters) => (assetId) => {
+      return _.get(getters.assetPurchaseState(assetId), 'state') === mutations.PURCHASE_FAILED;
     }
   },
   mutations: {
@@ -91,10 +108,10 @@ const store = new Vuex.Store({
       state.contractDeveloperAddress = contractDeveloperAddress;
       state.contractAddress = contractAddress;
     },
-    [mutations.SET_ASSETS] (state, {assets, assetsByEditions, assetsByArtists}) {
+    [mutations.SET_ASSETS] (state, {assets, assetsByEditions, assetsByArtistCode}) {
       Vue.set(state, 'assets', assets);
       Vue.set(state, 'assetsByEditions', assetsByEditions);
-      Vue.set(state, 'assetsByArtists', assetsByArtists);
+      Vue.set(state, 'assetsByArtistCode', assetsByArtistCode);
     },
     [mutations.SET_ARTISTS] (state, {artists}) {
       state.artists = artists;
@@ -120,6 +137,9 @@ const store = new Vuex.Store({
     [mutations.SET_CURRENT_NETWORK] (state, currentNetwork) {
       state.currentNetwork = currentNetwork;
     },
+    [mutations.SET_ETHERSCAN_NETWORK] (state, etherscanBase) {
+      state.etherscanBase = etherscanBase;
+    },
     [mutations.PURCHASE_TRIGGERED] (state, {tokenId, buyer}) {
       state.purchaseState = {
         ...state.purchaseState,
@@ -138,11 +158,15 @@ const store = new Vuex.Store({
         [tokenId]: {tokenId, buyer, state: 'PURCHASE_SUCCESSFUL'}
       };
     },
-    [mutations.PURCHASE_STARTED] (state, {tokenId, buyer}) {
+    [mutations.PURCHASE_STARTED] (state, {tokenId, buyer, data}) {
       state.purchaseState = {
         ...state.purchaseState,
-        [tokenId]: {tokenId, buyer, state: 'PURCHASE_STARTED'}
+        [tokenId]: {tokenId, buyer, data, state: 'PURCHASE_STARTED'}
       };
+    },
+    [mutations.UPDATE_PURCHASE_STATE] (state, {tokenId}) {
+      delete state.purchaseState[tokenId];
+      state.purchaseState = {...state.purchaseState};
     },
   },
   actions: {
@@ -164,6 +188,14 @@ const store = new Vuex.Store({
         .then((currentNetwork) => {
           commit(mutations.SET_CURRENT_NETWORK, currentNetwork);
         });
+      getEtherscanAddress()
+        .then((etherscanBase) => {
+          commit(mutations.SET_ETHERSCAN_NETWORK, etherscanBase);
+        });
+    },
+    [actions.RESET_PURCHASE_STATE]: function ({commit, dispatch, state}, asset) {
+      dispatch(actions.GET_ALL_ASSETS);
+      commit(mutations.UPDATE_PURCHASE_STATE, {tokenId: asset.id});
     },
     [actions.INIT_APP] ({commit, dispatch, state}, account) {
       web3.eth.getAccounts()
@@ -173,7 +205,7 @@ const store = new Vuex.Store({
           let account = accounts[0];
 
           // init the KODA contract
-          store.dispatch(actions.REFRESH_CONTRACT_DETAILS);
+          dispatch(actions.REFRESH_CONTRACT_DETAILS);
 
           return web3.eth.getBalance(account)
             .then((balance) => {
@@ -187,7 +219,6 @@ const store = new Vuex.Store({
         .catch(function (error) {
           console.log('ERROR - account locked', error);
           // TODO handle locked metamask account
-
         });
     },
     [actions.GET_ALL_ASSETS] ({commit, dispatch, state}) {
@@ -213,6 +244,17 @@ const store = new Vuex.Store({
           });
       };
 
+      const mapAssetType = (rawType) => {
+        switch (rawType) {
+          case 'DIG':
+            return 'digital';
+          case 'PHY':
+            return 'physical';
+          default:
+            return rawType;
+        }
+      };
+
       const lookupAssetInfo = (contract, index) => {
         return Promise.all([
           contract.assetInfo(index),
@@ -222,7 +264,10 @@ const store = new Vuex.Store({
             let assetInfo = results[0];
             let editionInfo = results[1];
 
-            let tokenUri = editionInfo[6];
+            let tokenUri = editionInfo[3];
+
+            // should always be 16 chars long
+            const edition = Web3.utils.toAscii(editionInfo[1]);
 
             let fullAssetDetails = {
               id: assetInfo[0].toNumber(),
@@ -230,21 +275,22 @@ const store = new Vuex.Store({
               purchased: assetInfo[2].toNumber(),
               priceInWei: assetInfo[3].toString(),
               priceInEther: Web3.utils.fromWei(assetInfo[3].toString(), 'ether').valueOf(),
-              auctionStartDate: assetInfo[4], // TODO handle auction start date
+              auctionStartDate: assetInfo[4].toString(10), // TODO handle auction start date
 
-              type: editionInfo[1].toString(),
-              edition: editionInfo[2].toString(),
-              editionName: editionInfo[3].toString(),
-              editionNumber: editionInfo[4].toNumber(),
-              artist: editionInfo[5].toString(),
+              edition: edition,
+              // Last 3 chars of edition are type
+              type: mapAssetType(edition.substring(13, 16)),
+              // First 3 chars of edition are artist code
+              artistCode: edition.substring(0, 3),
+              editionNumber: editionInfo[2].toNumber(),
               tokenUri: tokenUri
             };
 
-            return lookupIPFSData(tokenUri).then((ipfsMeata) => {
+            return lookupIPFSData(tokenUri).then((ipfsMeta) => {
               // set IPFS lookup back on object
-              _.set(fullAssetDetails, 'otherMeta', ipfsMeata.otherMeta);
-              _.set(fullAssetDetails, 'description', ipfsMeata.description);
-              _.set(fullAssetDetails, 'lowResImg', ipfsMeata.lowResImg);
+              _.set(fullAssetDetails, 'otherMeta', ipfsMeta.otherMeta);
+              _.set(fullAssetDetails, 'description', ipfsMeta.description);
+              _.set(fullAssetDetails, 'lowResImg', ipfsMeta.lowResImg);
               return fullAssetDetails;
             });
           });
@@ -258,12 +304,12 @@ const store = new Vuex.Store({
             .then((assets) => {
 
               let assetsByEditions = _.groupBy(assets, 'edition');
-              let assetsByArtists = _.groupBy(assets, 'artist');
+              let assetsByArtistCode = _.groupBy(assets, 'artistCode');
 
               commit(mutations.SET_ASSETS, {
                 assets: assets,
                 assetsByEditions: assetsByEditions,
-                assetsByArtists: assetsByArtists,
+                assetsByArtistCode: assetsByArtistCode,
               });
             });
         });
@@ -272,7 +318,7 @@ const store = new Vuex.Store({
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
 
-          Promise.all([contract.curator(), contract.commissionAccount(), contract.contractDeveloper(), contract.address])
+          Promise.all([contract.curatorAccount(), contract.commissionAccount(), contract.developerAccount(), contract.address])
             .then((results) => {
               commit(mutations.SET_COMMISSION_ADDRESSES, {
                 curatorAddress: results[0],
@@ -444,7 +490,7 @@ const store = new Vuex.Store({
             .then((data) => {
               // 2) Purchase transaction submitted
               console.log('Purchase transaction submitted', data);
-              commit(mutations.PURCHASE_STARTED, {tokenId: _tokenId, buyer: _buyer});
+              commit(mutations.PURCHASE_STARTED, {tokenId: _tokenId, buyer: _buyer, data: data});
             })
             .catch((error) => {
               // Purchase failure

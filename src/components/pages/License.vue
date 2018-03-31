@@ -1,6 +1,10 @@
 <template>
   <div id="license">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link>  License</h1>
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
+
+    <h1>License</h1>
 
     <h2>KnownOrigin.io Attribution-NonCommercial-NoDerivatives 4.0 International Public License</h2>
 

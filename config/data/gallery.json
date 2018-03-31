@@ -6,8 +6,7 @@
         {
           "artworkName": "Lending a hand 3",
           "ipfsPath": "lending_a_hand_3",
-          "edition": "PDLMAH01PHY",
-          "type": "physical",
+          "edition": "PDALNDMEHD300PHY",
           "numberOfEditions": 1,
           "fiatCost": 499.00,
           "costInEth": 0.78
@@ -15,8 +14,7 @@
         {
           "artworkName": "Lending a hand 3",
           "ipfsPath": "lending_a_hand_3",
-          "edition": "PDLMAH01DIG",
-          "type": "digital",
+          "edition": "PDALNDMEHD300DIG",
           "numberOfEditions": 10,
           "fiatCost": 49.00,
           "costInEth": 0.08
@@ -24,17 +22,15 @@
         {
           "artworkName": "Lending a hand 2",
           "ipfsPath": "lending_a_hand_2",
-          "edition": "PDLMAH02PHY",
-          "type": "physical",
+          "edition": "PDALNDMEHD200PHY",
           "numberOfEditions": 1,
           "fiatCost": 499.00,
           "costInEth": 0.78
         },
         {
-          "artworkName": "Lending a hand 3",
-          "ipfsPath": "lending_a_hand_3",
-          "edition": "PDLMAH02DIG",
-          "type": "digital",
+          "artworkName": "Lending a hand 2",
+          "ipfsPath": "lending_a_hand_2",
+          "edition": "PDALNDMEHD200DIG",
           "numberOfEditions": 10,
           "fiatCost": 49.00,
           "costInEth": 0.08
@@ -47,8 +43,7 @@
         {
           "artworkName": "Start me up",
           "ipfsPath": "start_me_up",
-          "edition": "BJDSMUP01PHY",
-          "type": "physical",
+          "edition": "BJDSTMEUP0001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
           "costInEth": 1.57
@@ -56,8 +51,7 @@
         {
           "artworkName": "Poker Face",
           "ipfsPath": "poker_face",
-          "edition": "BJDPF01PHY",
-          "type": "physical",
+          "edition": "BJDPKRFCE0001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
           "costInEth": 1.57
@@ -65,8 +59,7 @@
         {
           "artworkName": "Acid Rain Tuesday",
           "ipfsPath": "acid_rain_tuesday",
-          "edition": "BJDART01PHY",
-          "type": "physical",
+          "edition": "BJDACDRNTU001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
           "costInEth": 1.57
@@ -74,8 +67,7 @@
         {
           "artworkName": "Loose Tapestries",
           "ipfsPath": "loose_tapestries",
-          "edition": "BJDLT01PHY",
-          "type": "physical",
+          "edition": "BJDLOOTAP0001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
           "costInEth": 1.57
@@ -88,8 +80,7 @@
         {
           "artworkName": "Functional Flattery",
           "ipfsPath": "functional_flattery",
-          "edition": "JOCFFF01PHY",
-          "type": "physical",
+          "edition": "JOCFUNCFLT001PHY",
           "numberOfEditions": 1,
           "fiatCost": 65,
           "costInEth": 0.11
@@ -97,8 +88,7 @@
         {
           "artworkName": "Pace of Life",
           "ipfsPath": "pace_of_life",
-          "edition": "JOCPOL01DIG",
-          "type": "digital",
+          "edition": "JOCPACOFLF001DIG",
           "numberOfEditions": 10,
           "fiatCost": 25,
           "costInEth": 0.001989
@@ -106,8 +96,7 @@
         {
           "artworkName": "Family tree",
           "ipfsPath": "family_tree",
-          "edition": "JOCFMT01DIG",
-          "type": "digital",
+          "edition": "JOCFAMTREE001DIG",
           "numberOfEditions": 10,
           "fiatCost": 25,
           "costInEth": 0.001989
@@ -115,8 +104,7 @@
         {
           "artworkName": "Boo!",
           "ipfsPath": "boo",
-          "edition": "JOCBOO01DIG",
-          "type": "digital",
+          "edition": "JOCBOO0000001DIG",
           "numberOfEditions": 10,
           "fiatCost": 25,
           "costInEth": 0.001989

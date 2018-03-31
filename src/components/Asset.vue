@@ -1,20 +1,22 @@
 <template>
   <article class="card" v-if="asset">
     <div>
-      <asset-figure :edition="asset"></asset-figure>
+      <asset-figure :edition="asset" :is-asset="true"></asset-figure>
       <div class="card-content">
 
         <token-id :value="asset.id"></token-id>
 
         <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-        <p>{{ asset.otherMeta.description }}</p>
+        <p>
+          <strong>Artwork description</strong><br/>
+          {{ asset.otherMeta.description }}
+        </p>
+
+        <hr/>
 
         <price-in-eth :value="asset.priceInEther"></price-in-eth>
 
-        <button class="btn btn-sold">
-          <purchase-state :state="asset.purchased"></purchase-state>
-        </button>
       </div>
     </div>
     <!-- .card-content -->

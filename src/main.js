@@ -5,9 +5,10 @@ import App from './App';
 import router from './router';
 import store from './store';
 import logging from './logging';
-
+import VModal from 'vue-js-modal';
 import AsyncComputed from 'vue-async-computed';
 
+Vue.use(VModal);
 Vue.use(AsyncComputed);
 
 Vue.config.productionTip = false

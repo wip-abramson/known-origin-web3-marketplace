@@ -1,16 +1,24 @@
 <template>
   <div id="account">
-    <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Account</h1>
+    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
 
-    <p>
-      <!--My address:  -->
-      <address-icon :eth-address="account"></address-icon>
-    </p>
+    <h1>My Account</h1>
 
-    <h2>My collection (<span class="bold">{{assetsPurchasedByAccount.length}}</span>)</h2>
+    <!--<p>-->
+      <!--<img src="/../static/account.svg" style="height:50px"/>-->
+    <!--</p>-->
+
+    <h2>My Address</h2>
+    <address-icon :eth-address="account"></address-icon>
+
+    <hr/>
+
+    <h2>My collection (<strong>{{assetsPurchasedByAccount.length}}</strong>)</h2>
 
     <div class="centered">
-      <section class="cards" v-if="assetsPurchasedByAccount">
+      <section class="cards centered" v-if="assetsPurchasedByAccount">
         <asset v-for="tokenId, key in assetsPurchasedByAccount"
                :asset="assetById(tokenId)"
                :key="key">
@@ -31,7 +39,7 @@
   import EthAddress from '../ui-controls/EthAddress';
 
   export default {
-    name: 'dashboard',
+    name: 'account',
     components: {Asset, AddressIcon, EthAddress},
     computed: {
       ...mapState([
@@ -42,9 +50,6 @@
       ...mapGetters([
         'assetById',
       ])
-    },
-    mounted () {
-
     }
   };
 </script>

@@ -1,10 +1,13 @@
 <template>
-  <div>
-    <h1><router-link :to="{ name: 'gallery' }" class="back-arrow">&lt;</router-link>  {{ edition.editionName }}</h1>
+  <div v-if="edition">
+    <router-link :to="{ name: 'gallery' }" class="back-arrow" style="float: left">
+      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+    </router-link>
 
-    <div class="assets_to_buy centered" v-if="edition">
-        <edition :edition="edition"></edition>
-        <confirm-purchase-button :edition="edition" class="btn-center"></confirm-purchase-button>
+    <h1>{{ edition.otherMeta.artworkName }}</h1>
+
+    <div class="assets_to_buy">
+        <gallery-edition :edition="edition" :purchase="true"></gallery-edition>
     </div>
 
     <edition-qr-code :edition="edition"></edition-qr-code>
@@ -14,14 +17,14 @@
 <script>
   import { mapGetters, mapState } from 'vuex';
   import Artist from '../Artist';
-  import Edition from '../Edition';
+  import GalleryEdition from '../GalleryEdition';
   import ConfirmPurchaseButton from '../ui-controls/ConfirmPurchaseButton';
   import _ from 'lodash';
   import EditionQrCode from '../ui-controls/EditionQrCode';
 
   export default {
     name: 'confirmPurchase',
-    components: {EditionQrCode, Edition, ConfirmPurchaseButton},
+    components: {EditionQrCode, GalleryEdition, ConfirmPurchaseButton},
     computed: {
       ...mapGetters([
         'firstAssetForEdition'

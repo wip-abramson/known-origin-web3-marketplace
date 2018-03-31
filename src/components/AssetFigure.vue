@@ -1,10 +1,13 @@
 <template>
-  <figure class="thumbnail">
-    <img :src="edition.lowResImg"/>
-    <span class="edition-type">{{ edition.type }} artwork</span>
-    <span class="edition-sold" v-if="availableAssetsForEdition(edition.edition).length == 0">SOLD</span>
-    <span class="edition-run">1 of {{assetsForEdition(edition.edition).length}}</span>
-  </figure>
+  <span>
+    <figure class="thumbnail">
+      <img :src="edition.lowResImg"/>
+      <span class="edition-type" v-if="!isAsset">{{ edition.type }} artwork</span>
+      <span class="edition-sold-out" v-if="!isAsset && availableAssetsForEdition(edition.edition).length == 0">SOLD</span>
+      <span class="edition-sold" v-if="!isAsset && edition.purchased != 0">SOLD</span>
+    </figure>
+    <span class="edition-run" v-if="!isAsset">1 of {{assetsForEdition(edition.edition).length}}</span>
+  </span>
 </template>
 
 <script>
@@ -12,7 +15,7 @@
 
   export default {
     name: 'assetFigure',
-    props: ['edition'],
+    props: ['edition', 'isAsset'],
     computed: {
       ...mapGetters([
         'assetsForEdition',

@@ -1,44 +1,40 @@
 <template>
   <div id="dashboard">
+    <div id="topSection">
 
-<div id="topSection">
+      <div id="splash">
+        <h2 class="strap">Buy original artwork and rare digital art</h2>
+        <router-link :to="{ name: 'gallery' }" tag="button" class="btn">View gallery</router-link>
+      </div>
 
-    <div id="splash">
-      <h2 class="strap">Buy original artwork and rare digital art</h2>
-      <router-link :to="{ name: 'gallery' }" tag="button" class="btn">View gallery</router-link>
-    </div>
-
-    <div id="intro">
-      <h2>What is KnownOrigin.io</h2>
-      <div>
-        <section>
-          <p>We have built a platform that allows people to own original art linked to a digital asset.</p>
-        </section>
-        <section>
-          <p>KnownOrigin.io brings together Blockchain technology and digital artworks though the power of Web3 and ERC-721 backed digital arts assets.</p>
-        </section>
-        <section>
-          <div id="quote">
-            <p>
-              Can we use the power of Ethereum blockchain and the integrity of digital assets in the art world to
-              improve the proof of ownership, provenance, authenticity and reducing forgery of artwork?
-            </p>
-          </div>
-        </section>
+      <div id="intro">
+        <h2>What is KnownOrigin.io</h2>
+        <div>
+          <section>
+            <p>We have built a platform that allows people to own original art linked to a digital asset.</p>
+          </section>
+          <section>
+            <p>KnownOrigin.io brings together Blockchain technology and digital artworks though the power of Web3 and ERC-721 backed digital arts assets.</p>
+          </section>
+          <section>
+            <div id="quote">
+              <p>
+                Can we use the power of Ethereum blockchain and the integrity of digital assets in the art world to
+                improve the proof of ownership, provenance, authenticity and reducing forgery of artwork?
+              </p>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
-</div>
     <div id="featured-artists">
       <h2>Featured artists</h2>
-   
-        <section class="cards">
-            <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
 
-          
-        </section>
-      
+      <section class="cards">
+        <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
+      </section>
     </div>
-<router-link :to="{ name: 'artists' }" tag="button" class="btn btn-center">View all artists</router-link>
+    <router-link :to="{ name: 'artists' }" tag="button" class="btn btn-center">View all artists</router-link>
     <div id="how-ko-works">
       <h2>How KnownOrigin.io works</h2>
       <div>
@@ -62,6 +58,7 @@
           <p>
             The artist defines the price in Ether that each asset is to be sold at.
           </p>
+          <p class="pad-top"><img src="/../static/HP_Rare_icn.svg" style="height: 250px"/></p>
         </section>
         <section>
           <h3>Step 2.</h3>
@@ -72,6 +69,7 @@
           <p>
             KnownOrigin.io use the latest ERC-721 compliant smart contract to manage asset identity and purchasing.
           </p>
+          <p class="pad-top"><img src="/../static/HP_Upload_icn.svg" style="height: 250px"/></p>
         </section>
         <section>
           <h3>Step 3.</h3>
@@ -82,6 +80,7 @@
           <p>
             The KODA smart contract provides proof of ownership as well as seamless and transparent transfers of assets.
           </p>
+          <p class="pad-top"><img src="/../static/HP_BuyETH_icn.svg" style="height: 250px"/></p>
         </section>
         <section>
           <h3>Step 4.</h3>
@@ -92,21 +91,21 @@
           <p>
             Each digital asset is traceable via Ethereum at all times, KODA does not own the rights to the digital asset once purchased.
           </p>
+          <p class="pad-top"><img src="/../static/HP_Account_icn.svg" style="height: 250px"/></p>
         </section>
       </div>
     </div>
 
-    <div id="partners">
-      <h2>Our partners</h2>
-      <img src="../../../static/Partner_Footer2.png" style="max-width: 100%"/>
-    </div>
-
+    <!--<div id="partners">-->
+    <!--<h2>Our partners</h2>-->
+    <!--<img src="../../../static/Partner_Footer2.png" style="max-width: 100%"/>-->
+    <!--</div>-->
   </div>
 </template>
 
 <script>
 
-  import {mapGetters, mapState} from 'vuex';
+  import { mapGetters, mapState } from 'vuex';
   import Artist from '../Artist';
   import Gallery from './Gallery';
 

@@ -1,288 +1,364 @@
 pragma solidity ^0.4.18;
-import "./InternalMintableNonFungibleToken.sol";
+
+
+import "./ERC721Token.sol";
+
 
 /**
 * @title KnownOriginDigitalAsset
 *
 * A curator can mint digital assets and sell them via purchases (crypto via Ether or Fiat)
 */
-contract KnownOriginDigitalAsset is InternalMintableNonFungibleToken {
-    using SafeMath for uint;
+contract KnownOriginDigitalAsset is ERC721Token {
+  using SafeMath for uint;
 
-    // creates and owns the original assets all primary purchases transferred to this account
-    address public curator;
+  struct CommissionStructure {
+    uint8 curator;
+    uint8 developer;
+  }
 
-    // the person who is responsible for designing and building the contract
-    address public contractDeveloper;
+  // creates and owns the original assets all primary purchases transferred to this account
+  address public curatorAccount;
 
-    // the person who puts on the event
-    address public commissionAccount;
+  // the person who is responsible for designing and building the contract
+  address public developerAccount;
 
-    uint256 public totalPurchaseValueInWei;
-    uint public totalNumberOfPurchases;
+  // the person who puts on the event
+  address public commissionAccount;
 
-    enum PurchaseState { Unsold, EtherPurchase, FiatPurchase }
+  uint256 public totalPurchaseValueInWei;
 
-    mapping(uint => PurchaseState) internal tokenIdToPurchased;
-    mapping(uint => string) internal tokenIdToEdition;
-    mapping(uint => uint8) internal tokenIdToEditionNumber;
-    mapping(uint => string) internal tokenIdToEditionName;
-    mapping(uint => string) internal tokenIdToArtist;
-    mapping(uint => string) internal tokenIdToType;
-    mapping(uint => uint256) internal tokenIdToPriceInWei;
-    mapping(uint => uint256) internal tokenIdToBuyFromDate;
+  uint public totalNumberOfPurchases;
 
-    event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
-    event PurchasedWithFiat(uint256 indexed _tokenId);
-    event PurchasedWithFiatReversed(uint256 indexed _tokenId);
+  enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
-    modifier onlyCurator() {
-        require(msg.sender == curator);
-        _;
+  mapping (string => CommissionStructure) internal tokenIdToCommission;
+  mapping (uint => PurchaseState) internal tokenIdToPurchased;
+
+  mapping (uint => bytes16) internal tokenIdToEdition;
+  mapping (uint => uint8) internal tokenIdToEditionNumber;
+  mapping (uint => uint256) internal tokenIdToPriceInWei;
+  mapping (uint => uint32) internal tokenIdToAuctionStartDate;
+
+  event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
+
+  event PurchasedWithFiat(uint256 indexed _tokenId);
+
+  event PurchasedWithFiatReversed(uint256 indexed _tokenId);
+
+  modifier onlyCurator() {
+    require(msg.sender == curatorAccount);
+    _;
+  }
+
+  modifier onlyUnsold(uint256 _tokenId) {
+    require(tokenIdToPurchased[_tokenId] == PurchaseState.Unsold);
+    _;
+  }
+
+  modifier onlyFiatPurchased(uint256 _tokenId) {
+    require(tokenIdToPurchased[_tokenId] == PurchaseState.FiatPurchase);
+    _;
+  }
+
+  modifier onlyManagementOwnedToken(uint256 _tokenId) {
+    require(tokenOwner[_tokenId] == curatorAccount || tokenOwner[_tokenId] == developerAccount);
+    _;
+  }
+
+  modifier onlyManagement() {
+    require(msg.sender == curatorAccount || msg.sender == developerAccount);
+    _;
+  }
+
+  modifier onlyWhenBuyDateOpen(uint256 _tokenId) {
+    require(tokenIdToAuctionStartDate[_tokenId] <= block.timestamp);
+    _;
+  }
+
+  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount)
+  public
+  ERC721Token("KnownOriginDigitalAsset", "KODA")
+  {
+    curatorAccount = msg.sender;
+    commissionAccount = _commissionAccount;
+    developerAccount = _developerAccount;
+
+    // Setup default commission structures
+    tokenIdToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
+    tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
+  }
+
+  function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
+  public
+  onlyManagement {
+
+    uint256 offset = allTokens.length;
+    for (uint8 i = 0; i < _totalEdition; i++) {
+      uint256 _tokenId = offset + i;
+      super._mint(msg.sender, _tokenId);
+      super._setTokenURI(_tokenId, _tokenURI);
+      _populateTokenData(_tokenId, _edition, i + 1, _priceInWei, _auctionStartDate);
     }
+  }
 
-    modifier onlyUnsold(uint256 _tokenId) {
-        require(tokenIdToPurchased[_tokenId] == PurchaseState.Unsold);
-        _;
+  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate)
+  public
+  onlyManagement {
+
+    uint256 _tokenId = allTokens.length;
+    super._mint(msg.sender, _tokenId);
+    super._setTokenURI(_tokenId, _tokenURI);
+    _populateTokenData(_tokenId, _edition, 1, _priceInWei, _auctionStartDate);
+  }
+
+  function _populateTokenData(uint _tokenId, bytes16 _edition, uint8 _editionNumber, uint256 _priceInWei, uint32 _auctionStartDate)
+  internal
+  {
+    tokenIdToEdition[_tokenId] = _edition;
+    tokenIdToEditionNumber[_tokenId] = _editionNumber;
+    tokenIdToPriceInWei[_tokenId] = _priceInWei;
+    tokenIdToAuctionStartDate[_tokenId] = _auctionStartDate;
+  }
+
+  function burn(uint256 _tokenId)
+  public
+  onlyManagement
+  onlyUnsold(_tokenId)
+  onlyManagementOwnedToken(_tokenId)
+  {
+    // TODO fix me - clean up internal metadata when being burnt
+    super._burn(ownerOf(_tokenId), _tokenId);
+  }
+
+  function setTokenURI(uint256 _tokenId, string _uri)
+  public
+  onlyManagement
+  {
+    _setTokenURI(_tokenId, _uri);
+  }
+
+  function setPriceInWei(uint _tokenId, uint256 _priceInWei)
+  public
+  onlyManagement
+  onlyUnsold(_tokenId)
+  returns (bool) {
+    tokenIdToPriceInWei[_tokenId] = _priceInWei;
+    return true;
+  }
+
+  /**
+   * @dev Used to pre-approve a purchaser in order for internal purchase methods
+   * to succeed without calling approve() directly
+   * @param _tokenId uint256 ID of the token to query the approval of
+   * @return address currently approved for a the given token ID
+   */
+  function _approvePurchaser(address _to, uint _tokenId)
+  internal
+  {
+    address owner = ownerOf(_tokenId);
+    require(_to != address(0));
+
+    tokenApprovals[_tokenId] = _to;
+    Approval(owner, _to, _tokenId);
+  }
+
+  function updateCommission(string _type, uint8 _curator, uint8 _developer)
+  public
+  onlyManagement
+  returns (bool) {
+    require(_curator > 0);
+    require(_developer > 0);
+    require((_curator + _developer) < 100);
+
+    tokenIdToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
+    return true;
+  }
+
+  function getCommissionForType(string _type)
+  public
+  view
+  returns (uint8 _curator, uint8 _developer)
+  {
+    CommissionStructure storage commission = tokenIdToCommission[_type];
+    return (
+      commission.curator,
+      commission.developer
+    );
+  }
+
+  function purchaseWithEther(uint256 _tokenId)
+  public
+  payable
+  onlyUnsold(_tokenId)
+  onlyWhenBuyDateOpen(_tokenId)
+  returns (bool) {
+
+    uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
+
+    if (msg.value >= priceInWei) {
+
+      // approve sender as they have paid the required amount
+      _approvePurchaser(msg.sender, _tokenId);
+
+      // transfer assets from contract creator (curator) to new owner
+      safeTransferFrom(curatorAccount, msg.sender, _tokenId);
+
+      // now purchased - don't allow re-purchase!
+      tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
+
+      totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
+      totalNumberOfPurchases = totalNumberOfPurchases.add(1);
+
+      // Only apply commission if the art work has value
+      if (priceInWei > 0) {
+        _applyCommission(_tokenId);
+      }
+
+      PurchasedWithEther(_tokenId, msg.sender);
+
+      return true;
     }
+    return false;
+  }
 
-    modifier onlyCuratorOwnedToken(uint256 _tokenId) {
-        require(tokenIdToOwner[_tokenId] == curator);
-        _;
+  function _applyCommission(uint256 _tokenId)
+  internal
+  {
+    bytes16 edition = tokenIdToEdition[_tokenId];
+
+    string memory typeCode = getTypeFromEdition(edition);
+
+    CommissionStructure memory commission = tokenIdToCommission[typeCode];
+
+    // split & transfer fee for curator
+    uint curatorAccountFee = msg.value / 100 * commission.curator;
+    curatorAccount.transfer(curatorAccountFee);
+
+    // split & transfer fee for developer
+    uint developerAccountFee = msg.value / 100 * commission.developer;
+    developerAccount.transfer(developerAccountFee);
+
+    // final payment to commission would be the remaining value
+    uint finalCommissionTotal = msg.value - (curatorAccountFee + developerAccountFee);
+
+    // send ether
+    commissionAccount.transfer(finalCommissionTotal);
+  }
+
+  function purchaseWithFiat(uint _tokenId)
+  public
+  onlyManagement
+  onlyUnsold(_tokenId)
+  onlyWhenBuyDateOpen(_tokenId)
+  returns (bool) {
+
+    // now purchased - don't allow re-purchase!
+    tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
+
+    totalNumberOfPurchases = totalNumberOfPurchases.add(1);
+
+    PurchasedWithFiat(_tokenId);
+
+    return true;
+  }
+
+  function reverseFiatPurchase(uint _tokenId)
+  public
+  onlyManagement
+  onlyFiatPurchased(_tokenId)
+  onlyWhenBuyDateOpen(_tokenId)
+  returns (bool) {
+
+    // reset to Unsold
+    tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
+
+    totalNumberOfPurchases = totalNumberOfPurchases.sub(1);
+
+    PurchasedWithFiatReversed(_tokenId);
+
+    return true;
+  }
+
+  function assetInfo(uint _tokenId)
+  public
+  view
+  returns (
+  uint256 _tokId,
+  address _owner,
+  PurchaseState _purchaseState,
+  uint256 _priceInWei,
+  uint32 _auctionStartDate
+  ) {
+    return (
+    _tokenId,
+    ownerOf(_tokenId),
+    tokenIdToPurchased[_tokenId],
+    tokenIdToPriceInWei[_tokenId],
+    tokenIdToAuctionStartDate[_tokenId]
+    );
+  }
+
+  function editionInfo(uint _tokenId)
+  public
+  view
+  returns (
+  uint256 _tokId,
+  bytes16 _edition,
+  uint8 _editionNumber,
+  string _tokenURI
+  ) {
+    return (
+    _tokenId,
+    tokenIdToEdition[_tokenId],
+    tokenIdToEditionNumber[_tokenId],
+    tokenURI(_tokenId)
+    );
+  }
+
+  function getOwnerTokens(address _owner)
+  public
+  view
+  returns (uint[] _tokenIds)
+  {
+    return ownedTokens[_owner];
+  }
+
+  function isPurchased(uint256 _tokenId)
+  public
+  view
+  returns (PurchaseState _purchased) {
+    return tokenIdToPurchased[_tokenId];
+  }
+
+  function editionOf(uint _tokenId)
+  public
+  view
+  returns (bytes16 _edition) {
+    return tokenIdToEdition[_tokenId];
+  }
+
+  function tokenAuctionStartDate(uint _tokenId)
+  public
+  view
+  returns (uint32 _auctionStartDate) {
+    return tokenIdToAuctionStartDate[_tokenId];
+  }
+
+  function priceInWei(uint _tokenId)
+  public
+  view
+  returns (uint256 _priceInWei) {
+    return tokenIdToPriceInWei[_tokenId];
+  }
+
+  function getTypeFromEdition(bytes16 _bytes16) public pure returns (string){
+    bytes memory bytesArray = new bytes(3);
+    uint pos = 0;
+    for (uint256 i = 13; i < 16; i++) {
+      bytesArray[pos] = _bytes16[i];
+      pos++;
     }
-
-    modifier onlyWhenBuyDateOpen(uint256 _tokenId) {
-        require(tokenIdToBuyFromDate[_tokenId] <= block.timestamp);
-        _;
-    }
-
-    function KnownOriginDigitalAsset(address _commissionAccount, address _contractDeveloper)
-    public {
-        curator = msg.sender;
-        contractDeveloper = _contractDeveloper;
-        commissionAccount = _commissionAccount;
-        name = "KnownOriginDigitalAsset";
-        symbol = "KODA";
-    }
-
-    function mintEdition(string _metadata, string _edition, string _artist, string _editionName, string _type, uint8 _totalEdition, uint256 _priceInWei, uint _auctionStartDate)
-    public
-    onlyCurator {
-
-        uint offset = numTokensTotal;
-        for (uint8 i = 0; i < _totalEdition; i++) {
-            uint _tokenId = offset + i;
-            require(tokenIdToOwner[_tokenId] == address(0));
-            _mint(msg.sender, _tokenId, _metadata);
-
-            // TODO remove duplicate artist names
-            // TODO remove duplicate edition name
-            // TODO remove duplicate type
-            // TODO refactor into common setup method
-            tokenIdToEdition[_tokenId] = _edition;
-            tokenIdToEditionNumber[_tokenId] = i + 1;
-            tokenIdToPriceInWei[_tokenId] = _priceInWei;
-            tokenIdToBuyFromDate[_tokenId] = _auctionStartDate;
-            tokenIdToType[_tokenId] = _type;
-            tokenIdToArtist[_tokenId] = _artist;
-            tokenIdToEditionName[_tokenId] = _editionName;
-        }
-    }
-
-    function mint(string _metadata, string _edition, string _artist, string _editionName, string _type, uint256 _priceInWei, uint _auctionStartDate)
-    public
-    onlyCurator {
-        uint _tokenId = numTokensTotal;
-        require(tokenIdToOwner[_tokenId] == address(0));
-        _mint(msg.sender, _tokenId, _metadata);
-
-        // TODO remove duplicate artist names
-        // TODO remove duplicate edition name
-        // TODO remove duplicate type
-        // TODO refactor into common setup method
-        tokenIdToEdition[_tokenId] = _edition;
-        tokenIdToEditionNumber[_tokenId] = 1;
-        tokenIdToPriceInWei[_tokenId] = _priceInWei;
-        tokenIdToBuyFromDate[_tokenId] = _auctionStartDate;
-        tokenIdToType[_tokenId] = _type;
-        tokenIdToArtist[_tokenId] = _artist;
-        tokenIdToEditionName[_tokenId] = _editionName;
-    }
-
-    function isPurchased(uint256 _tokenId)
-    public
-    view
-    returns (PurchaseState _purchased) {
-        return tokenIdToPurchased[_tokenId];
-    }
-
-    function editionOf(uint _tokenId)
-    public
-    view
-    returns (string _edition) {
-        return tokenIdToEdition[_tokenId];
-    }
-
-    function auctionOpened(uint _tokenId)
-    public
-    view
-    returns (bool) {
-        return tokenIdToBuyFromDate[_tokenId] <= block.timestamp; // TODO should we use `now` for this check?
-    }
-
-    function tokenAuctionOpenDate(uint _tokenId)
-    public
-    view
-    returns (uint _auctionStartDate) {
-        return tokenIdToBuyFromDate[_tokenId];
-    }
-
-    // Utility function to get current block.timestamp = now() - good for testing with remix/truffle
-    function getNow() public constant returns (uint) {
-        return now;
-    }
-
-    function priceOfInWei(uint _tokenId)
-    public
-    view
-    returns (uint256 _priceInWei) {
-        return tokenIdToPriceInWei[_tokenId];
-    }
-
-    function setPriceInWei(uint _tokenId, uint256 _priceInWei)
-    public
-    onlyCurator
-    onlyUnsold(_tokenId)
-    onlyCuratorOwnedToken(_tokenId)
-    returns (bool) {
-        tokenIdToPriceInWei[_tokenId] = _priceInWei;
-        return true;
-    }
-
-    function purchaseWithEther(uint _tokenId)
-    public
-    payable
-    onlyUnsold(_tokenId)
-    onlyCuratorOwnedToken(_tokenId)
-    onlyWhenBuyDateOpen(_tokenId)
-    returns (bool) {
-
-        if (msg.value >= tokenIdToPriceInWei[_tokenId]) {
-
-            // approve sender as they have paid the required amount
-            _approve(msg.sender, _tokenId);
-            Approval(curator, msg.sender, _tokenId);
-
-            // transfer assets from contract creator (curator) to new owner
-            transferFrom(curator, msg.sender, _tokenId);
-
-            // now purchased - don't allow re-purchase!
-            tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
-
-            totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
-            totalNumberOfPurchases = totalNumberOfPurchases.add(1);
-
-            // TODO provide config for fee split
-
-            // split & transfer 15% fee for curator
-            uint commissionAccountFee = msg.value / 100 * 15;
-            commissionAccount.transfer(commissionAccountFee);
-
-            // split out 15% fee for creator of the contract
-            uint contractDeveloperFee = msg.value / 100 * 15;
-            contractDeveloper.transfer(contractDeveloperFee);
-
-            // final payment to curator would be 70% of initial price
-            uint curatorTotal = msg.value - (commissionAccountFee + contractDeveloperFee);
-
-            // send ether to owner instantly
-            curator.transfer(curatorTotal);
-
-            PurchasedWithEther(_tokenId, msg.sender);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    function purchaseWithFiat(uint _tokenId)
-    public
-    onlyCurator
-    onlyUnsold(_tokenId)
-    onlyCuratorOwnedToken(_tokenId)
-    onlyWhenBuyDateOpen(_tokenId)
-    returns (bool) {
-
-        // now purchased - don't allow re-purchase!
-        tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
-
-        totalNumberOfPurchases = totalNumberOfPurchases.add(1);
-
-        PurchasedWithFiat(_tokenId);
-
-        return true;
-    }
-
-    function reverseFiatPurchase(uint _tokenId)
-    public
-    onlyCurator
-    onlyCuratorOwnedToken(_tokenId)
-    onlyWhenBuyDateOpen(_tokenId)
-    returns (bool) {
-
-        // Ensure on FIAT purchase can be rolled back if FIAT transaction fails
-        require(tokenIdToPurchased[_tokenId] == PurchaseState.FiatPurchase);
-
-        // reset to Unsold
-        tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
-
-        totalNumberOfPurchases = totalNumberOfPurchases.sub(1);
-
-        PurchasedWithFiatReversed(_tokenId);
-
-        return true;
-    }
-
-    function assetInfo(uint _tokenId)
-    public
-    view
-    returns (
-    uint256 _tokId,
-    address _owner,
-    PurchaseState _purchaseState,
-    uint256 _priceInWei,
-    uint _auctionStartDate
-    ) {
-        return (
-        _tokenId,
-        tokenIdToOwner[_tokenId],
-        tokenIdToPurchased[_tokenId],
-        tokenIdToPriceInWei[_tokenId],
-        tokenIdToBuyFromDate[_tokenId]
-        );
-    }
-
-    function editionInfo(uint _tokenId)
-    public
-    view
-    returns (
-      uint256 _tokId,
-      string _type,
-      string _edition,
-      string _editionName,
-      uint8 _editionNumber,
-      string _artist,
-      string _metadata
-    ) {
-        return (
-        _tokenId,
-        tokenIdToType[_tokenId],
-        tokenIdToEdition[_tokenId],
-        tokenIdToEditionName[_tokenId],
-        tokenIdToEditionNumber[_tokenId],
-        tokenIdToArtist[_tokenId],
-        tokenIdToMetadata[_tokenId]
-        );
-    }
+    return string(bytesArray);
+  }
 }
