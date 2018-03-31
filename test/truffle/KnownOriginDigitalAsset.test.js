@@ -39,7 +39,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
   const RECEIVER_MAGIC_VALUE = '0xf0b9e5ba';
 
-  const _tokenURI = 'http://ipfs/123/abd';
+  const _baseUri = 'https://ipfs.infura.io/'; // FIXME load from contract?
+  const _tokenURI = 'abc123';
   const _editionDigital = 'ABC0000000000DIG';
   const _editionPhysical = 'ABC0000000000PHY';
 
@@ -734,7 +735,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         editionNumber.should.be.bignumber.equal(1);
 
         let tokenUri = editionInfo[3];
-        tokenUri.toString().should.be.equal(_tokenURI);
+        tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
       });
 
       it('editionOf()', async function () {
@@ -810,7 +811,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           editionNumber.should.be.bignumber.equal(NUMBER_OF_EDITIONS);
 
           let tokenUri = editionInfo[3];
-          tokenUri.toString().should.be.equal(_tokenURI);
+          tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
         }
       });
     });
@@ -1214,28 +1215,28 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('can be called by _curator', async function () {
-        await this.token.setTokenURI(firstTokenId, 'http://another-ipfs/hash/1', {
+        await this.token.setTokenURI(firstTokenId, 'hash/1', {
           from: _curator
         });
         let editionInfo = await this.token.editionInfo(firstTokenId);
-        editionInfo[3].should.be.equal('http://another-ipfs/hash/1');
+        editionInfo[3].should.be.equal(_baseUri + 'hash/1');
       });
 
       it('can be called by developer', async function () {
-        await this.token.setTokenURI(firstTokenId, 'http://another-ipfs/hash/2', {
+        await this.token.setTokenURI(firstTokenId, 'hash/2', {
           from: _contractDeveloper
         });
         let editionInfo = await this.token.editionInfo(firstTokenId);
-        editionInfo[3].should.be.equal('http://another-ipfs/hash/2');
+        editionInfo[3].should.be.equal(_baseUri + 'hash/2');
       });
 
       it('will fail if called by buyer', async function () {
-        await assertRevert(this.token.setTokenURI(firstTokenId, 'http://another-ipfs/hash/3', {
+        await assertRevert(this.token.setTokenURI(firstTokenId, 'hash/3', {
           from: buyer
         }));
 
         let editionInfo = await this.token.editionInfo(firstTokenId);
-        editionInfo[3].should.be.equal(_tokenURI);
+        editionInfo[3].should.be.equal(_baseUri + _tokenURI);
       });
     });
 
