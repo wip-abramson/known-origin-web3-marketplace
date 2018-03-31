@@ -12,12 +12,12 @@
 
         <p>{{ artist.strapline }}</p>
       </div>
-      <div class="twitterLink">
 
-        <p v-if="artist.twitter">
-          <a :href="'http://twitter.com/' + artist.twitter" target="_blank">{{ artist.twitter }}</a>
-        </p>
-      </div>
+      <!--<div class="twitterLink">-->
+        <!--<p v-if="artist.twitter">-->
+          <!--<a :href="'http://twitter.com/' + artist.twitter" target="_blank">{{ artist.twitter }}</a>-->
+        <!--</p>-->
+      <!--</div>-->
 
     </div>
     <!-- .card-content -->
@@ -32,8 +32,4 @@
 </script>
 
 <style scoped>
-  .twitter {
-    background-color: deepskyblue;
-    padding: 10px;
-  }
 </style>
