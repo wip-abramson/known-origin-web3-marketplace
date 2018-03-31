@@ -1608,6 +1608,18 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         uri.should.be.equal(newBaseUri + _tokenURI);
       });
     });
+    
+    describe.only('can not call fallback function', function () {
 
+      beforeEach(async function () {
+        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
+          from: _curator
+        });
+      });
+
+      it('should revert and not accept value', async function () {
+        await assertRevert(this.token.send(1));
+      });
+    });
   });
 });

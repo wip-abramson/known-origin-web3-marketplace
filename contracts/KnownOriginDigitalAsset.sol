@@ -101,7 +101,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   // don't accept payment directly to contract
   function () public payable {
-    revert() ;
+    revert();
   }
 
   function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _purchaseFromTime)
