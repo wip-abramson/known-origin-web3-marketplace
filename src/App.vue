@@ -108,7 +108,7 @@
     font-size: 30px;
     margin-top: 20px;
     margin-bottom: 20px;
-    color: #2366de;
+    color: $primary;
     border-bottom: 1px;
   }
 
@@ -160,10 +160,10 @@
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
-  
+
     border: none;
     border-radius: 7px;
-    
+
     &:hover {
       text-decoration: none;
     }
@@ -243,11 +243,6 @@ padding:10px;
   .card {
     background: $white;
     margin-bottom: 15px;
-
-    a {
-      color: $black;
-      text-decoration: none;
-    }
   }
 
   .card-content {
@@ -268,7 +263,7 @@ padding:10px;
   #featured-artists {
     margin-top: 20px !important;
   }
-  
+
   #featured-artists h2 {
   margin-bottom:40px!important;
 }
@@ -368,7 +363,7 @@ padding:10px;
 
     text-align:center;
   }
-  
+
   .uppercase{
   text-transform:uppercase;
   text-align:center;
