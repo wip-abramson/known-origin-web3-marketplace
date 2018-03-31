@@ -374,8 +374,6 @@
 
   .edition-type {
     position: absolute;
-    top: 0;
-    left: 0;
     background-color: $primary;
     color: $secondary;
     padding: 10px;
