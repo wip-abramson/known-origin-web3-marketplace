@@ -152,15 +152,15 @@
   }
 
   .btn {
-  display:block;
-  margin-bottom:60px;
-  width:100%;
+    display: block;
+    margin-bottom: 60px;
+    width: 100%;
     background: $primary;
     color: $secondary;
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
-
+    text-align: center;
     border: none;
     border-radius: 7px;
 
@@ -173,11 +173,11 @@
     }
   }
 
-#splash .btn{
-width:50%!important;
-display:inline-table;
-padding:10px;
-}
+  #splash .btn {
+    width: 50% !important;
+    display: inline-table;
+    padding: 10px;
+  }
 
   .router-link-exact-active {
     font-weight: normal;
@@ -247,7 +247,7 @@ padding:10px;
 
   .card-content {
     padding: 10px;
-    width:100%;
+    width: 100%;
     h2 {
       margin-top: 0;
       margin-bottom: .5em;
@@ -265,8 +265,9 @@ padding:10px;
   }
 
   #featured-artists h2 {
-  margin-bottom:40px!important;
-}
+    margin-bottom: 40px !important;
+  }
+
   #featured-artists img, .artists img {
     width: 75%;
   }
@@ -361,14 +362,14 @@ padding:10px;
 
   .thumbnail {
 
-    text-align:center;
+    text-align: center;
   }
 
-  .uppercase{
-  text-transform:uppercase;
-  text-align:center;
-  font-size:20px;
-  font-weight:400;
+  .uppercase {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
   }
 
   .edition-type {
