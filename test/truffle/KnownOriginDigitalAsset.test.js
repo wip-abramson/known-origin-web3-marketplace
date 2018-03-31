@@ -1608,8 +1608,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         uri.should.be.equal(newBaseUri + _tokenURI);
       });
     });
-    
-    describe.only('can not call fallback function', function () {
+
+    describe('fallback function', function () {
 
       beforeEach(async function () {
         await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
