@@ -85,6 +85,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
     commissionAccount = _commissionAccount;
     developerAccount = _developerAccount;
 
+    // FIXME thought? Don't add in constructor and make obvious - ADD AFTER CREATION AS PART OF SETUP?
+    // FIXME as if we change it this will always be the first thing reviewers will see.....?
     // Setup default commission structures
     editionTypeToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
     editionTypeToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
