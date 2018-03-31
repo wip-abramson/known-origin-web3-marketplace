@@ -86,6 +86,14 @@
           "costInEth": 0.11
         },
         {
+          "artworkName": "Functional Flattery",
+          "ipfsPath": "functional_flattery",
+          "edition": "JOCFUNCFLT001DIG",
+          "numberOfEditions": 10,
+          "fiatCost": 25,
+          "costInEth": 0.001989
+        },
+        {
           "artworkName": "Pace of Life",
           "ipfsPath": "pace_of_life",
           "edition": "JOCPACOFLF001DIG",
@@ -110,12 +118,169 @@
           "costInEth": 0.001989
         }
       ]
+    },
+    {
+      "name": "Jane Bowyer",
+      "artworks": [
+        {
+          "artworkName": "Pattern Play #1",
+          "ipfsPath": "pattern_play_1",
+          "edition": "JBOPATPLAY001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 28,
+          "costInEth": 0.002
+        }
+      ]
+    },
+    {
+      "name": "Sam Taylor",
+      "artworks": [
+        {
+          "artworkName": "Nature Man",
+          "ipfsPath": "nature_man",
+          "edition": "STANATUREMAN1PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 250,
+          "costInEth": 0.89
+        },{
+          "artworkName": "Inside Man",
+          "ipfsPath": "inside_man",
+          "edition": "STAINSIDEMAN1PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 200,
+          "costInEth": 0.69
+        }
+      ]
+    },
+    {
+      "name": "David Arnott",
+      "artworks": [
+        {
+          "artworkName": "Frank Sidebottom",
+          "ipfsPath": "frank_sidebottom",
+          "edition": "DVAFRNKSIDBMEPHY",
+          "numberOfEditions": 1,
+          "fiatCost": 1200,
+          "costInEth": 2.71
+        }
+      ]
+    },
+    {
+      "name": "Paper Hawk",
+      "artworks": [
+        {
+          "artworkName": "Peep",
+          "ipfsPath": "peep",
+          "edition": "LHKPEEP000001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 150,
+          "costInEth": 0.527
+        },
+        {
+          "artworkName": "Peep",
+          "ipfsPath": "peep",
+          "edition": "LHKPEEP000001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 15,
+          "costInEth": 0.0527
+        },
+        {
+          "artworkName": "Buzz",
+          "ipfsPath": "buzz",
+          "edition": "LHKBUZZ000001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 300,
+          "costInEth": 1.053
+        },
+        {
+          "artworkName": "Buzz",
+          "ipfsPath": "buzz",
+          "edition": "LHKBUZZ000001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 30,
+          "costInEth": 0.1053
+        },
+        {
+          "artworkName": "Roar",
+          "ipfsPath": "roar",
+          "edition": "LHKROAR000001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 550,
+          "costInEth": 1.93
+        }
+      ]
+    },
+    {
+      "name": "Katie O'Rourke",
+      "artworks": [
+        {
+          "artworkName": "Berlin",
+          "ipfsPath": "berlin",
+          "edition": "KORBERLIN0001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.351
+        },
+        {
+          "artworkName": "Berlin",
+          "ipfsPath": "berlin",
+          "edition": "KORBERLIN0001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 20,
+          "costInEth": 0.071
+        },
+        {
+          "artworkName": "Lisbon",
+          "ipfsPath": "lisbon",
+          "edition": "KORLISBON0001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.351
+        },
+        {
+          "artworkName": "Lisbon",
+          "ipfsPath": "lisbon",
+          "edition": "KORLISBON0001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 20,
+          "costInEth": 0.071
+        },
+        {
+          "artworkName": "Leeds",
+          "ipfsPath": "leeds",
+          "edition": "KORLEEDS00001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.351
+        },
+        {
+          "artworkName": "Leeds",
+          "ipfsPath": "leeds",
+          "edition": "KORLEEDS00001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 20,
+          "costInEth": 0.071
+        },
+        {
+          "artworkName": "Amsterdam",
+          "ipfsPath": "amsterdam",
+          "edition": "KORAMSTERDAM0PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.351
+        },
+        {
+          "artworkName": "Amsterdam",
+          "ipfsPath": "amsterdam",
+          "edition": "KORAMSTERDAM0DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 20,
+          "costInEth": 0.071
+        }
+      ]
     }
   ]
 }
-
-
-
 
 
 
