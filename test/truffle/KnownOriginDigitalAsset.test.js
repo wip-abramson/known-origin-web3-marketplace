@@ -782,7 +782,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         ownerTokens.should.be.deep.equal(range);
 
         let editionInfo = await this.token.editionInfo(firstTokenId);
-        editionInfo[2].toNumber(10).should.be.equal(NUMBER_OF_EDITIONS);
+        editionInfo[2].toNumber().should.be.equal(NUMBER_OF_EDITIONS);
       });
 
       describe('price in wei', function () {
