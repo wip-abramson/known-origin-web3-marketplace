@@ -11,7 +11,7 @@ import "./Strings.sol";
 * A curator can mint digital assets and sell them via purchases (crypto via Ether or Fiat)
 */
 contract KnownOriginDigitalAsset is ERC721Token {
-  using SafeMath for uint;
+  using SafeMath for uint256;
 
   struct CommissionStructure {
     uint8 curator;
@@ -27,7 +27,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
   // the person who puts on the event
   address public commissionAccount;
 
-  // base of tokenUri - allows resetting
   string public tokenBaseURI = "https://ipfs.infura.io/";
 
   uint256 public totalPurchaseValueInWei;
@@ -43,7 +42,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   mapping(uint256 => uint256) internal tokenIdToPriceInWei;
   mapping(uint256 => uint32) internal tokenIdToPurchaseFromTime;
 
-  mapping(bytes16 => uint8) internal editionToEditionNumber;
+  mapping(bytes16 => uint256) internal editionToEditionNumber;
 
   event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
 
@@ -81,15 +80,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
     _;
   }
 
-  modifier onlyNewEditions(bytes16 _edition) {
-    require(editionToEditionNumber[_edition] == 0);
-    _;
-  }
-
-  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount)
-  public
-  ERC721Token("KnownOriginDigitalAsset", "KODA")
-  {
+  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount) public ERC721Token("KnownOriginDigitalAsset", "KODA") {
     curatorAccount = msg.sender;
     commissionAccount = _commissionAccount;
     developerAccount = _developerAccount;
@@ -104,47 +95,23 @@ contract KnownOriginDigitalAsset is ERC721Token {
     revert();
   }
 
-  function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _purchaseFromTime)
-  public
-  onlyManagement
-  onlyNewEditions(_edition) {
-
-    uint256 offset = allTokens.length;
-    for (uint8 i = 0; i < _totalEdition; i++) {
-      uint256 _tokenId = offset + i;
-      super._mint(msg.sender, _tokenId);
-      super._setTokenURI(_tokenId, _tokenURI);
-      _populateTokenData(_tokenId, _edition, i + 1, _priceInWei, _purchaseFromTime);
-    }
-  }
-
-  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate)
-  public
-  onlyManagement
-  onlyNewEditions(_edition) {
-
+  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate) public onlyManagement {
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
-    _populateTokenData(_tokenId, _edition, 1, _priceInWei, _auctionStartDate);
+    _populateTokenData(_tokenId, _edition, _priceInWei, _auctionStartDate);
   }
 
-  function _populateTokenData(uint _tokenId, bytes16 _edition, uint8 _editionNumber, uint256 _priceInWei, uint32 _purchaseFromTime)
-  internal
-  {
+  function _populateTokenData(uint _tokenId, bytes16 _edition, uint256 _priceInWei, uint32 _purchaseFromTime) internal {
     tokenIdToEdition[_tokenId] = _edition;
-    editionToEditionNumber[_edition] = _editionNumber;
+    editionToEditionNumber[_edition] = editionToEditionNumber[_edition].add(1);
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     tokenIdToPurchaseFromTime[_tokenId] = _purchaseFromTime;
   }
 
-  function burn(uint256 _tokenId)
-  public
-  onlyManagement
-  onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
-  {
+  function burn(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyManagementOwnedToken(_tokenId) {
     // TODO fix me - clean up internal metadata when being burnt
+    // _populateTokenData(_tokenId, 0x0, 0, 0) << will work?
     super._burn(ownerOf(_tokenId), _tokenId);
   }
 
@@ -284,7 +251,7 @@ contract KnownOriginDigitalAsset is ERC721Token {
   function editionInfo(uint256 _tokenId) public view returns (
     uint256 _tokId,
     bytes16 _edition,
-    uint8 _editionNumber,
+    uint256 _editionNumber,
     string _tokenURI
   ) {
 

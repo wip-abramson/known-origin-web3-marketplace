@@ -754,76 +754,17 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe('mintEdition()', function () {
-      const NUMBER_OF_EDITIONS = 10;
-
-      beforeEach(async function () {
-        await this.token.mintEdition(_tokenURI, _editionDigital, NUMBER_OF_EDITIONS, _priceInWei, _purchaseFromTime, {
-          from: _curator
-        });
-      });
-
-      describe('balanceOf', function () {
-        describe('when the given address owns some tokens', function () {
-          it('returns the amount of tokens owned by the given address', async function () {
-            const balance = await this.token.balanceOf(_curator);
-            balance.should.be.bignumber.equal(10);
-          });
-        });
-
-        describe('when the given address does not own any tokens', function () {
-          it('returns 0', async function () {
-            const balance = await this.token.balanceOf(buyer);
-            balance.should.be.bignumber.equal(0);
-          });
-        });
-      });
-
-      it('assetInfo() & editionInfo() is fully populated', async function () {
-        const range = _.range(0, NUMBER_OF_EDITIONS);
-        for (let id of range) {
-          const assetInfo = await this.token.assetInfo(id);
-
-          let tokenId = assetInfo[0];
-          tokenId.should.be.bignumber.equal(id);
-
-          let owner = assetInfo[1];
-          owner.should.be.equal(_curator);
-
-          let purchaseState = assetInfo[2];
-          purchaseState.should.be.bignumber.equal(Unsold);
-
-          let priceInWei = assetInfo[3];
-          priceInWei.should.be.bignumber.equal(_priceInWei);
-
-          let auctionStartDate = assetInfo[4];
-          auctionStartDate.should.be.bignumber.equal(_purchaseFromTime);
-
-          let editionInfo = await this.token.editionInfo(id);
-
-          let tokenId2 = editionInfo[0];
-          tokenId2.should.be.bignumber.equal(id);
-
-          let edition = editionInfo[1];
-          web3.toAscii(edition).should.be.equal(_editionDigital);
-
-          let editionNumber = editionInfo[2];
-          editionNumber.should.be.bignumber.equal(NUMBER_OF_EDITIONS);
-
-          let tokenUri = editionInfo[3];
-          tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
-        }
-      });
-    });
-
     describe('purchaseWithEther()', function () {
       const NUMBER_OF_EDITIONS = 10;
       const tokenToPurchase = new BigNumber(3);
 
       beforeEach(async function () {
-        await this.token.mintEdition(_tokenURI, _editionDigital, NUMBER_OF_EDITIONS, _priceInWei, _purchaseFromTime, {
-          from: _curator
-        });
+        const totalInEdition = _.range(0, NUMBER_OF_EDITIONS);
+        for (let tokenId of totalInEdition) {
+          await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, {
+            from: _curator
+          });
+        }
 
         //Ensure all Unsold
         const range = _.range(0, NUMBER_OF_EDITIONS);
@@ -834,8 +775,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           let ownerOf = await this.token.ownerOf(tokenId);
           ownerOf.should.be.equal(_curator);
         }
-
-
 
         //Ensure all Ids as expected and owned by _curator
         let ownerTokens = await this.token.tokensOf(_curator);
@@ -1562,31 +1501,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         updatedCommissionAccountBalance.should.be.bignumber.equal(this.commissionAccountBalance);
       });
 
-    });
-
-    describe('can not re-use edition', function () {
-
-      beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
-          from: _curator
-        });
-
-        await this.token.mint(_tokenURI, _editionDigital, 0, _purchaseFromTime, {
-          from: _curator
-        });
-      });
-
-      it('physical edition already exists so revert', async function () {
-        await assertRevert(this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, {
-          from: _curator
-        }));
-      });
-
-      it('digital edition already exists so revert', async function () {
-        await assertRevert(this.token.mint(_tokenURI, _editionDigital, 0, _purchaseFromTime, {
-          from: _curator
-        }));
-      });
     });
 
     describe('can re-set token base URI', function () {
