@@ -2,7 +2,7 @@
   <div class="artists">
     <h1><router-link :to="{ name: 'dashboard' }" class="back-arrow">&lt;</router-link> Artists</h1>
 
-    <div class="centered">
+    <div>
       <section class="cards">
         <artist v-for="artist in artists" :key="artist.name" :artist="artist"></artist>
       </section>

@@ -63,12 +63,13 @@
 </script>
 
 <style lang="scss">
-$primary: #3e27d9;
+$primary:#2366de;
 $secondary: #f2f2f2;
 $black: black;
 $gray: gray;
 $white: white;
 $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
+
 $sold: red;
 $warning: darkorange;
 
@@ -79,21 +80,32 @@ $warning: darkorange;
 /* mq 40em*/
 /* mq 60em*/
 h1 {
-  display: block;
-  font-size: 38px;
-  margin-top: 35px;
-  margin-bottom: 35px;
-  color: $primary;
-  border-bottom: 1px;
+display: block;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #2366de;
+    border-bottom: 1px;
+}
+
+#splash h2{
+color:#FFF;
+font-size:18px;
+
+
+
 }
 h2 {
+color: $primary;
   display: block;
   font-size: 28px;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top:20px;
+  margin-bottom:20px;
+
 }
 h3 {
   display: block;
+  color: $primary;
   font-size: 16px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -101,8 +113,17 @@ h3 {
 }
 
 p {
-  padding: 5px;
-  line-height: 1.5em;
+  
+  line-height: 28px;
+  margin-bottom:10px;
+  color:#545454;
+}
+
+#footer p{
+color: rgba(255,255,255,0.5);
+}
+*{
+box-sizing:border-box;
 }
 
 .btn {
@@ -111,7 +132,9 @@ p {
   font-size: 20px;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
-  margin: 5px;
+  margin: 10px;
+  border:none;
+  border-radius:7px;
   &:hover {
     text-decoration: none;
   }
@@ -121,13 +144,13 @@ p {
   }
 }
 .router-link-exact-active {
-  font-weight: bold;
+  font-weight: normal;
 }
 #app {
   font-family: $font_family_1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $secondary;
+  background-color: #f2f5fb;
   margin: 0;
 }
 a {
@@ -137,6 +160,7 @@ a {
   color: $primary;
   padding: 10px;
   margin-bottom: 10px;
+  background-color:#FDFDFD;
 }
 #footer {
   background-color: $primary;
@@ -149,9 +173,9 @@ a {
   }
 }
 .header-branding {
-  font-weight: 600;
+  font-weight: 300;
   font-style: normal;
-  font-size: 34px;
+  font-size: 26px;
   letter-spacing: 0em;
   line-height: 1em;
   text-transform: none;
@@ -159,7 +183,7 @@ a {
 }
 .centered {
   margin: 0 auto;
-  padding: 0 1em;
+  padding: 0 10px;
 }
 .pad-top {
   padding-top: 20px;
@@ -172,25 +196,33 @@ a {
 }
 .card {
   background: $white;
-  margin-bottom: 2em;
-  max-width: 400px;
+  margin-bottom: 15px;
+  
   a {
     color: $black;
     text-decoration: none;
   }
 }
 .card-content {
-  padding: 1.4em;
+  padding: 10px;
   h2 {
     margin-top: 0;
     margin-bottom: .5em;
     font-weight: normal;
+    text-align:center;
   }
   p {
     font-size: 95%;
-    padding: 10px;
+
   }
 }
+#featured-artists{
+margin-top:20px!important;
+}
+
+#featured-artists img, .artists img{
+width: 75%;
+margin-left:12%;}
 img {
   width: 100%;
   height: auto;
@@ -206,8 +238,9 @@ img {
 }
 .pull-right {
   float: right;
-  margin: 10px;
+  margin-top: 6px;
   text-decoration: none;
+  font-size:15px;
 }
 .header-dash {
   text-decoration: none;
@@ -238,6 +271,8 @@ img {
     display: flex;
     flex: 0 1 calc(50% - 0.5em);
   }
+  
+  
 }
 @media screen and (min-width: 60em) {
   .cards {
@@ -248,6 +283,24 @@ img {
     display: flex;
     flex: 0 1 calc(33% - 0.5em);
   }
+
+  
+}
+
+@media only screen and (max-width: 768px) {
+    #topSection{
+        flex-direction:column!important;
+    }
+    #splash{
+    width:100%!important;}
+    
+    #intro{
+    width:100%!important;
+    }
+    
+    #intro h2{
+    margin-top:20px!important;
+    }
 }
 
 .thumbnail {
@@ -311,27 +364,58 @@ strong {
 }
 
 #splash {
+display:table;
   text-align: center;
   color: $white;
   background-image: url('../static/background.jpg');
-  min-height: 300px;
+  width:50%;
+  height:300px;
+
 
   .strap {
-    margin: 50px;
-    padding-top: 100px;
-    font-size: 3em;
+        padding-top: 58px;
+    font-size: 28px;
     line-height: 1.5em;
+    min-height: 164px;
   }
 }
 
 #quote {
   text-align: left;
   font-size: 18px;
-  font-weight: bold;
-  padding: 25px;
+  font-style: italic;
+  padding: 10px;
 }
 .assets_to_buy {
   background: $white;
   max-width: 400px;
 }
+
+.twitterLink{
+display: block;
+text-align: center;
+margin-top:20px;
+
+}
+
+.artist-info{
+display:flex;   
+height:90%;
+flex-direction:column;
+}
+
+#topSection{
+display:flex;
+flex-direction:row;
+}
+
+#intro{
+padding-left:10px;
+width:50%;
+}
+
+#intro h2{
+margin-top:0px;
+}
+
 </style>

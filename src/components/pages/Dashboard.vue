@@ -1,6 +1,8 @@
 <template>
   <div id="dashboard">
 
+<div id="topSection">
+
     <div id="splash">
       <h2 class="strap">Buy original artwork and rare digital art</h2>
       <router-link :to="{ name: 'gallery' }" tag="button" class="btn">View gallery</router-link>
@@ -8,7 +10,7 @@
 
     <div id="intro">
       <h2>What is KnownOrigin.io</h2>
-      <div class="centered">
+      <div>
         <section>
           <p>We have built a platform that allows people to own original art linked to a digital asset.</p>
         </section>
@@ -25,21 +27,21 @@
         </section>
       </div>
     </div>
-
+</div>
     <div id="featured-artists">
       <h2>Featured artists</h2>
-      <div class="centered">
+   
         <section class="cards">
             <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
 
-          <router-link :to="{ name: 'artists' }" tag="button" class="btn btn-center">View artists</router-link>
+          
         </section>
-      </div>
+      
     </div>
-
+<router-link :to="{ name: 'artists' }" tag="button" class="btn btn-center">View all artists</router-link>
     <div id="how-ko-works">
       <h2>How KnownOrigin.io works</h2>
-      <div class="centered">
+      <div>
         <section>
           <p>
             Selling va the KnownOrigin marketplace is a new wat for artist, illustrators and creative practitioners to monetize their craft.
