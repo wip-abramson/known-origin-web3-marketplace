@@ -1,7 +1,8 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.20;
 
 
 import "./ERC721Token.sol";
+import "./ERC165.sol";
 
 
 /**
@@ -9,8 +10,47 @@ import "./ERC721Token.sol";
 *
 * A curator can mint digital assets and sell them via purchases (crypto via Ether or Fiat)
 */
-contract KnownOriginDigitalAsset is ERC721Token {
+contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   using SafeMath for uint;
+
+  bytes4 constant InterfaceSignature_ERC165 =
+    bytes4(keccak256('supportsInterface(bytes4)'));
+
+  bytes4 constant InterfaceSignature_ERC721Enumerable =
+    bytes4(keccak256('totalSupply()')) ^
+    bytes4(keccak256('tokenOfOwnerByIndex(address,uint256)')) ^
+    bytes4(keccak256('tokenByIndex(uint256)'));
+
+  bytes4 constant InterfaceSignature_ERC721Metadata =
+    bytes4(keccak256('name()')) ^
+    bytes4(keccak256('symbol()')) ^
+    bytes4(keccak256('tokenURI(uint256)'));
+
+  bytes4 constant InterfaceSignature_ERC721 =
+    bytes4(keccak256('balanceOf(address)')) ^
+    bytes4(keccak256('ownerOf(uint256)')) ^
+    bytes4(keccak256('exists(uint256)')) ^
+    bytes4(keccak256('approve(address,uint256)')) ^
+    bytes4(keccak256('getApproved(uint256)')) ^
+    bytes4(keccak256('setApprovalForAll(address,bool)')) ^
+    bytes4(keccak256('isApprovedForAll(address,address)')) ^
+    bytes4(keccak256('transferFrom(address,address,uint256)')) ^
+    bytes4(keccak256('safeTransferFrom(address,address,uint256)')) ^
+    bytes4(keccak256('safeTransferFrom(address,address,uint256,bytes)'));
+
+  /**
+   * @notice Introspection interface as per ERC-165 (https://github.com/ethereum/EIPs/issues/165).
+   * @dev Returns true for any standardized interfaces implemented by this contract.
+   * @param _interfaceID bytes4 the interface to check for
+   * @return true for any standardized interfaces implemented by this contract.
+   */
+  function supportsInterface(bytes4 _interfaceID) external view returns (bool)
+  {
+    return ((_interfaceID == InterfaceSignature_ERC165)
+      || (_interfaceID == InterfaceSignature_ERC721)
+      || (_interfaceID == InterfaceSignature_ERC721Enumerable)
+      || (_interfaceID == InterfaceSignature_ERC721Metadata));
+  }
 
   struct CommissionStructure {
     uint8 curator;
