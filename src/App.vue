@@ -87,7 +87,7 @@
 </script>
 
 <style lang="scss">
-  $primary: #2366de;
+  $primary: #3e27d9;
   $secondary: #f2f2f2;
   $black: black;
   $gray: gray;
@@ -152,14 +152,18 @@
   }
 
   .btn {
+  display:block;
+  margin-bottom:60px;
+  width:100%;
     background: $primary;
     color: $secondary;
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
-    margin: 10px;
+  
     border: none;
     border-radius: 7px;
+    
     &:hover {
       text-decoration: none;
     }
@@ -168,6 +172,12 @@
       text-decoration: none;
     }
   }
+
+#splash .btn{
+width:50%!important;
+display:inline-table;
+padding:10px;
+}
 
   .router-link-exact-active {
     font-weight: normal;
@@ -242,6 +252,7 @@
 
   .card-content {
     padding: 10px;
+    width:100%;
     h2 {
       margin-top: 0;
       margin-bottom: .5em;
@@ -257,10 +268,12 @@
   #featured-artists {
     margin-top: 20px !important;
   }
-
+  
+  #featured-artists h2 {
+  margin-bottom:40px!important;
+}
   #featured-artists img, .artists img {
     width: 75%;
-    margin-left: 12%;
   }
 
   img {
@@ -282,7 +295,6 @@
 
   .pull-right {
     float: right;
-    margin-top: 6px;
     text-decoration: none;
     font-size: 15px;
   }
@@ -353,7 +365,15 @@
   }
 
   .thumbnail {
-    position: relative;
+
+    text-align:center;
+  }
+  
+  .uppercase{
+  text-transform:uppercase;
+  text-align:center;
+  font-size:20px;
+  font-weight:400;
   }
 
   .edition-type {
