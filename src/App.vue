@@ -2,11 +2,11 @@
   <div id="app">
 
     <header id="header" class="centered">
-      <router-link :to="{ name: 'account' }" style="float: right" class="no-text-decoration">
-          <img src="/../static/account.svg" style="height:25px"/>
+      <router-link :to="{ name: 'account' }" class="pull-right">
+        <img src="/../static/account.svg" style="height:25px"/>
       </router-link>
-      <div class="header-branding">
-        <router-link :to="{ name: 'dashboard' }" class="no-text-decoration">KnownOrigin.io</router-link>
+      <div class="header-branding ">
+        <router-link :to="{ name: 'dashboard' }" class="header-dash">KnownOrigin.io</router-link>
       </div>
     </header>
 
@@ -38,10 +38,10 @@
       <!--<p>(+44) 7715 86 28 33</p>-->
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
 
-      <br/>
-
-      <router-link :to="{ name: 'license' }">License</router-link> |
-      <router-link :to="{ name: 'details' }">Contract details</router-link> |
+      <router-link :to="{ name: 'license' }">License</router-link>
+      |
+      <router-link :to="{ name: 'details' }">Contract details</router-link>
+      |
       <router-link :to="{ name: 'assets' }">Assets</router-link>
     </footer>
   </div>
@@ -63,14 +63,12 @@
       ...mapGetters([]),
       ...mapState([]),
     },
-    mounted () {
+    mounted() {
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 === 'undefined') {
-        console.log('No web3? You should consider trying MetaMask!');
-        this.$modal.show('no-web3-found');
+        console.error('No web3 detected...');
         return;
       }
-
       if (web3) {
         // Use Mist / MetaMask's / provided provider
         window.web3 = new Web3(web3.currentProvider);
@@ -81,28 +79,23 @@
         // Find current network
         this.$store.dispatch(actions.GET_CURRENT_NETWORK);
 
+      } else {
+        // TODO fire action - WEB_3_NOT_FOUND - show error banner
       }
     },
   };
 </script>
 
 <style lang="scss">
-
-  $primary: #3d3bee;
-
-  $background: #f8f8f8;
-
-  $strong-text: #4f4f6f;
-  $normal-text: #757587;
-
-
-  $font_family_1: 'Avenir Light', Helvetica, Arial, sans-serif;
+  $primary: #3e27d9;
+  $secondary: #f2f2f2;
+  $black: black;
+  $gray: gray;
+  $white: white;
+  $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
 
   $sold: red;
   $warning: darkorange;
-  $success: #2ed573;
-
-  $white: #fff;
 
   /*--------------------------------------------------------------
     Header styles minus menu
@@ -110,179 +103,129 @@
   /* Flexbox styles */
   /* mq 40em*/
   /* mq 60em*/
+  h1 {
+    display: block;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: $primary;
+    border-bottom: 1px;
+  }
+
+  #splash h2 {
+    color: #FFF;
+    font-size: 18px;
+
+  }
+
+  h2 {
+    color: $primary;
+    display: block;
+    font-size: 28px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+  }
+
+  h3 {
+    display: block;
+    color: $primary;
+    font-size: 16px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
+  p {
+
+    line-height: 28px;
+    margin-bottom: 10px;
+    color: #545454;
+  }
+
+  #footer p {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .btn {
+    display: block;
+    margin-bottom: 60px;
+    width: 100%;
+    background: $primary;
+    color: $secondary;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    border-radius: 7px;
+
+    &:hover {
+      text-decoration: none;
+    }
+    &:disabled {
+      background: $gray;
+      text-decoration: none;
+    }
+  }
+
+  #splash .btn {
+    width: 50% !important;
+    display: inline-table;
+    padding: 10px;
+  }
+
+  .router-link-exact-active {
+    font-weight: normal;
+  }
 
   #app {
     font-family: $font_family_1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: $background;
+    background-color: #f2f5fb;
     margin: 0;
-  }
-
-  body {
-    background-color: $background;
-  }
-
-  h1 {
-    display: block;
-    font-size: 28px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    color: $strong-text;
-    border-bottom: 1px;
-    text-align: center;
-  }
-
-  h2 {
-    display: block;
-    font-size: 28px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    color: $strong-text;
-  }
-
-
-  h3 {
-    display: block;
-    font-size: 28px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: $strong-text;
-    line-height: 1.25;
-  }
-
-  h4 {
-    font-size: 24px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    color: $strong-text;
-  }
-
-  p {
-    font-size: 18px;
-    padding: 5px;
-    line-height: 1.5em;
-    color: $normal-text;
-  }
-
-  hr {
-    margin: 25px;
   }
 
   a {
     color: $primary;
-    text-decoration: none;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  strong {
-    font-weight: bold;
-  }
-
-
-  .btn {
-    -webkit-border-radius: 28;
-    -moz-border-radius: 28;
-    border-radius: 28px;
-    color: $primary;
-    font-size: 18px;
-    padding: 5px 10px 5px 10px;
-    border: solid $primary 2px;
-    text-decoration: none;
-    display: block;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 150px;
-
-    &:hover {
-      text-decoration: none;
-    }
-
-    &:disabled {
-      background: $normal-text;
-      text-decoration: none;
-    }
-
-    &.btn-sold {
-      background: $sold;
-      color: $white;
-      border: solid $sold 2px;
-    }
-
-    &.btn-warning {
-      background-color: $warning;
-      border: solid $warning 2px;
-      color: $white;
-    }
-
-    &.btn-danger {
-      background-color: $sold;
-    }
-
-    &.btn-muted {
-      border: solid $normal-text 2px;
-      color: $normal-text;
-    }
-
-    &.btn-success {
-      background-color: $success;
-      border: solid $success 2px;
-      color: $white;
-
-      &:disabled {
-        background: $normal-text;
-        text-decoration: none;
-        border: solid $normal-text 2px;
-      }
-    }
-
-    &.btn-primary {
-      background: $primary;
-      color: $white;
-    }
   }
 
   #header {
     color: $primary;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    background-color: $white !important;
-
-    .header-branding {
-      font-size: 26px;
-      font-weight: 200;
-      text-transform: none;
-      color: $primary;
-    }
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #FDFDFD;
   }
 
   #footer {
     background-color: $primary;
-    color: $background;
+    color: $secondary;
     padding: 10px;
     padding-bottom: 50px;
-
     a {
-      color: $background;
+      color: $secondary;
       text-decoration: none;
     }
+  }
 
-    p {
-      color: $background;
-    }
+  .header-branding {
+    font-weight: 300;
+    font-style: normal;
+    font-size: 26px;
+    letter-spacing: 0em;
+    line-height: 1em;
+    text-transform: none;
+    color: $primary;
   }
 
   .centered {
-    /*margin: 0 auto;*/
-    /*padding: 0 1em;*/
-  }
-
-  .uppercase {
-    text-transform: uppercase;
+    margin: 0 auto;
+    padding: 0 10px;
   }
 
   .pad-top {
@@ -297,48 +240,80 @@
     margin-bottom: 150px;
   }
 
-  .muted {
-    color: $normal-text;
+  .card {
+    background: $white;
+    margin-bottom: 15px;
   }
 
-  /*.btn-center {*/
-    /*text-align: center;*/
-  /*}*/
+  .card-content {
+    padding: 10px;
+    width: 100%;
+    h2 {
+      margin-top: 0;
+      margin-bottom: .5em;
+      font-weight: normal;
+      text-align: center;
+    }
+    p {
+      font-size: 95%;
 
-  .no-text-decoration {
+    }
+  }
+
+  #featured-artists {
+    margin-top: 20px !important;
+  }
+
+  #featured-artists h2 {
+    margin-bottom: 40px !important;
+  }
+
+  #featured-artists img, .artists img {
+    width: 75%;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .muted {
+    color: $gray;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .btn-center {
+    text-align: center;
+  }
+
+  .pull-right {
+    float: right;
+    text-decoration: none;
+    font-size: 15px;
+  }
+
+  .header-dash {
     text-decoration: none;
   }
 
   .back-arrow {
     font-size: 1.25em;
     text-decoration: none;
-    color: $strong-text;
+    padding-right: 20px;
+  }
+
+  .btn-sold {
+    background-color: $sold;
+    color: $white;
   }
 
   .token-id {
-    color: $strong-text;
-  }
-
-  .card {
-    background: $white;
-    /*margin-bottom: 10px;*/
-  }
-
-  .card-content {
-    padding: 1.4em;
-    text-align: center;
-    /*display: flex;*/
-    /*<!--box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);-->*/
-    margin-bottom: 0;
-    h2 {
-      margin-top: 0;
-      margin-bottom: .5em;
-      font-weight: normal;
-    }
-    p {
-      font-size: 95%;
-      padding: 10px;
-    }
+    font-weight: bold;
+    color: $primary;
+    font-size: 1.25em;
   }
 
   @media screen and (min-width: 40em) {
@@ -349,14 +324,11 @@
       flex-wrap: wrap;
     }
     .card {
-      margin-bottom: 25px;
+      margin-bottom: 1em;
       display: flex;
       flex: 0 1 calc(50% - 0.5em);
     }
-    .centered {
-      margin: 0 auto;
-      padding: 0 10px;
-    }
+
   }
 
   @media screen and (min-width: 60em) {
@@ -364,117 +336,157 @@
       margin-top: inherit;
     }
     .card {
-      margin-bottom: 25px;
+      margin-bottom: 2em;
       display: flex;
       flex: 0 1 calc(33% - 0.5em);
     }
-    .centered {
-      margin: 0 auto;
-      padding: 0 10px;
+
+  }
+
+  @media only screen and (max-width: 768px) {
+    #topSection {
+      flex-direction: column !important;
+    }
+    #splash {
+      width: 100% !important;
+    }
+
+    #intro {
+      width: 100% !important;
+    }
+
+    #intro h2 {
+      margin-top: 20px !important;
     }
   }
 
   .thumbnail {
-    position: relative;
-  }
 
-  .text-center {
     text-align: center;
   }
 
-  .text-danger {
-    color: $sold;
-  }
-
-  .text-success {
-   color: $success;
-  }
-
-  #featured-artists, #artists {
-    .card {
-      background-color: $background !important;
-      box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);
-      img {
-        width: 50%;
-      }
-    }
+  .uppercase {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
   }
 
   .edition-type {
     position: absolute;
-    top: 0;
-    left: 0;
     background-color: $primary;
-    color: $background;
+    color: $secondary;
     padding: 10px;
     opacity: 0.8;
   }
 
   .edition-sold {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 100px;
+    right: 100px;
     background-color: $sold;
-    color: $background;
-    padding: 10px;
-    opacity: 0.6;
-    font-size: 1.25em;
-  }
-
-  .edition-sold-out {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    background-color: $sold;
-    color: $background;
+    color: $secondary;
     padding: 10px;
     opacity: 0.6;
     font-size: 1.25em;
   }
 
   .edition-run {
-    background-color: $normal-text;
-    color: $background;
+    background-color: $gray;
+    color: $secondary;
     padding: 5px;
   }
 
-  #splash {
+  .btn-warning {
+    background-color: $warning;
+  }
+
+  .btn-danger {
+    background-color: $sold;
+  }
+
+  .error {
+    background-color: $sold;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  .license-text {
+    font-size: 0.8em;
+    margin: 5px;
+  }
+
+  .current-network {
+    font-size: 12px;
+  }
+
+  #partners, #quote {
     text-align: center;
+    margin: 5px;
+  }
+
+  #splash {
+    display: table;
+    text-align: center;
+    color: $white;
     background-image: url('../static/background.jpg');
-    min-height: 300px;
-    margin: 0 10px;
+    width: 50%;
+    height: 300px;
 
     .strap {
-      margin: 50px;
-      padding-top: 100px;
-      font-size: 3em;
+      padding-top: 58px;
+      font-size: 28px;
       line-height: 1.5em;
+      min-height: 164px;
     }
   }
 
-  #how {
-    h3 {
-      font-size: 18px;
-      color: $normal-text;
-      margin-bottom: 0px;
-    }
-
-    h4 {
-      margin-top: 5px;
-    }
+  #quote {
+    text-align: left;
+    font-size: 18px;
+    font-style: italic;
+    padding: 10px;
   }
 
   .assets_to_buy {
     background: $white;
     max-width: 400px;
-    margin: auto;
   }
 
-  .no-web3-found-container {
-    padding: 20px;
-    font-size: 30px;
-    color: $sold;
-    height: 400px;
+  .twitterLink {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+
   }
+
+  .artist-info {
+    display: flex;
+    height: 90%;
+    flex-direction: column;
+  }
+
+  #topSection {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #intro {
+    padding-left: 10px;
+    width: 50%;
+  }
+
+  #intro h2 {
+    margin-top: 0px;
+  }
+
+.viewAllArtists{
+width:100%;
+display:block;
+text-align:center;
+font-size:20px;
+margin-bottom:40px;}
 
 </style>
