@@ -484,4 +484,11 @@
     margin-top: 0px;
   }
 
+.viewAllArtists{
+width:100%;
+display:block;
+text-align:center;
+font-size:20px;
+margin-bottom:40px;}
+
 </style>
