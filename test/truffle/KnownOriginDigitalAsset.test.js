@@ -754,7 +754,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe('purchaseWithEther()', function () {
+    describe.only('purchaseWithEther()', function () {
       const NUMBER_OF_EDITIONS = 10;
       const tokenToPurchase = new BigNumber(3);
 
@@ -780,6 +780,9 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         let ownerTokens = await this.token.tokensOf(_curator);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
         ownerTokens.should.be.deep.equal(range);
+
+        let editionInfo = await this.token.editionInfo(firstTokenId);
+        editionInfo[2].toNumber(10).should.be.equal(NUMBER_OF_EDITIONS);
       });
 
       describe('price in wei', function () {
