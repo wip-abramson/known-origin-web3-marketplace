@@ -49,25 +49,43 @@ const loadSeedData = (instance, _curatorAccount, _openingTime) => {
 
   let flatInserts = flattenTestData();
 
-  return Promise.all(_.map(flatInserts, (insert) => {
+  // convert gallery.json into individual inserts decorated with IPFS data
+  let populatedMintItems = _.flatMap(flatInserts, (insert) => {
     console.log(`Seeding test data for [${insert.artworkName}]`);
-
     return ipfsUploader.uploadMetaData(insert)
       .then((tokenUri) => {
 
-        // mint edition
-        return instance.mintEdition(
-          tokenUri,
-          insert.edition,
-          insert.numberOfEditions,
-          insert.costInWei.toString(10),
-          _openingTime,
-          {
-            from: _curatorAccount,
-          }
-        );
+        return _.map(_.range(0, insert.numberOfEditions), function (count) {
+          console.log(`Populating Sourcing [${insert.edition}] - item [${count}]`);
+
+          return {
+            tokenUri,
+            edition: insert.edition,
+            costInWei: insert.costInWei.toString(10),
+            openingTime: _openingTime
+          };
+        });
       });
-  }));
+  });
+
+  // Each each set of inserts per edition, Promise.each is serial to prevent duplicate transaction issues
+  return Promise.each(populatedMintItems, function (insertsForEditionArray) {
+    console.log(`Minting [${insertsForEditionArray[0].edition}] - total to mint [${insertsForEditionArray.length}]`);
+
+    // insert each series before moving on the to the next one
+    return Promise.map(insertsForEditionArray, function ({tokenUri, edition, costInWei, openingTime}) {
+      return instance.mint(
+        tokenUri,
+        edition,
+        costInWei,
+        openingTime,
+        {
+          from: _curatorAccount,
+        }
+      );
+    });
+  });
+
 };
 
 const flattenTestData = () => {

@@ -1,6 +1,6 @@
-import Vue from 'vue'
-import Dashboard from '@/components/Dashboard'
-import router from '@/router'
+import Vue from 'vue';
+import Dashboard from '@/components/Dashboard';
+import router from '@/router';
 
 describe('Dashboard.vue', () => {
   it('should render correct contents', () => {
