@@ -1305,9 +1305,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       type = await this.token.getTypeFromEdition('ABC0000000000ABC');
       type.should.be.equal('ABC');
-
-      console.log(web3.fromAscii('DIG'));
-      console.log(web3.fromAscii('PHY'));
     });
 
     it('convert DIG to bytes', async function () {
@@ -1560,5 +1557,107 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     });
 
+  });
+
+  describe('ERC165 supportsInterface()', async function () {
+
+    describe('supports ERC165', async function () {
+      it('matches correct bytes', async function () {
+        let supportsERC165 = await this.token.supportsInterface('0x01ffc9a7');
+        supportsERC165.should.be.equal.true;
+      })
+    });
+
+    describe('supports ERC721Enumerable', async function () {
+      it('matches correct bytes', async function () {
+        let supportsERC721Enumerable = await this.token.supportsInterface('0x780e9d63');
+        supportsERC721Enumerable.should.be.equal.true;
+      });
+      it('supports totalSupply()', async function () {
+        let support = await this.token.supportsInterface('0x18160ddd');
+        support.should.be.equal.true;
+      });
+      it('supports tokenOfOwnerByIndex()', async function () {
+        let support = await this.token.supportsInterface('0x2f745c59');
+        support.should.be.equal.true;
+      });
+      it('supports tokenByIndex()', async function () {
+        let support = await this.token.supportsInterface('0x4f6ccce7');
+        support.should.be.equal.true;
+      });
+    });
+
+    describe('supports ERC721Metadata', async function () {
+      it('matches correct bytes', async function () {
+        let supportsERC721Metadata = await this.token.supportsInterface('0x5b5e139f');
+        supportsERC721Metadata.should.be.equal.true;
+      });
+      it('supports symbol()', async function () {
+        let support = await this.token.supportsInterface('0x06fdde03');
+        support.should.be.equal.true;
+      });
+      it('supports totalSupply()', async function () {
+        let support = await this.token.supportsInterface('0x95d89b41');
+        support.should.be.equal.true;
+      });
+      it('supports tokenURI()', async function () {
+        let support = await this.token.supportsInterface('0xc87b56dd');
+        support.should.be.equal.true;
+      });
+    });
+
+    describe('supports ERC721', async function () {
+      it('matches correct bytes', async function () {
+        let supportsERC721 = await this.token.supportsInterface('0xcff9d6b4');
+        supportsERC721.should.be.equal.true;
+      });
+      it('supports balanceOf()', async function () {
+        let support = await this.token.supportsInterface('0x70a08231');
+        support.should.be.equal.true;
+      });
+      it('supports ownerOf()', async function () {
+        let support = await this.token.supportsInterface('0x6352211e');
+        support.should.be.equal.true;
+      });
+      it('supports exists()', async function () {
+        let support = await this.token.supportsInterface('0x4f558e79');
+        support.should.be.equal.true;
+      });
+      it('supports approve()', async function () {
+        let support = await this.token.supportsInterface('0x095ea7b3');
+        support.should.be.equal.true;
+      });
+      it('supports getApproved()', async function () {
+        let support = await this.token.supportsInterface('0x081812fc');
+        support.should.be.equal.true;
+      });
+      it('supports setApprovalForAll()', async function () {
+        let support = await this.token.supportsInterface('0xa22cb465');
+        support.should.be.equal.true;
+      });
+      it('supports isApprovedForAll()', async function () {
+        let support = await this.token.supportsInterface('0xe985e9c5');
+        support.should.be.equal.true;
+      });
+      it('supports transferFrom()', async function () {
+        let support = await this.token.supportsInterface('0x23b872dd');
+        support.should.be.equal.true;
+      });
+      it('supports safeTransferFrom()', async function () {
+        let support = await this.token.supportsInterface('0x42842e0e');
+        support.should.be.equal.true;
+      });
+      it('supports safeTransferFrom() overloaded with bytes', async function () {
+        let support = await this.token.supportsInterface('0xb88d4fde');
+        support.should.be.equal.true;
+      });
+    });
+
+    describe('doesnt support missing feature', async function () {
+      it('fails to match something which doesnt exist', async function () {
+        let supportsERC165 = await this.token.supportsInterface('someOtherValue');
+        supportsERC165.should.be.equal.false;
+      });
+    });
   });
 });
