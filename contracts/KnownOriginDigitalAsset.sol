@@ -1,4 +1,4 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.21;
 
 
 import "./ERC721Token.sol";
@@ -10,7 +10,7 @@ import "./ERC165.sol";
 *
 * A curator can mint digital assets and sell them via purchases (crypto via Ether or Fiat)
 */
-contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
+contract KnownOriginDigitalAsset is ERC721Token, ERC165{
   using SafeMath for uint;
 
   bytes4 constant InterfaceSignature_ERC165 =
@@ -44,7 +44,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _interfaceID bytes4 the interface to check for
    * @return true for any standardized interfaces implemented by this contract.
    */
-  function supportsInterface(bytes4 _interfaceID) external view returns (bool)
+  function supportsInterface(bytes4 _interfaceID) external pure returns (bool)
   {
     return ((_interfaceID == InterfaceSignature_ERC165)
       || (_interfaceID == InterfaceSignature_ERC721)

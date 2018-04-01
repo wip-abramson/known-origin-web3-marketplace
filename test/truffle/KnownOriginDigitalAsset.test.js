@@ -1305,9 +1305,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       type = await this.token.getTypeFromEdition('ABC0000000000ABC');
       type.should.be.equal('ABC');
-
-      console.log(web3.fromAscii('DIG'));
-      console.log(web3.fromAscii('PHY'));
     });
 
     it('convert DIG to bytes', async function () {
@@ -1560,5 +1557,31 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     });
 
+  });
+
+  describe.only('ERC165 supportsInterface()', async function () {
+
+    describe('supports ERC165', async function () {
+      it('matches correct byte', async function () {
+        let supportsERC165 = await this.token.supportsInterface('0x01ffc9a7');
+        supportsERC165.should.be.equal.true;
+      })
+    });
+
+    describe('supports ERC721Enumerable', async function () {
+
+    });
+
+    describe('supports ERC721Metadata', async function () {
+
+    });
+
+    describe('supports ERC721', async function () {
+
+    });
+
+    describe('doesnt support missing feature', async function () {
+
+    });
   });
 });
