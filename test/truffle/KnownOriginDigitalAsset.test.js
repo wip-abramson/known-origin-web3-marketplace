@@ -754,7 +754,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe.only('purchaseWithEther()', function () {
+    describe('purchaseWithEther()', function () {
       const NUMBER_OF_EDITIONS = 10;
       const tokenToPurchase = new BigNumber(3);
 

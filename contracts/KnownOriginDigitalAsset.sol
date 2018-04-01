@@ -18,6 +18,8 @@ contract KnownOriginDigitalAsset is ERC721Token {
     uint8 developer;
   }
 
+  string internal tokenBaseURI = "https://ipfs.infura.io/ipfs/";
+
   // creates and owns the original assets all primary purchases transferred to this account
   address public curatorAccount;
 
@@ -26,8 +28,6 @@ contract KnownOriginDigitalAsset is ERC721Token {
 
   // the person who puts on the event
   address public commissionAccount;
-
-  string public tokenBaseURI = "https://ipfs.infura.io/";
 
   uint256 public totalPurchaseValueInWei;
 
