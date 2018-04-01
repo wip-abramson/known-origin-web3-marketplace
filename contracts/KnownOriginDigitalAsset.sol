@@ -2,7 +2,11 @@ pragma solidity ^0.4.21;
 
 
 import "./ERC721Token.sol";
+
+import "./Strings.sol";
+
 import "./ERC165.sol";
+
 
 
 /**
@@ -10,41 +14,43 @@ import "./ERC165.sol";
 *
 * A curator can mint digital assets and sell them via purchases (crypto via Ether or Fiat)
 */
-contract KnownOriginDigitalAsset is ERC721Token, ERC165{
-  using SafeMath for uint;
+contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
+  using SafeMath for uint256;
 
   bytes4 constant InterfaceSignature_ERC165 = 0x01ffc9a7;
-    /*bytes4(keccak256('supportsInterface(bytes4)'));*/
+  /*
+  bytes4(keccak256('supportsInterface(bytes4)'));
+  */
 
   bytes4 constant InterfaceSignature_ERC721Enumerable = 0x780e9d63;
-    /*
-    bytes4(keccak256('totalSupply()')) ^
-    bytes4(keccak256('tokenOfOwnerByIndex(address,uint256)')) ^
-    bytes4(keccak256('tokenByIndex(uint256)'));
-    */
+  /*
+  bytes4(keccak256('totalSupply()')) ^
+  bytes4(keccak256('tokenOfOwnerByIndex(address,uint256)')) ^
+  bytes4(keccak256('tokenByIndex(uint256)'));
+  */
 
   bytes4 constant InterfaceSignature_ERC721Metadata = 0x5b5e139f;
-    /*
-    bytes4(keccak256('name()')) ^
-    bytes4(keccak256('symbol()')) ^
-    bytes4(keccak256('tokenURI(uint256)'));
-    */
+  /*
+  bytes4(keccak256('name()')) ^
+  bytes4(keccak256('symbol()')) ^
+  bytes4(keccak256('tokenURI(uint256)'));
+  */
 
   bytes4 constant InterfaceSignature_ERC721 = 0xcff9d6b4;
-    /*
-    bytes4(keccak256('balanceOf(address)')) ^
-    bytes4(keccak256('ownerOf(uint256)')) ^
-    bytes4(keccak256('exists(uint256)')) ^
+  /*
+  bytes4(keccak256('balanceOf(address)')) ^
+  bytes4(keccak256('ownerOf(uint256)')) ^
+  bytes4(keccak256('exists(uint256)')) ^
 
-    bytes4(keccak256('approve(address,uint256)')) ^
-    bytes4(keccak256('getApproved(uint256)')) ^
-    bytes4(keccak256('setApprovalForAll(address,bool)')) ^
+  bytes4(keccak256('approve(address,uint256)')) ^
+  bytes4(keccak256('getApproved(uint256)')) ^
+  bytes4(keccak256('setApprovalForAll(address,bool)')) ^
 
-    bytes4(keccak256('isApprovedForAll(address,address)')) ^
-    bytes4(keccak256('transferFrom(address,address,uint256)')) ^
-    bytes4(keccak256('safeTransferFrom(address,address,uint256)')) ^
-    bytes4(keccak256('safeTransferFrom(address,address,uint256,bytes)'));
-    */
+  bytes4(keccak256('isApprovedForAll(address,address)')) ^
+  bytes4(keccak256('transferFrom(address,address,uint256)')) ^
+  bytes4(keccak256('safeTransferFrom(address,address,uint256)')) ^
+  bytes4(keccak256('safeTransferFrom(address,address,uint256,bytes)'));
+  */
 
   /**
    * @notice Introspection interface as per ERC-165 (https://github.com/ethereum/EIPs/issues/165).
@@ -52,18 +58,19 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
    * @param _interfaceID bytes4 the interface to check for
    * @return true for any standardized interfaces implemented by this contract.
    */
-  function supportsInterface(bytes4 _interfaceID) external pure returns (bool)
-  {
+  function supportsInterface(bytes4 _interfaceID) external pure returns (bool) {
     return ((_interfaceID == InterfaceSignature_ERC165)
-      || (_interfaceID == InterfaceSignature_ERC721)
-      || (_interfaceID == InterfaceSignature_ERC721Enumerable)
-      || (_interfaceID == InterfaceSignature_ERC721Metadata));
+    || (_interfaceID == InterfaceSignature_ERC721)
+    || (_interfaceID == InterfaceSignature_ERC721Enumerable)
+    || (_interfaceID == InterfaceSignature_ERC721Metadata));
   }
 
   struct CommissionStructure {
     uint8 curator;
     uint8 developer;
   }
+
+  string internal tokenBaseURI = "https://ipfs.infura.io/ipfs/";
 
   // creates and owns the original assets all primary purchases transferred to this account
   address public curatorAccount;
@@ -76,17 +83,18 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
 
   uint256 public totalPurchaseValueInWei;
 
-  uint public totalNumberOfPurchases;
+  uint256 public totalNumberOfPurchases;
 
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
-  mapping (string => CommissionStructure) internal tokenIdToCommission;
-  mapping (uint => PurchaseState) internal tokenIdToPurchased;
+  mapping(string => CommissionStructure) internal editionTypeToCommission;
+  mapping(uint256 => PurchaseState) internal tokenIdToPurchased;
 
-  mapping (uint => bytes16) internal tokenIdToEdition;
-  mapping (uint => uint8) internal tokenIdToEditionNumber;
-  mapping (uint => uint256) internal tokenIdToPriceInWei;
-  mapping (uint => uint32) internal tokenIdToAuctionStartDate;
+  mapping(uint256 => bytes16) internal tokenIdToEdition;
+  mapping(uint256 => uint256) internal tokenIdToPriceInWei;
+  mapping(uint256 => uint32) internal tokenIdToPurchaseFromTime;
+
+  mapping(bytes16 => uint256) internal editionToEditionNumber;
 
   event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
 
@@ -119,78 +127,53 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
     _;
   }
 
-  modifier onlyWhenBuyDateOpen(uint256 _tokenId) {
-    require(tokenIdToAuctionStartDate[_tokenId] <= block.timestamp);
+  modifier onlyAfterPurchaseFromTime(uint256 _tokenId) {
+    require(tokenIdToPurchaseFromTime[_tokenId] <= block.timestamp);
     _;
   }
 
-  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount)
-  public
-  ERC721Token("KnownOriginDigitalAsset", "KODA")
-  {
+  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount) public ERC721Token("KnownOriginDigitalAsset", "KODA") {
     curatorAccount = msg.sender;
     commissionAccount = _commissionAccount;
     developerAccount = _developerAccount;
 
+    // FIXME thought? Don't add in constructor and make obvious - ADD AFTER CREATION AS PART OF SETUP?
+    // FIXME as if we change it this will always be the first thing reviewers will see.....?
     // Setup default commission structures
-    tokenIdToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
-    tokenIdToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
+    editionTypeToCommission["DIG"] = CommissionStructure({curator : 12, developer : 12});
+    editionTypeToCommission["PHY"] = CommissionStructure({curator : 24, developer : 15});
   }
 
-  function mintEdition(string _tokenURI, bytes16 _edition, uint8 _totalEdition, uint256 _priceInWei, uint32 _auctionStartDate)
-  public
-  onlyManagement {
-
-    uint256 offset = allTokens.length;
-    for (uint8 i = 0; i < _totalEdition; i++) {
-      uint256 _tokenId = offset + i;
-      super._mint(msg.sender, _tokenId);
-      super._setTokenURI(_tokenId, _tokenURI);
-      _populateTokenData(_tokenId, _edition, i + 1, _priceInWei, _auctionStartDate);
-    }
+  // don't accept payment directly to contract
+  function() public payable {
+    revert();
   }
 
-  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate)
-  public
-  onlyManagement {
-
+  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate) public onlyManagement {
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
-    _populateTokenData(_tokenId, _edition, 1, _priceInWei, _auctionStartDate);
+    _populateTokenData(_tokenId, _edition, _priceInWei, _auctionStartDate);
   }
 
-  function _populateTokenData(uint _tokenId, bytes16 _edition, uint8 _editionNumber, uint256 _priceInWei, uint32 _auctionStartDate)
-  internal
-  {
+  function _populateTokenData(uint _tokenId, bytes16 _edition, uint256 _priceInWei, uint32 _purchaseFromTime) internal {
     tokenIdToEdition[_tokenId] = _edition;
-    tokenIdToEditionNumber[_tokenId] = _editionNumber;
+    editionToEditionNumber[_edition] = editionToEditionNumber[_edition].add(1);
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
-    tokenIdToAuctionStartDate[_tokenId] = _auctionStartDate;
+    tokenIdToPurchaseFromTime[_tokenId] = _purchaseFromTime;
   }
 
-  function burn(uint256 _tokenId)
-  public
-  onlyManagement
-  onlyUnsold(_tokenId)
-  onlyManagementOwnedToken(_tokenId)
-  {
+  function burn(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyManagementOwnedToken(_tokenId) {
     // TODO fix me - clean up internal metadata when being burnt
+    // _populateTokenData(_tokenId, 0x0, 0, 0) << will work?
     super._burn(ownerOf(_tokenId), _tokenId);
   }
 
-  function setTokenURI(uint256 _tokenId, string _uri)
-  public
-  onlyManagement
-  {
+  function setTokenURI(uint256 _tokenId, string _uri) public onlyManagement {
     _setTokenURI(_tokenId, _uri);
   }
 
-  function setPriceInWei(uint _tokenId, uint256 _priceInWei)
-  public
-  onlyManagement
-  onlyUnsold(_tokenId)
-  returns (bool) {
+  function setPriceInWei(uint _tokenId, uint256 _priceInWei) public onlyManagement onlyUnsold(_tokenId) returns (bool _result) {
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     return true;
   }
@@ -201,9 +184,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
    * @param _tokenId uint256 ID of the token to query the approval of
    * @return address currently approved for a the given token ID
    */
-  function _approvePurchaser(address _to, uint _tokenId)
-  internal
-  {
+  function _approvePurchaser(address _to, uint256 _tokenId) internal {
     address owner = ownerOf(_tokenId);
     require(_to != address(0));
 
@@ -211,36 +192,24 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
     Approval(owner, _to, _tokenId);
   }
 
-  function updateCommission(string _type, uint8 _curator, uint8 _developer)
-  public
-  onlyManagement
-  returns (bool) {
+  function updateCommission(string _type, uint8 _curator, uint8 _developer) public onlyManagement returns (bool) {
     require(_curator > 0);
     require(_developer > 0);
     require((_curator + _developer) < 100);
 
-    tokenIdToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
+    editionTypeToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
     return true;
   }
 
-  function getCommissionForType(string _type)
-  public
-  view
-  returns (uint8 _curator, uint8 _developer)
-  {
-    CommissionStructure storage commission = tokenIdToCommission[_type];
+  function getCommissionForType(string _type) public view returns (uint8 _curator, uint8 _developer) {
+    CommissionStructure storage commission = editionTypeToCommission[_type];
     return (
-      commission.curator,
-      commission.developer
+    commission.curator,
+    commission.developer
     );
   }
 
-  function purchaseWithEther(uint256 _tokenId)
-  public
-  payable
-  onlyUnsold(_tokenId)
-  onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  function purchaseWithEther(uint256 _tokenId) public payable onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
 
     uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
 
@@ -267,17 +236,16 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
 
       return true;
     }
+
     return false;
   }
 
-  function _applyCommission(uint256 _tokenId)
-  internal
-  {
+  function _applyCommission(uint256 _tokenId) internal {
     bytes16 edition = tokenIdToEdition[_tokenId];
 
     string memory typeCode = getTypeFromEdition(edition);
 
-    CommissionStructure memory commission = tokenIdToCommission[typeCode];
+    CommissionStructure memory commission = editionTypeToCommission[typeCode];
 
     // split & transfer fee for curator
     uint curatorAccountFee = msg.value / 100 * commission.curator;
@@ -294,12 +262,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
     commissionAccount.transfer(finalCommissionTotal);
   }
 
-  function purchaseWithFiat(uint _tokenId)
-  public
-  onlyManagement
-  onlyUnsold(_tokenId)
-  onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  function purchaseWithFiat(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
 
     // now purchased - don't allow re-purchase!
     tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
@@ -311,12 +274,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
     return true;
   }
 
-  function reverseFiatPurchase(uint _tokenId)
-  public
-  onlyManagement
-  onlyFiatPurchased(_tokenId)
-  onlyWhenBuyDateOpen(_tokenId)
-  returns (bool) {
+  function reverseFiatPurchase(uint256 _tokenId) public onlyManagement onlyFiatPurchased(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
 
     // reset to Unsold
     tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
@@ -328,85 +286,69 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
     return true;
   }
 
-  function assetInfo(uint _tokenId)
-  public
-  view
-  returns (
-  uint256 _tokId,
-  address _owner,
-  PurchaseState _purchaseState,
-  uint256 _priceInWei,
-  uint32 _auctionStartDate
+  function assetInfo(uint _tokenId) public view returns (
+    uint256 _tokId,
+    address _owner,
+    PurchaseState _purchaseState,
+    uint256 _priceInWei,
+    uint32 _purchaseFromTime
   ) {
     return (
     _tokenId,
     ownerOf(_tokenId),
     tokenIdToPurchased[_tokenId],
     tokenIdToPriceInWei[_tokenId],
-    tokenIdToAuctionStartDate[_tokenId]
+    tokenIdToPurchaseFromTime[_tokenId]
     );
   }
 
-  function editionInfo(uint _tokenId)
-  public
-  view
-  returns (
-  uint256 _tokId,
-  bytes16 _edition,
-  uint8 _editionNumber,
-  string _tokenURI
+  function editionInfo(uint256 _tokenId) public view returns (
+    uint256 _tokId,
+    bytes16 _edition,
+    uint256 _editionNumber,
+    string _tokenURI
   ) {
+
+    bytes16 edition = tokenIdToEdition[_tokenId];
     return (
     _tokenId,
-    tokenIdToEdition[_tokenId],
-    tokenIdToEditionNumber[_tokenId],
+    edition,
+    editionToEditionNumber[edition],
     tokenURI(_tokenId)
     );
   }
 
-  function getOwnerTokens(address _owner)
-  public
-  view
-  returns (uint[] _tokenIds)
-  {
+  function tokensOf(address _owner) public view returns (uint256[] _tokenIds) {
     return ownedTokens[_owner];
   }
 
-  function isPurchased(uint256 _tokenId)
-  public
-  view
-  returns (PurchaseState _purchased) {
+  function isPurchased(uint256 _tokenId) public view returns (PurchaseState _purchased) {
     return tokenIdToPurchased[_tokenId];
   }
 
-  function editionOf(uint _tokenId)
-  public
-  view
-  returns (bytes16 _edition) {
+  function editionOf(uint256 _tokenId) public view returns (bytes16 _edition) {
     return tokenIdToEdition[_tokenId];
   }
 
-  function tokenAuctionStartDate(uint _tokenId)
-  public
-  view
-  returns (uint32 _auctionStartDate) {
-    return tokenIdToAuctionStartDate[_tokenId];
+  function purchaseFromTime(uint256 _tokenId) public view returns (uint32 _purchaseFromTime) {
+    return tokenIdToPurchaseFromTime[_tokenId];
   }
 
-  function priceInWei(uint _tokenId)
-  public
-  view
-  returns (uint256 _priceInWei) {
+  function priceInWei(uint256 _tokenId) public view returns (uint256 _priceInWei) {
     return tokenIdToPriceInWei[_tokenId];
   }
 
-  function getTypeFromEdition(bytes16 _bytes16) public pure returns (string){
-    bytes memory bytesArray = new bytes(3);
-    uint pos = 0;
-    for (uint256 i = 13; i < 16; i++) {
-      bytesArray[pos] = _bytes16[i];
-      pos++;
-    }
-    return string(bytesArray);
+  function getTypeFromEdition(bytes16 _bytes16) public pure returns (string) {
+    // return last 3 chars that represent the edition type
+    return Strings.bytes16ToStr(_bytes16, 13, 16);
+  }
+
+  function tokenURI(uint256 _tokenId) public view returns (string) {
+    require(exists(_tokenId));
+    return Strings.strConcat(tokenBaseURI, tokenURIs[_tokenId]);
+  }
+
+  function setTokenBaseURI(string _newBaseURI) external onlyManagement {
+    tokenBaseURI = _newBaseURI;
   }
 }
