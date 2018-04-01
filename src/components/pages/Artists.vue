@@ -6,7 +6,7 @@
 
     <h1>Artists</h1>
 
-    <div class="centered">
+    <div>
       <section class="cards">
         <artist v-for="artist in artists" :key="artist.name" :artist="artist"></artist>
       </section>
