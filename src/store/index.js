@@ -173,7 +173,7 @@ const store = new Vuex.Store({
     [actions.GET_ASSETS_PURCHASED_FOR_ACCOUNT] ({commit, dispatch, state}) {
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
-          return contract.getOwnerTokens(state.account)
+          return contract.tokensOf(state.account)
             .then((tokens) => {
               commit(mutations.SET_ASSETS_PURCHASED_FROM_ACCOUNT, tokens);
             });
