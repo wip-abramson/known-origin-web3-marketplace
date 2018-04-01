@@ -80,7 +80,8 @@ const uploadMetaData = ({ipfsPath}) => {
 
           // TODO convert to multi address support https://github.com/multiformats/multiaddr
 
-          let tokenUri = `https://ipfs.infura.io/ipfs/${rootHash.hash}`;
+          // we use baseURI in contract so don't need base here (unlike above?)
+          let tokenUri = `${rootHash.hash}`;
 
           cacheIpfsHashes(ipfsPath, tokenUri);
 
