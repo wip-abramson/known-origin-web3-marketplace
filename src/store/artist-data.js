@@ -97,5 +97,30 @@ const artists = [
     strapline: 'CoinJournal is a Manchester based artist who collaborates with several different designers, incorporating the style of 1930s cartoons',
     img: 'static/artists/coinjournal_x2.png'
   },
+  {
+    artistCode: 'HSM',
+    name: 'Hamish Muir',
+    hidden: true
+  },
+  {
+    artistCode: 'MRL',
+    name: 'Muirmcneil',
+    hidden: true
+  },
+  {
+    artistCode: 'BYE',
+    name: 'Bryan Edmondson',
+    hidden: true
+  },
+  {
+    artistCode: 'HSM',
+    name: 'laurence-amelie',
+    hidden: true
+  },
+  {
+    artistCode: 'SCH',
+    name: 'Stanley Chow',
+    hidden: true
+  },
 ];
 module.exports = artists;

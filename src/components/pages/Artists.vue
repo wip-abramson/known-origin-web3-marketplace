@@ -8,7 +8,7 @@
 
     <div>
       <section class="cards">
-        <artist v-for="artist in artists" :key="artist.name" :artist="artist"></artist>
+        <artist v-for="artist in visibleAssets()" :key="artist.name" :artist="artist"></artist>
       </section>
     </div>
 
@@ -23,10 +23,12 @@
     name: 'artists',
     components: {Artist},
     computed: {
+      ...mapGetters([
+        'visibleAssets',
+      ]),
       ...mapState([
-        'artists',
         'assets',
-      ])
+      ]),
     },
     mounted() {
 
