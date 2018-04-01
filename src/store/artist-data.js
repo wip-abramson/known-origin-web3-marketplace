@@ -67,7 +67,7 @@ const artists = [
   {
     artistCode: 'LHK',
     name: 'Laura Hawkins AKA Paper Hawk',
-    twitter: '@paper_hawk',§
+    twitter: '@paper_hawk',
     bio: 'Laura Hawkins is a designer and illustrator based in Manchester. Her illustration alias ‘Paper Hawk’ was born of her desire to create illustrations full of character, charm and life - that weren\'t \'perfect\', but who\'s imperfections were what made them interesting.Working in graphic design since graduating from Falmouth College of Arts back in 2005 Laura had been increasingly drawn to illustration. After a recent move from London to Manchester, she began experimenting with using paper as the \'paint\', and discovered a passion she never knew existed.Her aim with Paper Hawk is to make engaging, interesting and unique illustrations that bring a brief to life. Using papers salvaged from magazines, newspapers, recycling bins, empty paper packaging, and donations from friends and colleagues her work aims to giving new life to something that would otherwise be discarded. She also creates some of the papers herself by painting with watercolours or inks and then tearing these up too.',
     img: 'static/artists/LauraH_@x2.png'
   },
