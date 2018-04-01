@@ -14,43 +14,43 @@ import "./ERC165.sol";
 *
 * A curator can mint digital assets and sell them via purchases (crypto via Ether or Fiat)
 */
-contract KnownOriginDigitalAsset is ERC721Token, ERC165{
+contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   using SafeMath for uint256;
 
   bytes4 constant InterfaceSignature_ERC165 = 0x01ffc9a7;
-    /*
-    bytes4(keccak256('supportsInterface(bytes4)'));
-    */
+  /*
+  bytes4(keccak256('supportsInterface(bytes4)'));
+  */
 
   bytes4 constant InterfaceSignature_ERC721Enumerable = 0x780e9d63;
-    /*
-    bytes4(keccak256('totalSupply()')) ^
-    bytes4(keccak256('tokenOfOwnerByIndex(address,uint256)')) ^
-    bytes4(keccak256('tokenByIndex(uint256)'));
-    */
+  /*
+  bytes4(keccak256('totalSupply()')) ^
+  bytes4(keccak256('tokenOfOwnerByIndex(address,uint256)')) ^
+  bytes4(keccak256('tokenByIndex(uint256)'));
+  */
 
   bytes4 constant InterfaceSignature_ERC721Metadata = 0x5b5e139f;
-    /*
-    bytes4(keccak256('name()')) ^
-    bytes4(keccak256('symbol()')) ^
-    bytes4(keccak256('tokenURI(uint256)'));
-    */
+  /*
+  bytes4(keccak256('name()')) ^
+  bytes4(keccak256('symbol()')) ^
+  bytes4(keccak256('tokenURI(uint256)'));
+  */
 
   bytes4 constant InterfaceSignature_ERC721 = 0xcff9d6b4;
-    /*
-    bytes4(keccak256('balanceOf(address)')) ^
-    bytes4(keccak256('ownerOf(uint256)')) ^
-    bytes4(keccak256('exists(uint256)')) ^
+  /*
+  bytes4(keccak256('balanceOf(address)')) ^
+  bytes4(keccak256('ownerOf(uint256)')) ^
+  bytes4(keccak256('exists(uint256)')) ^
 
-    bytes4(keccak256('approve(address,uint256)')) ^
-    bytes4(keccak256('getApproved(uint256)')) ^
-    bytes4(keccak256('setApprovalForAll(address,bool)')) ^
+  bytes4(keccak256('approve(address,uint256)')) ^
+  bytes4(keccak256('getApproved(uint256)')) ^
+  bytes4(keccak256('setApprovalForAll(address,bool)')) ^
 
-    bytes4(keccak256('isApprovedForAll(address,address)')) ^
-    bytes4(keccak256('transferFrom(address,address,uint256)')) ^
-    bytes4(keccak256('safeTransferFrom(address,address,uint256)')) ^
-    bytes4(keccak256('safeTransferFrom(address,address,uint256,bytes)'));
-    */
+  bytes4(keccak256('isApprovedForAll(address,address)')) ^
+  bytes4(keccak256('transferFrom(address,address,uint256)')) ^
+  bytes4(keccak256('safeTransferFrom(address,address,uint256)')) ^
+  bytes4(keccak256('safeTransferFrom(address,address,uint256,bytes)'));
+  */
 
   /**
    * @notice Introspection interface as per ERC-165 (https://github.com/ethereum/EIPs/issues/165).
@@ -60,9 +60,9 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
    */
   function supportsInterface(bytes4 _interfaceID) external pure returns (bool) {
     return ((_interfaceID == InterfaceSignature_ERC165)
-      || (_interfaceID == InterfaceSignature_ERC721)
-      || (_interfaceID == InterfaceSignature_ERC721Enumerable)
-      || (_interfaceID == InterfaceSignature_ERC721Metadata));
+    || (_interfaceID == InterfaceSignature_ERC721)
+    || (_interfaceID == InterfaceSignature_ERC721Enumerable)
+    || (_interfaceID == InterfaceSignature_ERC721Metadata));
   }
 
   struct CommissionStructure {
@@ -145,7 +145,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165{
   }
 
   // don't accept payment directly to contract
-  function () public payable {
+  function() public payable {
     revert();
   }
 

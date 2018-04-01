@@ -39,7 +39,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
   const RECEIVER_MAGIC_VALUE = '0xf0b9e5ba';
 
-  const _baseUri = 'https://ipfs.infura.io/'; // FIXME load from contract?
+  const _baseUri = 'https://ipfs.infura.io/ipfs/'; // FIXME load from contract?
   const _tokenURI = 'abc123';
   const _editionDigital = 'ABC0000000000DIG';
   const _editionPhysical = 'ABC0000000000PHY';
