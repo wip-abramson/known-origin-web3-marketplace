@@ -76,7 +76,23 @@ const artists = [
     name: 'David Arnott',
     twitter: '@DavidPArnott7',
     bio: 'David Arnott is a Mosaic Artist based in Salford Manchester. He take popular and cultural icons and creates an image from hand cut pieces of ceramic tile',
+    img: 'static/artists/david-arnott_x2.png'
+  },
+  {
+    artistCode: '89A',
+    name: '89—A',
+    twitter: '@Mathew_Lucas',
+    bio: 'Mathew is a multidisciplinary designer, one third of Studio Treble and behind the looping gif animations of 89A. Starting his career in games after studying graphic design, a diverse output is something he’s always strived for. From animation & illustration to branding & digital work.With 89A Mathew was originally looking to learn animation and 3D software, this quickly went from a side project to part of his daily routine. Working originally with the restrictive gif format, the constraints made a great playground for exploration and experimentation. Now he’s looking take what he has learnt with 89A and work on a more interactive experiences.',
+    strapline: 'Mathew is a multidisciplinary designer, one third of Studio Treble and behind the looping gif animations of 89A.',
     img: ''
+  },
+  {
+    artistCode: 'CNJ',
+    name: 'CoinJournal',
+    twitter: '@CoinJournal',
+    bio: 'CoinJournal is a Manchester-based Bitcoin and cryptocurrency news site. The artwork submitted has been produced as a collaboration with several different designers, incorporating the style of 1930s cartoons and celebrating the disruptive nature of cryptocurrencies.',
+    strapline: 'CoinJournal is a Manchester based artist who collaborates with several different designers, incorporating the style of 1930s cartoons',
+    img: 'static/artists/coinjournal_x2.png'
   },
 ];
 module.exports = artists;
