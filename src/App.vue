@@ -89,9 +89,10 @@
 <style lang="scss">
   $primary: #3e27d9;
   $secondary: #f2f2f2;
+  $background: #f2f5fb;
   $black: black;
-  $gray: gray;
-  $white: white;
+  $gray: #545454;
+  $white: #FFF;
   $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
 
   $sold: red;
@@ -113,23 +114,21 @@
   }
 
   #splash h2 {
-    color: #FFF;
+    color: $white;
     font-size: 18px;
-
   }
 
   h2 {
-    color: $primary;
+    color: $gray;
     display: block;
     font-size: 28px;
     margin-top: 20px;
     margin-bottom: 20px;
-
   }
 
   h3 {
     display: block;
-    color: $primary;
+    color: $gray;
     font-size: 16px;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -137,10 +136,9 @@
   }
 
   p {
-
     line-height: 28px;
     margin-bottom: 10px;
-    color: #545454;
+    color: $gray;
   }
 
   #footer p {
@@ -187,7 +185,7 @@
     font-family: $font_family_1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f2f5fb;
+    background-color: $background;
     margin: 0;
   }
 
@@ -312,7 +310,7 @@
 
   .token-id {
     font-weight: bold;
-    color: $primary;
+    color: $gray;
     font-size: 1.25em;
   }
 
@@ -482,11 +480,12 @@
     margin-top: 0px;
   }
 
-.viewAllArtists{
-width:100%;
-display:block;
-text-align:center;
-font-size:20px;
-margin-bottom:40px;}
+  .viewAllArtists{
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 40px;
+  }
 
 </style>
