@@ -246,9 +246,9 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   /**
    * @dev Purchase the provide token in Ether
    * @dev Reverts if token not unsold and not available to be purchased
+   * msg.sender will become the owner of the token
+   * msg.value needs to be >= to the token priceInWei
    * @param _tokenId the KODA token ID
-   * @param msg.sender will become the owner of the token
-   * @param msg.value needs to be >= to the token priceInWei
    * @return true/false depending on success
    */
   function purchaseWithEther(uint256 _tokenId) public payable onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
