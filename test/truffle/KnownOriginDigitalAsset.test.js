@@ -57,6 +57,10 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     _purchaseFromTime = latestTime(); // opens immediately
 
     await increaseTimeTo(_purchaseFromTime + duration.seconds(1)); // force time to move 1 seconds so normal tests pass
+
+    // set base commission rates
+    await this.token.updateCommission("DIG", 12, 12, {from: _curator});
+    await this.token.updateCommission("PHY", 24, 15, {from: _curator});
   });
 
   describe('like a ERC721BasicToken', function () {
