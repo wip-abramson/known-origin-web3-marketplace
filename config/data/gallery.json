@@ -357,7 +357,7 @@
         {
           "artworkName": "Sample 2",
           "ipfsPath": "cotton_and_path_sample_2",
-          "edition": "CHESAMPLE1CTNPHY",
+          "edition": "CHESAMPLE2CTNPHY",
           "numberOfEditions": 1,
           "fiatCost": 100,
           "costInEth": 0.37
@@ -365,7 +365,7 @@
         {
           "artworkName": "Sample 3",
           "ipfsPath": "cotton_and_path_sample_3",
-          "edition": "CHESAMPLE1CTNPHY",
+          "edition": "CHESAMPLE3CTNPHY",
           "numberOfEditions": 1,
           "fiatCost": 100,
           "costInEth": 0.37
@@ -373,7 +373,7 @@
         {
           "artworkName": "Sample 4",
           "ipfsPath": "cotton_and_path_sample_4",
-          "edition": "CHESAMPLE1CTNPHY",
+          "edition": "CHESAMPLE4CTNPHY",
           "numberOfEditions": 1,
           "fiatCost": 100,
           "costInEth": 0.37
