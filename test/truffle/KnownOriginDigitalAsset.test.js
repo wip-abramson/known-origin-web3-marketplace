@@ -1413,13 +1413,22 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         updatedContractDeveloperBalance.should.be.bignumber.equal(
           this.contractDeveloperBalance.add(_priceInWei.dividedBy(100).times(12)) // 12%
         );
-      })
+      });
 
       it('artist account receives correct value', async function () {
         let updatedArtistBalance = await web3.eth.getBalance(_artist);
         updatedArtistBalance.should.be.bignumber.equal(
           this.artistBalance.add(_priceInWei.dividedBy(100).times(76)) // 76%%
         );
+      });
+    });
+
+    describe('allocating commissions for digital purchases with zero artist address', function () {
+
+      it('should revert as not allowed', async function () {
+        await assertRevert(this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, ZERO_ADDRESS, {
+          from: _curator
+        }));
       });
     });
 
@@ -1513,12 +1522,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = 0;
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, _curator, {
+        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, _artist, {
           from: _curator
         });
         this.curatorBalance = await web3.eth.getBalance(_curator);
         this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
-        this.commissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
+        this.artistBalance = await web3.eth.getBalance(_artist);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
           from: _buyer
@@ -1541,9 +1550,9 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         updatedContractDeveloperBalance.should.be.bignumber.equal(this.contractDeveloperBalance);
       });
 
-      it('commission account receives correct value of zero', async function () {
-        let updatedCommissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
-        updatedCommissionAccountBalance.should.be.bignumber.equal(this.commissionAccountBalance);
+      it('artist account receives correct value of zero', async function () {
+        let updatedArtistBalance = await web3.eth.getBalance(_artist);
+        updatedArtistBalance.should.be.bignumber.equal(this.artistBalance);
       });
 
     });
