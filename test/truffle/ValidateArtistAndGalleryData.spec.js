@@ -15,12 +15,26 @@ describe('testing gallery and metatdata', function () {
       return data.artistCode;
     });
 
+    let editions = [];
+    _.forEach(this.galleryData.artists, function (item) {
+      _.forEach(item.artworks, function (artwork) {
+        editions.push(artwork.edition);
+      });
+    });
+
+    this.editions = editions;
+
     done();
   });
 
   it('all artists should have unique values', function () {
     let uniqueArtistsCode = _.uniq(this.artistCodes);
     uniqueArtistsCode.should.be.deep.equals(this.artistCodes);
+  });
+
+  it('all gallery items should have unique editions', function () {
+    let uniqueEditions = _.uniq(this.editions);
+    uniqueEditions.should.be.deep.equals(this.editions);
   });
 
   it('all gallery items should match edition code to artists', function () {
