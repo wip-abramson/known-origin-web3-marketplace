@@ -1470,12 +1470,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const _editionWithMissingType = 'ABC0000000000MIA';
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionWithMissingType, _priceInWei, _purchaseFromTime, _curator, {
+        await this.token.mint(_tokenURI, _editionWithMissingType, _priceInWei, _purchaseFromTime, _artist, {
           from: _curator
         });
         this.curatorBalance = await web3.eth.getBalance(_curator);
         this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
-        this.commissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
+        this.artistBalance = await web3.eth.getBalance(_artist);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
           value: _priceInWei,
@@ -1500,9 +1500,9 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('commission account receives correct value', async function () {
-        let updatedCommissionAccountBalance = await web3.eth.getBalance(_commissionAccount);
-        updatedCommissionAccountBalance.should.be.bignumber.equal(
-          this.commissionAccountBalance.add(_priceInWei)
+        let updatedArtistBalance = await web3.eth.getBalance(_artist);
+        updatedArtistBalance.should.be.bignumber.equal(
+          this.artistBalance.add(_priceInWei)
         );
       });
 
