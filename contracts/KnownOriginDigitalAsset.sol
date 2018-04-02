@@ -146,6 +146,14 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     revert();
   }
 
+  /**
+   * @dev Mint a new KODA token
+   * @dev Reverts if not called by management
+   * @param _tokenURI the IPFS or equivalent hash
+   * @param _edition the identifier of the edition - leading 3 bytes are the artists code, trailing 3 bytes are the asset type
+   * @param _priceInWei the price of the KODA token
+   * @param _auctionStartDate the date when the token is available for sale
+   */
   function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate) public onlyManagement {
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
@@ -160,16 +168,33 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     tokenIdToPurchaseFromTime[_tokenId] = _purchaseFromTime;
   }
 
+  /**
+   * @dev Burns a KODA token
+   * @dev Reverts if token is not unsold or not owned by management
+   * @param _tokenId the KODA token ID
+   */
   function burn(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyManagementOwnedToken(_tokenId) {
     // TODO fix me - clean up internal metadata when being burnt
     // _populateTokenData(_tokenId, 0x0, 0, 0) << will work?
     super._burn(ownerOf(_tokenId), _tokenId);
   }
 
+  /**
+   * @dev Utility function for updating a KODA assets token URI
+   * @dev Reverts if not called by management
+   * @param _tokenId the KODA token ID
+   * @param _uri the token URI, will be concatenated with baseUri
+   */
   function setTokenURI(uint256 _tokenId, string _uri) public onlyManagement {
     _setTokenURI(_tokenId, _uri);
   }
 
+  /**
+   * @dev Utility function for updating a KODA assets price
+   * @dev Reverts if token is not unsold or not called by management
+   * @param _tokenId the KODA token ID
+   * @param _priceInWei the price in wei
+   */
   function setPriceInWei(uint _tokenId, uint256 _priceInWei) public onlyManagement onlyUnsold(_tokenId) returns (bool _result) {
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
     return true;
@@ -178,7 +203,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   /**
    * @dev Used to pre-approve a purchaser in order for internal purchase methods
    * to succeed without calling approve() directly
-   * @param _tokenId uint256 ID of the token to query the approval of
+   * @param _tokenId the KODA token ID
    * @return address currently approved for a the given token ID
    */
   function _approvePurchaser(address _to, uint256 _tokenId) internal {
@@ -189,6 +214,13 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     Approval(owner, _to, _tokenId);
   }
 
+  /**
+   * @dev Updates the commission structure for the given _type
+   * @dev Reverts if not called by management
+   * @param _type the asset type
+   * @param _curator the curators commission
+   * @param _developer the developers commission
+   */
   function updateCommission(string _type, uint8 _curator, uint8 _developer) public onlyManagement returns (bool) {
     require(_curator > 0);
     require(_developer > 0);
@@ -198,14 +230,27 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     return true;
   }
 
+  /**
+   * @dev Utility function for retrieving the commission structure for the provided _type
+   * @param _type the asset type
+   * @return the commission structure or zero for both values when not found
+   */
   function getCommissionForType(string _type) public view returns (uint8 _curator, uint8 _developer) {
     CommissionStructure storage commission = editionTypeToCommission[_type];
     return (
-    commission.curator,
-    commission.developer
+      commission.curator,
+      commission.developer
     );
   }
 
+  /**
+   * @dev Purchase the provide token in Ether
+   * @dev Reverts if token not unsold and not available to be purchased
+   * @param _tokenId the KODA token ID
+   * @param msg.sender will become the owner of the token
+   * @param msg.value needs to be >= to the token priceInWei
+   * @return true/false depending on success
+   */
   function purchaseWithEther(uint256 _tokenId) public payable onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
 
     uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
@@ -237,6 +282,44 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     return false;
   }
 
+  /**
+   * @dev Purchase the provide token in FIAT, management command only for taking fiat payments during KODA physical exhibitions
+   * Equivalent to taking the KODA token off the market and marking as sold
+   * @dev Reverts if token not unsold and not available to be purchased and not called by management
+   * @param _tokenId the KODA token ID
+   */
+  function purchaseWithFiat(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
+
+    // now purchased - don't allow re-purchase!
+    tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
+
+    totalNumberOfPurchases = totalNumberOfPurchases.add(1);
+
+    PurchasedWithFiat(_tokenId);
+
+    return true;
+  }
+
+  /**
+   * @dev Reverse a fiat purchase made by calling purchaseWithFiat()
+   * @dev Reverts if token not purchased with fiat and not available to be purchased and not called by management
+   * @param _tokenId the KODA token ID
+   */
+  function reverseFiatPurchase(uint256 _tokenId) public onlyManagement onlyFiatPurchased(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
+
+    // reset to Unsold
+    tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
+
+    totalNumberOfPurchases = totalNumberOfPurchases.sub(1);
+
+    PurchasedWithFiatReversed(_tokenId);
+
+    return true;
+  }
+
+  /**
+   * @dev Internal function for apply commission on purchase
+   */
   function _applyCommission(uint256 _tokenId) internal {
     bytes16 edition = tokenIdToEdition[_tokenId];
 
@@ -259,30 +342,11 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     commissionAccount.transfer(finalCommissionTotal);
   }
 
-  function purchaseWithFiat(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
-
-    // now purchased - don't allow re-purchase!
-    tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
-
-    totalNumberOfPurchases = totalNumberOfPurchases.add(1);
-
-    PurchasedWithFiat(_tokenId);
-
-    return true;
-  }
-
-  function reverseFiatPurchase(uint256 _tokenId) public onlyManagement onlyFiatPurchased(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
-
-    // reset to Unsold
-    tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
-
-    totalNumberOfPurchases = totalNumberOfPurchases.sub(1);
-
-    PurchasedWithFiatReversed(_tokenId);
-
-    return true;
-  }
-
+  /**
+   * @dev Retrieve all asset information for the provided token
+   * @param _tokenId the KODA token ID
+   * @return tokenId, owner, purchaseState, priceInWei, purchaseFromDateTime
+   */
   function assetInfo(uint _tokenId) public view returns (
     uint256 _tokId,
     address _owner,
@@ -299,13 +363,17 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     );
   }
 
+  /**
+   * @dev Retrieve all edition information for the provided token
+   * @param _tokenId the KODA token ID
+   * @return tokenId, edition, editionNumber, tokenUri
+   */
   function editionInfo(uint256 _tokenId) public view returns (
     uint256 _tokId,
     bytes16 _edition,
     uint256 _editionNumber,
     string _tokenURI
   ) {
-
     bytes16 edition = tokenIdToEdition[_tokenId];
     return (
     _tokenId,
@@ -345,6 +413,11 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     return Strings.strConcat(tokenBaseURI, tokenURIs[_tokenId]);
   }
 
+  /**
+   * @dev Allows management to update the base tokenURI path
+   * @dev Reverts if token not called by management
+   * @param _newBaseURI the new base URI to set
+   */
   function setTokenBaseURI(string _newBaseURI) external onlyManagement {
     tokenBaseURI = _newBaseURI;
   }
