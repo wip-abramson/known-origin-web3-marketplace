@@ -60,7 +60,7 @@ const store = new Vuex.Store({
     },
     availableAssetsForEdition: (state, getters) => (edition) => {
       let editions = getters.assetsForEdition(edition);
-      return _.reject(editions, {purchased: 0});
+      return _.filter(editions, {purchased: 0});
     },
     firstAssetForEdition: (state) => (edition) => {
       return _.head(state.assets.filter((asset) => asset.edition === edition));

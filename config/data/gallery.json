@@ -142,7 +142,8 @@
           "numberOfEditions": 1,
           "fiatCost": 250,
           "costInEth": 0.89
-        },{
+        },
+        {
           "artworkName": "Inside Man",
           "ipfsPath": "inside_man",
           "edition": "STAINSIDEMAN1PHY",
@@ -276,6 +277,148 @@
           "numberOfEditions": 25,
           "fiatCost": 20,
           "costInEth": 0.071
+        }
+      ]
+    },
+    {
+      "name": "89-A",
+      "artworks": [
+        {
+          "artworkName": "Up&down",
+          "ipfsPath": "89a_up_and_down",
+          "edition": "89AUP&DOWN001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 33,
+          "costInEth": 0.12
+        },
+        {
+          "artworkName": "Wake",
+          "ipfsPath": "89a_wake",
+          "edition": "89AWAKE000001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 33,
+          "costInEth": 0.12
+        }
+      ]
+    },
+    {
+      "name": "Hamish Muir",
+      "artworks": [
+        {
+          "artworkName": "tephra iP138",
+          "ipfsPath": "tephra_ip138",
+          "edition": "HSMTEPHRAP138PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 300,
+          "costInEth": 1
+        },
+        {
+          "artworkName": "tephra iP0100",
+          "ipfsPath": "tephra_ip0100",
+          "edition": "HSMTEPHRP0100PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 300,
+          "costInEth": 1
+        },
+        {
+          "artworkName": "tephra iP0250",
+          "ipfsPath": "tephra_ip0250",
+          "edition": "HSMTEPHiP0250PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 300,
+          "costInEth": 1
+        }
+      ]
+    },
+    {
+      "name": "Muirmcneil",
+      "artworks": [
+        {
+          "artworkName": "Neue Haas Unica",
+          "ipfsPath": "neue_haas_unica",
+          "edition": "MRLNEHAUN0001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 65,
+          "costInEth": 0.24
+        }
+      ]
+    },
+    {
+      "name": "Chris English",
+      "artworks": [
+        {
+          "artworkName": "Sample 1",
+          "ipfsPath": "cotton_and_path_sample_1",
+          "edition": "CHESAMPLE1CTNPHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.37
+        },
+        {
+          "artworkName": "Sample 2",
+          "ipfsPath": "cotton_and_path_sample_2",
+          "edition": "CHESAMPLE1CTNPHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.37
+        },
+        {
+          "artworkName": "Sample 3",
+          "ipfsPath": "cotton_and_path_sample_3",
+          "edition": "CHESAMPLE1CTNPHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.37
+        },
+        {
+          "artworkName": "Sample 4",
+          "ipfsPath": "cotton_and_path_sample_4",
+          "edition": "CHESAMPLE1CTNPHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.37
+        }
+      ]
+    },
+    {
+      "name": "laurence-amelie",
+      "artworks": [
+        {
+          "artworkName": "Untitled 2011 #1",
+          "ipfsPath": "lam_untitled_2011_1",
+          "edition": "LAMUTLD2011#1PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 2844,
+          "costInEth": 10.50
+        },
+        {
+          "artworkName": "Untitled 2011 #2",
+          "ipfsPath": "lam_untitled_2011_2",
+          "edition": "LAMUTLD2011#2PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 2959,
+          "costInEth": 11
+        },
+        {
+          "artworkName": "Untitled 2011 #3",
+          "ipfsPath": "lam_untitled_2011_3",
+          "edition": "LAMUTLD2011#3PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 2959,
+          "costInEth": 11
+        }
+      ]
+    },
+    {
+      "name": "Stanley Chow",
+      "artworks": [
+        {
+          "artworkName": "The Green Lady",
+          "ipfsPath": "sch_the_green_lady",
+          "edition": "SCHGREENLADY1PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 90,
+          "costInEth": 0.33
         }
       ]
     }

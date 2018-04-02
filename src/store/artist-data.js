@@ -113,7 +113,7 @@ const artists = [
     hidden: true
   },
   {
-    artistCode: 'HSM',
+    artistCode: 'LAM',
     name: 'laurence-amelie',
     hidden: true
   },

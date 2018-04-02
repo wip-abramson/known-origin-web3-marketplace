@@ -1597,10 +1597,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         let support = await this.token.supportsInterface('0x6352211e');
         support.should.be.equal.true;
       });
-      it('supports exists()', async function () {
-        let support = await this.token.supportsInterface('0x4f558e79');
-        support.should.be.equal.true;
-      });
       it('supports approve()', async function () {
         let support = await this.token.supportsInterface('0x095ea7b3');
         support.should.be.equal.true;
@@ -1627,6 +1623,14 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
       it('supports safeTransferFrom() overloaded with bytes', async function () {
         let support = await this.token.supportsInterface('0xb88d4fde');
+        support.should.be.equal.true;
+      });
+    });
+
+
+    describe('supports ERC721 optional', async function () {
+      it('supports exists()', async function () {
+        let support = await this.token.supportsInterface('0x4f558e79');
         support.should.be.equal.true;
       });
     });
