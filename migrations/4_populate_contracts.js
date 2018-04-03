@@ -79,6 +79,7 @@ const loadSeedData = (instance, _curatorAccount, _openingTime) => {
         edition,
         costInWei,
         openingTime,
+        _curatorAccount,
         {
           from: _curatorAccount,
         }

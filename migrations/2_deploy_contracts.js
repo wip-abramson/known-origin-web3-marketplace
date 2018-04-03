@@ -20,5 +20,5 @@ module.exports = function (deployer, network, accounts) {
   console.log(`_commissionAccount = ${_commissionAccount}`);
   console.log(`_contractDeveloper = ${_contractDeveloper}`);
 
-  deployer.deploy(KnownOriginDigitalAsset, _commissionAccount, _contractDeveloper);
+  deployer.deploy(KnownOriginDigitalAsset, _contractDeveloper);
 };

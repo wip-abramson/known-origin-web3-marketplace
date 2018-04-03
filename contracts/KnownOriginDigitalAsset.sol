@@ -7,8 +7,6 @@ import "./Strings.sol";
 
 import "./ERC165.sol";
 
-
-
 /**
 * @title KnownOriginDigitalAsset
 *
@@ -81,9 +79,6 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   // the person who is responsible for designing and building the contract
   address public developerAccount;
 
-  // the person who puts on the event
-  address public commissionAccount;
-
   uint256 public totalPurchaseValueInWei;
 
   uint256 public totalNumberOfPurchases;
@@ -98,6 +93,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   mapping(uint256 => uint32) internal tokenIdToPurchaseFromTime;
 
   mapping(bytes16 => uint256) internal editionToEditionNumber;
+  mapping(bytes16 => address) internal editionToArtistAccount;
 
   event PurchasedWithEther(uint256 indexed _tokenId, address indexed _buyer);
 
@@ -135,9 +131,8 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     _;
   }
 
-  function KnownOriginDigitalAsset(address _commissionAccount, address _developerAccount) public ERC721Token("KnownOriginDigitalAsset", "KODA") {
+  function KnownOriginDigitalAsset(address _developerAccount) public ERC721Token("KnownOriginDigitalAsset", "KODA") {
     curatorAccount = msg.sender;
-    commissionAccount = _commissionAccount;
     developerAccount = _developerAccount;
   }
 
@@ -150,14 +145,19 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @dev Mint a new KODA token
    * @dev Reverts if not called by management
    * @param _tokenURI the IPFS or equivalent hash
-   * @param _edition the identifier of the edition - leading 3 bytes are the artists code, trailing 3 bytes are the asset type
+   * @param _edition the identifier of the edition - leading 3 bytes are the artist code, trailing 3 bytes are the asset type
    * @param _priceInWei the price of the KODA token
    * @param _auctionStartDate the date when the token is available for sale
    */
-  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate) public onlyManagement {
+  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate, address _artistAccount) public onlyManagement {
+    require(_artistAccount != address(0));
+
     uint256 _tokenId = allTokens.length;
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
+
+    editionToArtistAccount[_edition] = _artistAccount;
+
     _populateTokenData(_tokenId, _edition, _priceInWei, _auctionStartDate);
   }
 
@@ -237,10 +237,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    */
   function getCommissionForType(string _type) public view returns (uint8 _curator, uint8 _developer) {
     CommissionStructure storage commission = editionTypeToCommission[_type];
-    return (
-      commission.curator,
-      commission.developer
-    );
+    return (commission.curator, commission.developer);
   }
 
   /**
@@ -339,7 +336,8 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     uint finalCommissionTotal = msg.value - (curatorAccountFee + developerAccountFee);
 
     // send ether
-    commissionAccount.transfer(finalCommissionTotal);
+    address artistAccount = editionToArtistAccount[edition];
+    artistAccount.transfer(finalCommissionTotal);
   }
 
   /**
