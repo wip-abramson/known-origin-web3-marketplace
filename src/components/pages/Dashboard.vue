@@ -4,7 +4,7 @@
 
       <div id="splash">
         <h2 class="strap">Buy original artwork and rare digital art</h2>
-        <router-link :to="{ name: 'gallery' }" tag="button" class="btn">View gallery</router-link>
+        <router-link :to="{ name: 'gallery' }" tag="button" class="btn btn-action">View gallery</router-link>
       </div>
 
       <div id="intro">
@@ -33,9 +33,8 @@
       <section class="cards">
         <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
       </section>
-
     </div>
-    <router-link :to="{ name: 'artists' }" class="viewAllArtists">View all artists</router-link>
+    <router-link :to="{ name: 'artists' }" class="btn btn-link">View all artists</router-link>
     <div id="how-ko-works">
       <h2>How KnownOrigin.io works</h2>
       <div>

@@ -20,7 +20,7 @@
         <price-in-eth :value="edition.priceInEther"></price-in-eth>
 
         <p v-if="!purchase" class="pad-top">
-          <router-link :to="{ name: 'confirmPurchase', params: { artistCode: edition.edition.substring(0, 3), edition: edition.edition }}" class="btn">
+          <router-link :to="{ name: 'confirmPurchase', params: { artistCode: edition.edition.substring(0, 3), edition: edition.edition }}" class="btn btn-link">
             View details
           </router-link>
         </p>
@@ -73,4 +73,5 @@
 </script>
 
 <style scoped>
+
 </style>

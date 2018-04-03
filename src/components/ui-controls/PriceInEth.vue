@@ -16,7 +16,6 @@
 <style scoped>
   .price {
     font-weight: bold;
-    font-size: 1.25em;
     text-align: center;
   }
 </style>

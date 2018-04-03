@@ -35,7 +35,6 @@
       <current-network style="float: right"></current-network>
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
-      <!--<p>(+44) 7715 86 28 33</p>-->
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
 
       <router-link :to="{ name: 'license' }">License</router-link>
@@ -97,6 +96,7 @@
 
   $sold: red;
   $warning: darkorange;
+  $success: #2ed573;
 
   /*--------------------------------------------------------------
     Header styles minus menu
@@ -149,25 +149,29 @@
     color: $gray;
   }
 
+  td {
+    vertical-align: middle;
+  }
+
   #footer p {
     color: rgba(255, 255, 255, 0.5);
   }
 
   * {
     box-sizing: border-box;
+    vertical-align: middle;
   }
 
   .btn {
     display: block;
     margin-bottom: 60px;
     width: 100%;
-    background: $primary;
-    color: $secondary;
+    color: $white;
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
     text-align: center;
-    border: none;
+    border: solid $primary 2px;
     border-radius: 28px;
 
     &:hover {
@@ -177,6 +181,44 @@
     &:disabled {
       background: $gray;
       text-decoration: none;
+    }
+
+    &.btn-action {
+      background-color: $primary;
+      color: $white;
+      border: solid $primary 2px;
+    }
+
+    &.btn-sold {
+      background-color: $sold;
+      color: $white;
+      border: solid $sold 2px;
+    }
+
+    &.btn-link {
+      color: $primary;
+      border: solid $primary 2px;
+    }
+
+    &.btn-warning {
+      background-color: $warning;
+      border: solid $warning 2px;
+      color: $white;
+    }
+
+    &.btn-danger {
+      background-color: $sold;
+    }
+
+    &.btn-success {
+      background-color: $success;
+      border: solid $success 2px;
+      color: $white;
+    }
+
+    &.btn-muted {
+      border: solid $gray 2px;
+      color: $gray;
     }
   }
 
@@ -273,7 +315,7 @@
     margin-top: 20px !important;
 
     .card-content {
-      box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);
+      box-shadow: inset 0 -1px 0px rgba(0, 0, 0, 0.1);
     }
 
     .card {
@@ -291,7 +333,6 @@
     img, .artists img {
       width: 75%;
     }
-
 
   }
 
@@ -336,7 +377,6 @@
   .token-id {
     font-weight: bold;
     color: $gray;
-    font-size: 1.25em;
   }
 
   @media screen and (min-width: 40em) {
@@ -420,14 +460,6 @@
     padding: 5px;
   }
 
-  .btn-warning {
-    background-color: $warning;
-  }
-
-  .btn-danger {
-    background-color: $sold;
-  }
-
   .error {
     background-color: $sold;
   }
@@ -505,7 +537,10 @@
     margin-top: 0px;
   }
 
-  .viewAllArtists{
+  #how-ko-works {
+  }
+
+  .viewAllArtists {
     width: 100%;
     display: block;
     text-align: center;

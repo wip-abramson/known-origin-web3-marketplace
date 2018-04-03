@@ -3,7 +3,7 @@
 
     <div class="card-content">
       <div class="artist-info">
-        <router-link :to="{ name: 'artist', params: { id: artist.id} }">
+        <router-link :to="{ name: 'artist', params: { artistCode: artist.artistCode} }">
           <figure class="thumbnail">
             <img :src="artist.img"/>
           </figure>

@@ -40,23 +40,42 @@
           </div>
 
           <div v-if="!assetPurchaseState(asset.id)">
+
             <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
-              <p>You:<br/>
-                <address-icon :eth-address="account" :size="'small'"></address-icon>
-              </p>
+              <table>
+                <tr>
+                  <td><img src="/../../static/Account_You_icn.svg" style="height: 50px"/></td>
+                  <td>
+                    You:<br/>
+                      <address-icon :eth-address="account" :size="'small'"></address-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td><img src="/../../static/DotDivider@x2.svg" style="height: 50px"/></td>
+                </tr>
+                <tr>
+                  <td><img src="/../../static/ETH_icn.svg" style="height: 50px"/></td>
+                  <td>
+                    <price-in-eth :value="asset.priceInEther"></price-in-eth>
+                  </td>
+                </tr>
+                <tr>
+                  <td><img src="/../../static/DotDivider@x2.svg" style="height: 50px"/></td>
+                </tr>
+                <tr>
+                  <td><img src="/../../static/Account_You_icn.svg" style="height: 50px"/></td>
+                  <td>
+                    Transfer to:<br/>
+                    <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+                  </td>
+                </tr>
+              </table>
             </div>
 
-            <price-in-eth :value="asset.priceInEther"></price-in-eth>
-
-            <div class="pad-top pad-bottom">
-              <p>Transfer to:<br/>
-                <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
-              </p>
-            </div>
             <hr/>
           </div>
 
-          <p>Total ETH: {{ asset.priceInEther }}</p>
+          <h3>Total ETH: {{ asset.priceInEther }}</h3>
 
           <div v-if="isPurchaseFailed(asset.id)">
             <button type="button" v-on:click="retryPurchase" class="btn">
