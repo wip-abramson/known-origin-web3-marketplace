@@ -13,16 +13,15 @@
     <modal name="no-web3-found" :height="400" :clickToClose="false">
       <div class="no-web3-found-container">
         <div>
-          <h1>No web3 provider found!</h1>
+          <h1 class="text-danger">No Ethereum provider detected!</h1>
 
           <p>
-            You need to install <a href='https://metmask.io' target="_blank">MetaMask </a> to use this feature. <a
-            href='https://metmask.io' target="_blank">https://metamask.io</a>
+            You need to install <a href='https://metmask.io' target="_blank">MetaMask</a> to use this application and buy digital assets.
           </p>
 
         </div>
         <div>
-          <img src="../static/pay_with_metamask.png"/>
+          <a href='https://metmask.io' target="_blank"><img src="../static/pay_with_metamask.png"/></a>
         </div>
       </div>
     </modal>
@@ -65,7 +64,8 @@
     mounted() {
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 === 'undefined') {
-        console.error('No web3 detected...');
+        console.log('No web3? You should consider trying MetaMask!');
+        this.$modal.show('no-web3-found');
         return;
       }
       if (web3) {
@@ -556,5 +556,9 @@
 
   .text-muted {
     color: $gray !important;
+  }
+
+  .no-web3-found-container {
+    margin: 50px;
   }
 </style>
