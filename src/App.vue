@@ -553,4 +553,8 @@
   .text-success {
     color: $success !important;
   }
+
+  .text-muted {
+    color: $gray !important;
+  }
 </style>
