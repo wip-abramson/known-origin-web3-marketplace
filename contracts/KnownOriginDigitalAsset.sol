@@ -195,9 +195,8 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _tokenId the KODA token ID
    * @param _priceInWei the price in wei
    */
-  function setPriceInWei(uint _tokenId, uint256 _priceInWei) public onlyManagement onlyUnsold(_tokenId) returns (bool _result) {
+  function setPriceInWei(uint _tokenId, uint256 _priceInWei) public onlyManagement onlyUnsold(_tokenId) {
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
-    return true;
   }
 
   /**
@@ -221,13 +220,12 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _curator the curators commission
    * @param _developer the developers commission
    */
-  function updateCommission(string _type, uint8 _curator, uint8 _developer) public onlyManagement returns (bool) {
+  function updateCommission(string _type, uint8 _curator, uint8 _developer) public onlyManagement {
     require(_curator > 0);
     require(_developer > 0);
     require((_curator + _developer) < 100);
 
     editionTypeToCommission[_type] = CommissionStructure({curator : _curator, developer : _developer});
-    return true;
   }
 
   /**
@@ -248,35 +246,29 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _tokenId the KODA token ID
    * @return true/false depending on success
    */
-  function purchaseWithEther(uint256 _tokenId) public payable onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
+  function purchaseWithEther(uint256 _tokenId) public payable onlyUnsold(_tokenId) onlyManagementOwnedToken(_tokenId) onlyAfterPurchaseFromTime(_tokenId) {
 
     uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
+    require(msg.value >= priceInWei);
 
-    if (msg.value >= priceInWei) {
+    // approve sender as they have paid the required amount
+    _approvePurchaser(msg.sender, _tokenId);
 
-      // approve sender as they have paid the required amount
-      _approvePurchaser(msg.sender, _tokenId);
+    // transfer assets from contract creator (curator) to new owner
+    safeTransferFrom(curatorAccount, msg.sender, _tokenId);
 
-      // transfer assets from contract creator (curator) to new owner
-      safeTransferFrom(curatorAccount, msg.sender, _tokenId);
+    // now purchased - don't allow re-purchase!
+    tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
 
-      // now purchased - don't allow re-purchase!
-      tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;
+    totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
+    totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
-      totalPurchaseValueInWei = totalPurchaseValueInWei.add(msg.value);
-      totalNumberOfPurchases = totalNumberOfPurchases.add(1);
-
-      // Only apply commission if the art work has value
-      if (priceInWei > 0) {
-        _applyCommission(_tokenId);
-      }
-
-      PurchasedWithEther(_tokenId, msg.sender);
-
-      return true;
+    // Only apply commission if the art work has value
+    if (priceInWei > 0) {
+      _applyCommission(_tokenId);
     }
 
-    return false;
+    PurchasedWithEther(_tokenId, msg.sender);
   }
 
   /**
@@ -285,7 +277,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @dev Reverts if token not unsold and not available to be purchased and not called by management
    * @param _tokenId the KODA token ID
    */
-  function purchaseWithFiat(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
+  function purchaseWithFiat(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) {
 
     // now purchased - don't allow re-purchase!
     tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
@@ -293,8 +285,6 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     totalNumberOfPurchases = totalNumberOfPurchases.add(1);
 
     PurchasedWithFiat(_tokenId);
-
-    return true;
   }
 
   /**
@@ -302,7 +292,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @dev Reverts if token not purchased with fiat and not available to be purchased and not called by management
    * @param _tokenId the KODA token ID
    */
-  function reverseFiatPurchase(uint256 _tokenId) public onlyManagement onlyFiatPurchased(_tokenId) onlyAfterPurchaseFromTime(_tokenId) returns (bool _result) {
+  function reverseFiatPurchase(uint256 _tokenId) public onlyManagement onlyFiatPurchased(_tokenId) onlyAfterPurchaseFromTime(_tokenId) {
 
     // reset to Unsold
     tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
@@ -310,8 +300,6 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     totalNumberOfPurchases = totalNumberOfPurchases.sub(1);
 
     PurchasedWithFiatReversed(_tokenId);
-
-    return true;
   }
 
   /**
@@ -370,14 +358,16 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     uint256 _tokId,
     bytes16 _edition,
     uint256 _editionNumber,
-    string _tokenURI
+    string _tokenURI,
+    address _artistAccount
   ) {
     bytes16 edition = tokenIdToEdition[_tokenId];
     return (
     _tokenId,
     edition,
     editionToEditionNumber[edition],
-    tokenURI(_tokenId)
+    tokenURI(_tokenId),
+    editionToArtistAccount[edition]
     );
   }
 
@@ -401,9 +391,9 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     return tokenIdToPriceInWei[_tokenId];
   }
 
-  function getTypeFromEdition(bytes16 _bytes16) public pure returns (string) {
+  function getTypeFromEdition(bytes16 _edition) public pure returns (string) {
     // return last 3 chars that represent the edition type
-    return Strings.bytes16ToStr(_bytes16, 13, 16);
+    return Strings.bytes16ToStr(_edition, 13, 16);
   }
 
   function tokenURI(uint256 _tokenId) public view returns (string) {
