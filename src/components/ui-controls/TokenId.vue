@@ -1,5 +1,5 @@
 <template>
-  <span class="token-id">{{ pad }}</span>
+  <span class="token-id">KODA {{ pad }}</span>
 </template>
 
 <script>

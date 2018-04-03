@@ -164,7 +164,6 @@
 
   .btn {
     display: block;
-    margin-bottom: 60px;
     width: 100%;
     color: $white;
     font-size: 20px;
@@ -356,7 +355,6 @@
   .pull-right {
     float: right;
     text-decoration: none;
-    font-size: 15px;
   }
 
   .header-dash {
@@ -548,4 +546,11 @@
     margin-bottom: 40px;
   }
 
+  .text-danger {
+    color: $sold !important;
+  }
+
+  .text-success {
+    color: $success !important;
+  }
 </style>

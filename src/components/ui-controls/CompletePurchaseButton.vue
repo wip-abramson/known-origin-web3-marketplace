@@ -9,9 +9,9 @@
           <label :for="'confirm_terms'">I agree with KODA license</label>
         </div>
 
-        <div class="pad-bottom muted" v-if="isUnsold">
+        <div class="pad-bottom muted license-text" v-if="isUnsold">
           By choosing <strong>I agree</strong>, you understand and agree to KnownOrigin's term of service and usage license.
-          <router-link :to="{ name: 'license' }">Read license</router-link>
+          <router-link :to="{ name: 'license' }" target="_blank">Read license</router-link>
         </div>
 
         <button type="button" class="btn btn-success"
@@ -38,7 +38,7 @@
       <!--</div>-->
 
       <div>
-        <router-link v-if="asset.purchased !== 0" :to="{ name: 'account'}" class="btn">
+        <router-link v-if="asset.purchased !== 0" :to="{ name: 'account'}" class="btn btn-link">
           View account
         </router-link>
       </div>
