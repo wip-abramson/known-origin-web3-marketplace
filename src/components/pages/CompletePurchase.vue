@@ -16,10 +16,12 @@
           <div class="card-content">
 
             <div v-if="isPurchaseTriggered(asset.id)" class="icon-message">
+              <img src="../../../static/GreenTick.svg" style="width: 100px"/>
               <h2 class="text-muted pad-top">Your purchase is being initiated</h2>
             </div>
 
             <div v-if="isPurchaseStarted(asset.id)" class="icon-message">
+              <img src="../../../static/GreenTick.svg" style="width: 100px"/>
               <h2 class="text-muted pad-top">Your purchase is being mined on the Blockchain...</h2>
             </div>
 
