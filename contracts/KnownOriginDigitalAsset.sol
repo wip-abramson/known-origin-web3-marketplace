@@ -131,6 +131,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     _;
   }
 
+
   function KnownOriginDigitalAsset(address _developerAccount) public ERC721Token("KnownOriginDigitalAsset", "KODA") {
     curatorAccount = msg.sender;
     developerAccount = _developerAccount;

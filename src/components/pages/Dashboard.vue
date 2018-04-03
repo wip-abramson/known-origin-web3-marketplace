@@ -33,6 +33,7 @@
       <section class="cards">
         <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
       </section>
+
     </div>
     <router-link :to="{ name: 'artists' }" class="viewAllArtists">View all artists</router-link>
     <div id="how-ko-works">

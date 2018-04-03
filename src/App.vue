@@ -119,7 +119,7 @@
   }
 
   h2 {
-    color: $gray;
+    color: $primary;
     display: block;
     font-size: 28px;
     margin-top: 20px;
@@ -133,6 +133,14 @@
     margin-top: 15px;
     margin-bottom: 15px;
     font-weight: bold;
+  }
+
+  h4 {
+    color: $primary;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   p {
@@ -160,11 +168,12 @@
     text-decoration: none;
     text-align: center;
     border: none;
-    border-radius: 7px;
+    border-radius: 28px;
 
     &:hover {
       text-decoration: none;
     }
+
     &:disabled {
       background: $gray;
       text-decoration: none;
@@ -196,7 +205,8 @@
   #header {
     color: $primary;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
+    margin-top: 10px;
     background-color: #FDFDFD;
   }
 
@@ -205,6 +215,7 @@
     color: $secondary;
     padding: 10px;
     padding-bottom: 50px;
+
     a {
       color: $secondary;
       text-decoration: none;
@@ -258,16 +269,30 @@
     }
   }
 
-  #featured-artists {
+  #featured-artists, #artists {
     margin-top: 20px !important;
-  }
 
-  #featured-artists h2 {
-    margin-bottom: 40px !important;
-  }
+    .card-content {
+      box-shadow: inset 0 -1px 0px rgba(0,0,0,0.1);
+    }
 
-  #featured-artists img, .artists img {
-    width: 75%;
+    .card {
+      background: $background;
+    }
+
+    h2 {
+      margin-bottom: 40px !important;
+    }
+
+    h3 {
+      color: $primary;
+    }
+
+    img, .artists img {
+      width: 75%;
+    }
+
+
   }
 
   img {
@@ -472,7 +497,7 @@
   }
 
   #intro {
-    padding-left: 10px;
+    padding-left: 25px;
     width: 50%;
   }
 

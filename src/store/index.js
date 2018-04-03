@@ -36,7 +36,6 @@ const store = new Vuex.Store({
 
     // contract addresses
     curatorAddress: null,
-    commissionAddress: null,
     contractDeveloperAddress: null,
 
     // non-contract data
@@ -108,9 +107,8 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, commissionAddress, contractDeveloperAddress, contractAddress}) {
+    [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, contractDeveloperAddress, contractAddress}) {
       state.curatorAddress = curatorAddress;
-      state.commissionAddress = commissionAddress;
       state.contractDeveloperAddress = contractDeveloperAddress;
       state.contractAddress = contractAddress;
     },
@@ -324,11 +322,10 @@ const store = new Vuex.Store({
       KnownOriginDigitalAsset.deployed()
         .then((contract) => {
 
-          Promise.all([contract.curatorAccount(), contract.commissionAccount(), contract.developerAccount(), contract.address])
+          Promise.all([contract.curatorAccount(), contract.developerAccount(), contract.address])
             .then((results) => {
               commit(mutations.SET_COMMISSION_ADDRESSES, {
                 curatorAddress: results[0],
-                commissionAddress: results[1],
                 contractDeveloperAddress: results[2],
                 contractAddress: results[3]
               });
