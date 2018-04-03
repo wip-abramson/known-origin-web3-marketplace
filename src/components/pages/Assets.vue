@@ -4,9 +4,9 @@
       <img src="../../../static/back_arrow.svg" style="width: 50px"/>
     </router-link>
 
-    <h1>Assets</h1>
+    <h1>Assets <span v-if="assets">({{ assets.length }})</span></h1>
 
-    <h2 v-if="assets">{{ assets.length }} assets</h2>
+
 
     <div class="centered">
       <section class="cards centered" v-if="assets">
