@@ -36,7 +36,6 @@ const store = new Vuex.Store({
 
     // contract addresses
     curatorAddress: null,
-    commissionAddress: null,
     contractDeveloperAddress: null,
 
     // non-contract data
@@ -108,9 +107,8 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, commissionAddress, contractDeveloperAddress, contractAddress}) {
+    [mutations.SET_COMMISSION_ADDRESSES](state, {curatorAddress, contractDeveloperAddress, contractAddress}) {
       state.curatorAddress = curatorAddress;
-      state.commissionAddress = commissionAddress;
       state.contractDeveloperAddress = contractDeveloperAddress;
       state.contractAddress = contractAddress;
     },

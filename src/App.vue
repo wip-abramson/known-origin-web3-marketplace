@@ -13,16 +13,13 @@
     <modal name="no-web3-found" :height="400" :clickToClose="false">
       <div class="no-web3-found-container">
         <div>
-          <h1>No web3 provider found!</h1>
-
+          <h1 class="text-danger">No Ethereum provider detected!</h1>
           <p>
-            You need to install <a href='https://metmask.io' target="_blank">MetaMask </a> to use this feature. <a
-            href='https://metmask.io' target="_blank">https://metamask.io</a>
+            You need to install <a href='https://metmask.io' target="_blank">MetaMask</a> to use this application and buy digital assets.
           </p>
-
         </div>
         <div>
-          <img src="../static/pay_with_metamask.png"/>
+          <a href='https://metmask.io' target="_blank"><img src="../static/pay_with_metamask.png"/></a>
         </div>
       </div>
     </modal>
@@ -35,14 +32,19 @@
       <current-network style="float: right"></current-network>
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
-      <!--<p>(+44) 7715 86 28 33</p>-->
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
 
-      <router-link :to="{ name: 'license' }">License</router-link>
-      |
-      <router-link :to="{ name: 'details' }">Contract details</router-link>
-      |
-      <router-link :to="{ name: 'assets' }">Assets</router-link>
+      <div class="text-center pad-top">
+        <router-link :to="{ name: 'dashboard' }">Home</router-link>
+        |
+        <router-link :to="{ name: 'license' }">License</router-link>
+        |
+        <router-link :to="{ name: 'details' }">Contract</router-link>
+        |
+        <router-link :to="{ name: 'gallery' }">Gallery</router-link>
+        |
+        <router-link :to="{ name: 'assets' }">Assets</router-link>
+      </div>
     </footer>
   </div>
 </template>
@@ -66,7 +68,8 @@
     mounted() {
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 === 'undefined') {
-        console.error('No web3 detected...');
+        console.log('No web3? You should consider trying MetaMask!');
+        this.$modal.show('no-web3-found');
         return;
       }
       if (web3) {
@@ -92,11 +95,12 @@
   $background: #f2f5fb;
   $black: black;
   $gray: #545454;
-  $white: #FFF;
+  $white: #FDFDFD;
   $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
 
   $sold: red;
   $warning: darkorange;
+  $success: #2ed573;
 
   /*--------------------------------------------------------------
     Header styles minus menu
@@ -111,6 +115,7 @@
     margin-bottom: 20px;
     color: $primary;
     border-bottom: 1px;
+    padding-bottom: 20px;
   }
 
   #splash h2 {
@@ -119,9 +124,9 @@
   }
 
   h2 {
-    color: $gray;
+    color: $primary;
     display: block;
-    font-size: 28px;
+    font-size: 26px;
     margin-top: 20px;
     margin-bottom: 20px;
   }
@@ -135,10 +140,22 @@
     font-weight: bold;
   }
 
+  h4 {
+    color: $primary;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
   p {
     line-height: 28px;
     margin-bottom: 10px;
     color: $gray;
+  }
+
+  td {
+    vertical-align: middle;
   }
 
   #footer p {
@@ -147,27 +164,66 @@
 
   * {
     box-sizing: border-box;
+    vertical-align: middle;
   }
 
   .btn {
     display: block;
-    margin-bottom: 60px;
     width: 100%;
-    background: $primary;
-    color: $secondary;
+    color: $white;
     font-size: 20px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
     text-align: center;
-    border: none;
-    border-radius: 7px;
+    border: solid $primary 2px;
+    border-radius: 28px;
 
     &:hover {
       text-decoration: none;
     }
-    &:disabled {
-      background: $gray;
-      text-decoration: none;
+
+    &.btn-action {
+      background-color: $primary;
+      color: $white;
+      border: solid $primary 2px;
+    }
+
+    &.btn-sold {
+      background-color: $sold;
+      color: $white;
+      border: solid $sold 2px;
+    }
+
+    &.btn-link {
+      color: $primary;
+      border: solid $primary 2px;
+    }
+
+    &.btn-warning {
+      background-color: $warning;
+      border: solid $warning 2px;
+      color: $white;
+    }
+
+    &.btn-danger {
+      background-color: $sold;
+    }
+
+    &.btn-success {
+      background-color: $success;
+      border: solid $success 2px;
+      color: $white;
+
+      &:disabled {
+        background: $gray;
+        text-decoration: none;
+        border: solid $gray 2px;
+      }
+    }
+
+    &.btn-muted {
+      border: solid $gray 2px;
+      color: $gray;
     }
   }
 
@@ -196,8 +252,9 @@
   #header {
     color: $primary;
     padding: 10px;
-    margin-bottom: 10px;
-    background-color: #FDFDFD;
+    margin-bottom: 35px;
+    margin-top: 10px;
+    background-color: $white;
   }
 
   #footer {
@@ -205,6 +262,7 @@
     color: $secondary;
     padding: 10px;
     padding-bottom: 50px;
+
     a {
       color: $secondary;
       text-decoration: none;
@@ -258,16 +316,29 @@
     }
   }
 
-  #featured-artists {
+  #featured-artists, #artists {
     margin-top: 20px !important;
-  }
 
-  #featured-artists h2 {
-    margin-bottom: 40px !important;
-  }
+    .card-content {
+      box-shadow: inset 0 -1px 0px rgba(0, 0, 0, 0.1);
+    }
 
-  #featured-artists img, .artists img {
-    width: 75%;
+    .card {
+      background: $background;
+    }
+
+    h2 {
+      margin-bottom: 40px !important;
+    }
+
+    h3 {
+      color: $primary;
+    }
+
+    img, .artists img {
+      width: 75%;
+    }
+
   }
 
   img {
@@ -290,7 +361,6 @@
   .pull-right {
     float: right;
     text-decoration: none;
-    font-size: 15px;
   }
 
   .header-dash {
@@ -311,7 +381,6 @@
   .token-id {
     font-weight: bold;
     color: $gray;
-    font-size: 1.25em;
   }
 
   @media screen and (min-width: 40em) {
@@ -359,7 +428,6 @@
   }
 
   .thumbnail {
-
     text-align: center;
   }
 
@@ -393,14 +461,6 @@
     background-color: $gray;
     color: $secondary;
     padding: 5px;
-  }
-
-  .btn-warning {
-    background-color: $warning;
-  }
-
-  .btn-danger {
-    background-color: $sold;
   }
 
   .error {
@@ -472,7 +532,7 @@
   }
 
   #intro {
-    padding-left: 10px;
+    padding-left: 25px;
     width: 50%;
   }
 
@@ -480,7 +540,19 @@
     margin-top: 0px;
   }
 
-  .viewAllArtists{
+  #how-ko-works {
+    h4 {
+      font-size: 24px;
+    }
+
+    h3 {
+      font-size: 34px;
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+    }
+  }
+
+  .viewAllArtists {
     width: 100%;
     display: block;
     text-align: center;
@@ -488,4 +560,24 @@
     margin-bottom: 40px;
   }
 
+  .text-danger {
+    color: $sold !important;
+  }
+
+  .text-success {
+    color: $success !important;
+  }
+
+  .text-muted {
+    color: $gray !important;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+
+  .no-web3-found-container {
+    margin: 50px;
+  }
 </style>

@@ -8,58 +8,86 @@
       <img src="../../../static/back_arrow.svg" style="width: 50px"/>
     </router-link>
 
-    <h1>
-      {{ asset.otherMeta.artworkName }}
-    </h1>
+    <h1>&nbsp;</h1>
 
     <article class="card assets_to_buy pad-bottom">
       <div>
-        <div class="card-content">
-          <token-id :value="asset.id"></token-id>
+        <div class="border-box">
+          <div class="card-content">
 
-          <edition-name-by-artist :edition="asset" :purchase="true"></edition-name-by-artist>
-
-          <hr/>
-
-          <div v-if="isPurchaseTriggered(asset.id)">
-            <h2>Your purchase is being initiated</h2>
-          </div>
-
-          <div v-if="isPurchaseStarted(asset.id)">
-            <h2>Your purchase is being mined on the Blockchain...</h2>
-          </div>
-
-          <div v-if="isPurchaseSuccessful(asset.id)">
-            <img src="../../../static/GreenTick.svg" style="width: 150px"/>
-            <h2 class="text-success pad-top">Your purchase was successful</h2>
-          </div>
-
-          <div v-if="isPurchaseFailed(asset.id)">
-            <img src="../../../static/Failure.svg" style="width: 150px"/>
-            <h2 class="text-danger pad-top">Your purchase failed</h2>
-          </div>
-
-          <div v-if="!assetPurchaseState(asset.id)">
-            <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
-              <p>You:<br/>
-                <address-icon :eth-address="account" :size="'small'"></address-icon>
-              </p>
+            <div v-if="isPurchaseTriggered(asset.id)" class="icon-message">
+              <img src="../../../static/GreenTick.svg" style="width: 100px"/>
+              <h2 class="text-muted pad-top">Your purchase is being initiated</h2>
             </div>
 
-            <price-in-eth :value="asset.priceInEther"></price-in-eth>
-
-            <div class="pad-top pad-bottom">
-              <p>Transfer to:<br/>
-                <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
-              </p>
+            <div v-if="isPurchaseStarted(asset.id)" class="icon-message">
+              <img src="../../../static/GreenTick.svg" style="width: 100px"/>
+              <h2 class="text-muted pad-top">Your purchase is being mined on the Blockchain...</h2>
             </div>
+
+            <div v-if="isPurchaseSuccessful(asset.id)" class="icon-message">
+              <img src="../../../static/GreenTick.svg" style="width: 100px"/>
+              <h2 class="text-success pad-top">Your purchase was successful</h2>
+            </div>
+
+            <div v-if="isPurchaseFailed(asset.id)" class="icon-message">
+              <img src="../../../static/Failure.svg" style="width: 100px"/>
+              <h2 class="text-danger pad-top">Your purchase failed</h2>
+            </div>
+
+            <h3>{{ asset.otherMeta.artworkName }}</h3>
+
+            <edition-name-by-artist :edition="asset" :purchase="true"></edition-name-by-artist>
+
+            <token-id :value="asset.id"></token-id>
+
             <hr/>
+
+            <div v-if="!assetPurchaseState(asset.id)">
+
+              <div v-if="asset.purchased == 0" class="pad-top pad-bottom">
+                <table>
+                  <tr>
+                    <td width="25%"><img src="/../../static/Account_You_icn.svg" style="height: 50px"/></td>
+                    <td width="75%">
+                      You:<br/>
+                      <address-icon :eth-address="account" :size="'small'"></address-icon>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="25%"><img src="/../../static/DotDivider@x2.svg" style="height: 50px"/></td>
+                    <td width="75%"><hr/></td>
+                  </tr>
+                  <tr>
+                    <td width="25%"><img src="/../../static/ETH_icn.svg" style="height: 50px"/></td>
+                    <td width="75%">
+                      Amount:<br/>
+                      <strong>{{ asset.priceInEther }} ETH</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="25%"><img src="/../../static/DotDivider@x2.svg" style="height: 50px"/></td>
+                    <td width="75%"><hr/></td>
+                  </tr>
+                  <tr>
+                    <td width="25%"><img src="/../../static/Account_You_icn.svg" style="height: 50px"/></td>
+                    <td width="75%">
+                      Transfer to:<br/>
+                      <address-icon :eth-address="asset.owner" :size="'small'"></address-icon>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <hr/>
+            </div>
+
+            <h3>Total ETH: <span class="pull-right ">{{ asset.priceInEther }}</span></h3>
           </div>
-
-          <p>Total ETH: {{ asset.priceInEther }}</p>
-
-          <div v-if="isPurchaseFailed(asset.id)">
-            <button type="button" v-on:click="retryPurchase" class="btn">
+        </div>
+        <div class="border-box-buttons">
+          <div v-if="isPurchaseFailed(asset.id)" class="pad-bottom">
+            <button type="button" v-on:click="retryPurchase" class="btn btn-link">
               Retry
             </button>
           </div>
@@ -68,6 +96,7 @@
           </complete-purchase-button>
         </div>
       </div>
+
     </article>
 
   </div>
@@ -137,16 +166,24 @@
       retryPurchase: function () {
         this.$store.dispatch(actions.RESET_PURCHASE_STATE, this.asset);
       }
-    },
-    updated: function () {
-
-    },
-    beforeDestroy: function () {
-
     }
   };
 </script>
 
 <style scoped>
+  .border-box {
+    border: 1px solid #545454;
+    border-radius: 15px;
+    margin: 15px;
+  }
 
+  .border-box-buttons {
+    margin: 15px;
+  }
+
+  .icon-message {
+    text-align: center;
+    margin: 30px;
+    padding: 10px;
+  }
 </style>

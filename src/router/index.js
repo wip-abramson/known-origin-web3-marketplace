@@ -8,6 +8,7 @@ import Account from '@/components/pages/Account';
 import License from '@/components/pages/License';
 import Assets from '@/components/pages/Assets';
 import ConfirmPurchase from '@/components/pages/ConfirmPurchase';
+import ConfirmPurchaseQr from '@/components/pages/ConfirmPurchaseQr';
 import ArtistPage from '@/components/pages/ArtistPage';
 import CompletePurchase from '@/components/pages/CompletePurchase';
 
@@ -74,6 +75,12 @@ export default new Router({
       path: '/artists/:artistCode/editions/:edition',
       name: 'confirmPurchase',
       component: ConfirmPurchase,
+      props: true
+    },
+    {
+      path: '/artists/:artistCode/editions/:edition/qr',
+      name: 'confirmPurchase',
+      component: ConfirmPurchaseQr,
       props: true
     },
     {

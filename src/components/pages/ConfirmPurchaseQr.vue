@@ -6,8 +6,8 @@
 
     <h1>{{ edition.otherMeta.artworkName }}</h1>
 
-    <div class="assets_to_buy">
-        <gallery-edition :edition="edition" :purchase="true"></gallery-edition>
+    <div class="qr-code">
+      <edition-qr-code :edition="edition"></edition-qr-code>
     </div>
   </div>
 </template>
@@ -48,5 +48,12 @@
 </script>
 
 <style scoped>
+  img {
+    width: auto;
+  }
 
+  .qr-code {
+    width: 50%;
+    text-align: center;
+  }
 </style>

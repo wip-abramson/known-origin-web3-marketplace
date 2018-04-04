@@ -1,7 +1,6 @@
 <template>
   <div v-if="edition">
-    <a v-on:click="showQr = !showQr">{{showQr ? 'Hide' : 'Show'}} QR Code</a>
-    <div v-if="showQr">
+    <div>
       <h4>#{{ edition.edition }}</h4>
       <img :src="generateQrCode" alt="qrcode"/>
     </div>

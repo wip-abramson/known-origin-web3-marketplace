@@ -6,16 +6,16 @@
 
     <h1>My Account</h1>
 
-    <!--<p>-->
-      <!--<img src="/../static/account.svg" style="height:50px"/>-->
-    <!--</p>-->
+    <img src="/../static/account.svg" style="height:50px"/>
 
-    <h2>My Address</h2>
+    <h3>My Address</h3>
+    <p class="pad-bottom">
     <address-icon :eth-address="account"></address-icon>
+    </p>
 
     <hr/>
 
-    <h2>My collection (<strong>{{assetsPurchasedByAccount.length}}</strong>)</h2>
+    <h2>My collection ({{assetsPurchasedByAccount.length}})</h2>
 
     <div class="centered">
       <section class="cards centered" v-if="assetsPurchasedByAccount">
@@ -23,6 +23,16 @@
                :asset="assetById(tokenId)"
                :key="key">
         </asset>
+      </section>
+
+      <section v-if="assetsPurchasedByAccount.length == 0">
+        <p>You don't have any digital assets yet...</p>
+
+        <div class="pad-top">
+          <router-link :to="{ name: 'gallery'}" class="btn btn-link">
+            View gallery
+          </router-link>
+        </div>
       </section>
     </div>
 
@@ -55,4 +65,7 @@
 </script>
 
 <style scoped>
+  img {
+    width: auto;
+  }
 </style>

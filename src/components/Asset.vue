@@ -4,11 +4,11 @@
       <asset-figure :edition="asset" :is-asset="true"></asset-figure>
       <div class="card-content">
 
-        <token-id :value="asset.id"></token-id>
-
         <edition-name-by-artist :edition="asset"></edition-name-by-artist>
 
-        <p>
+        <token-id :value="asset.id"></token-id>
+
+        <p class="pad-top">
           <strong>Artwork description</strong><br/>
           {{ asset.otherMeta.description }}
         </p>

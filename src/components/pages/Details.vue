@@ -6,45 +6,48 @@
 
     <h1>KODA smart contract</h1>
 
-    <h2>
+    <h2 v-if="contractAddress">
       Contract address:
       <clickable-address :eth-address="contractAddress"></clickable-address>
     </h2>
 
-    <div v-if="contractName && contractSymbol" class="message is-primary">
-        <p>Symbol {{ contractSymbol }}</p>
-    </div>
-
-    <div v-if="curatorAddress" class="message is-primary">
-        <p>
-          Curator:
+    <table>
+      <tr v-if="contractSymbol">
+        <td>Symbol</td>
+        <td>{{ contractSymbol }}</td>
+      </tr>
+      <tr v-if="curatorAddress">
+        <td>Curator</td>
+        <td>
           <clickable-address :eth-address="curatorAddress"></clickable-address>
-        </p>
-        <p>
-          Commission:
-          <clickable-address :eth-address="commissionAddress"></clickable-address>
-        </p>
-        <p>
-          Smart contract partner:
+        </td>
+      </tr>
+      <tr v-if="contractDeveloperAddress">
+        <td>Developer:</td>
+        <td>
           <clickable-address :eth-address="contractDeveloperAddress"></clickable-address>
-        </p>
-    </div>
-
-    <div v-if="totalSupply" class="message is-primary">
-      <p>Total supply of assets: {{ totalSupply }}</p>
-    </div>
-
-    <div v-if="totalPurchaseValueInWei && totalNumberOfPurchases && totalPurchaseValueInEther" class="message is-primary">
-      <p>Number of sales: {{ totalNumberOfPurchases }}</p>
-      <p>Purchase total in ETH: {{ totalPurchaseValueInEther }}</p>
-    </div>
+        </td>
+      </tr>
+      <tr v-if="totalSupply">
+        <td>Supply:</td>
+        <td>{{ totalSupply }}</td>
+      </tr>
+      <tr v-if="totalNumberOfPurchases">
+        <td>Sales</td>
+        <td>{{ totalNumberOfPurchases }}</td>
+      </tr>
+      <tr v-if="totalPurchaseValueInEther">
+        <td>Total</td>
+        <td>{{ totalPurchaseValueInEther }}</td>
+      </tr>
+    </table>
 
   </div>
 </template>
 
 <script>
 
-  import {mapGetters, mapState} from 'vuex';
+  import { mapGetters, mapState } from 'vuex';
   import AddressIcon from '../ui-controls/AddressIcon';
   import ClickableAddress from '../ui-controls/ClickableAddress';
 
@@ -69,5 +72,7 @@
 </script>
 
 <style scoped>
-
+  td {
+    padding: 20px;
+  }
 </style>
