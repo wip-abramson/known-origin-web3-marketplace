@@ -79,8 +79,10 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   // the person who is responsible for designing and building the contract
   address public developerAccount;
 
+  // total wei been processed through the contract
   uint256 public totalPurchaseValueInWei;
 
+  // number of assets sold of any type
   uint256 public totalNumberOfPurchases;
 
   // A pointer to the next token to be minted, zero indexed
@@ -153,7 +155,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _priceInWei the price of the KODA token
    * @param _auctionStartDate the date when the token is available for sale
    */
-  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate, address _artistAccount) public onlyKnownOrigin {
+  function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate, address _artistAccount) external onlyKnownOrigin {
     require(_artistAccount != address(0));
 
     uint256 _tokenId = tokenIdPointer;
@@ -199,7 +201,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _tokenId the KODA token ID
    * @param _uri the token URI, will be concatenated with baseUri
    */
-  function setTokenURI(uint256 _tokenId, string _uri) public onlyKnownOrigin {
+  function setTokenURI(uint256 _tokenId, string _uri) external onlyKnownOrigin {
     require(exists(_tokenId));
     _setTokenURI(_tokenId, _uri);
   }
@@ -210,7 +212,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _tokenId the KODA token ID
    * @param _priceInWei the price in wei
    */
-  function setPriceInWei(uint _tokenId, uint256 _priceInWei) public onlyKnownOrigin onlyUnsold(_tokenId) {
+  function setPriceInWei(uint _tokenId, uint256 _priceInWei) external onlyKnownOrigin onlyUnsold(_tokenId) {
     require(exists(_tokenId));
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
   }
@@ -236,7 +238,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _curator the curators commission
    * @param _developer the developers commission
    */
-  function updateCommission(string _type, uint8 _curator, uint8 _developer) public onlyKnownOrigin {
+  function updateCommission(string _type, uint8 _curator, uint8 _developer) external onlyKnownOrigin {
     require(_curator > 0);
     require(_developer > 0);
     require((_curator + _developer) < 100);
@@ -463,10 +465,20 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
 
   /**
    * @dev Allows management to update the base tokenURI path
-   * @dev Reverts if token not called by management
+   * @dev Reverts if not called by management
    * @param _newBaseURI the new base URI to set
    */
   function setTokenBaseURI(string _newBaseURI) external onlyKnownOrigin {
     tokenBaseURI = _newBaseURI;
+  }
+
+  /**
+   * @dev Allows management to update the artist account (where commission is sent)
+   * @dev Reverts if not called by management
+   * @param _edition edition to adjust
+    * @param _artistAccount address of artist on blockchain
+   */
+  function setArtistAccount(string _edition, address _artistAccount) external onlyKnownOrigin {
+    editionToArtistAccount[_edition] = _artistAccount;
   }
 }
