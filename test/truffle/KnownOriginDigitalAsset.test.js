@@ -1735,12 +1735,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('keeps track of the edition total number correctly', async function () {
       it('tracks total in edition correctly', async function () {
-        let editionNumber = await this.token.editionNumber(_editionDigital);
+        let editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(3);
 
         await this.token.burn(2, {from: _curatorAccount});
 
-        editionNumber = await this.token.editionNumber(_editionDigital);
+        editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(2);
       });
     });
@@ -1833,7 +1833,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         const totalSupply = await this.token.totalSupply();
         totalSupply.should.be.bignumber.equal(3);
 
-        let editionNumber = await this.token.editionNumber(_editionDigital);
+        let editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(3);
 
         // Burn 1
@@ -1845,7 +1845,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('tracks total in edition correctly', async function () {
-        let editionNumber = await this.token.editionNumber(_editionDigital);
+        let editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(4);
       });
 

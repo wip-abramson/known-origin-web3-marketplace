@@ -10,7 +10,11 @@ import "./ERC165.sol";
 /**
 * @title KnownOriginDigitalAsset
 *
-* A curator can mint digital assets and sell them via purchases (crypto via Ether or Fiat)
+* http://www.knownorigin.io/
+*
+* ERC721 compliant digital assets for real-world artwork.
+* BE ORIGINAL. BUY ORIGINAL.
+*
 */
 contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   using SafeMath for uint256;
@@ -400,7 +404,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @dev Return the total number of assets in an edition
    * @param _edition the edition identifier
    */
-  function editionNumber(bytes16 _edition) public view returns (uint256) {
+  function numberOf(bytes16 _edition) public view returns (uint256) {
     return editionToEditionNumber[_edition];
   }
 
@@ -478,7 +482,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _edition edition to adjust
     * @param _artistAccount address of artist on blockchain
    */
-  function setArtistAccount(string _edition, address _artistAccount) external onlyKnownOrigin {
+  function setArtistAccount(bytes16 _edition, address _artistAccount) external onlyKnownOrigin {
     editionToArtistAccount[_edition] = _artistAccount;
   }
 }
