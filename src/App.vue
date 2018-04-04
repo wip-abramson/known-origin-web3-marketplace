@@ -36,11 +36,17 @@
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
 
-      <router-link :to="{ name: 'license' }">License</router-link>
-      |
-      <router-link :to="{ name: 'details' }">Contract details</router-link>
-      |
-      <router-link :to="{ name: 'assets' }">Assets</router-link>
+      <div class="text-center pad-top">
+        <router-link :to="{ name: 'dashboard' }">Home</router-link>
+        |
+        <router-link :to="{ name: 'license' }">License</router-link>
+        |
+        <router-link :to="{ name: 'details' }">Contract details</router-link>
+        |
+        <router-link :to="{ name: 'gallery' }">Gallery</router-link>
+        |
+        <router-link :to="{ name: 'assets' }">All assets</router-link>
+      </div>
     </footer>
   </div>
 </template>
@@ -111,6 +117,7 @@
     margin-bottom: 20px;
     color: $primary;
     border-bottom: 1px;
+    padding-bottom: 20px;
   }
 
   #splash h2 {
@@ -121,7 +128,7 @@
   h2 {
     color: $primary;
     display: block;
-    font-size: 28px;
+    font-size: 26px;
     margin-top: 20px;
     margin-bottom: 20px;
   }
@@ -177,11 +184,6 @@
       text-decoration: none;
     }
 
-    &:disabled {
-      background: $gray;
-      text-decoration: none;
-    }
-
     &.btn-action {
       background-color: $primary;
       color: $white;
@@ -213,6 +215,12 @@
       background-color: $success;
       border: solid $success 2px;
       color: $white;
+
+      &:disabled {
+        background: $gray;
+        text-decoration: none;
+        border: solid $gray 2px;
+      }
     }
 
     &.btn-muted {
@@ -422,7 +430,6 @@
   }
 
   .thumbnail {
-
     text-align: center;
   }
 
@@ -536,6 +543,15 @@
   }
 
   #how-ko-works {
+    h4 {
+      font-size: 24px;
+    }
+
+    h3 {
+      font-size: 34px;
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+    }
   }
 
   .viewAllArtists {
@@ -557,6 +573,11 @@
   .text-muted {
     color: $gray !important;
   }
+
+  .text-center {
+    text-align: center;
+  }
+
 
   .no-web3-found-container {
     margin: 50px;

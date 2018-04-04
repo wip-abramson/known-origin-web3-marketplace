@@ -166,12 +166,6 @@
       retryPurchase: function () {
         this.$store.dispatch(actions.RESET_PURCHASE_STATE, this.asset);
       }
-    },
-    updated: function () {
-
-    },
-    beforeDestroy: function () {
-
     }
   };
 </script>
@@ -179,6 +173,7 @@
 <style scoped>
   .border-box {
     border: 1px solid #545454;
+    border-radius: 15px;
     margin: 15px;
   }
 

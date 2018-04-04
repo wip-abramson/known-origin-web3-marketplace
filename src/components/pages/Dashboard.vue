@@ -35,7 +35,8 @@
       </section>
     </div>
     <router-link :to="{ name: 'artists' }" class="btn btn-link">View all artists</router-link>
-    <div id="how-ko-works">
+
+    <div id="how-ko-works" class="pad-top">
       <h2>How KnownOrigin.io works</h2>
       <div>
         <section>
