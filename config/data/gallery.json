@@ -9,15 +9,15 @@
           "edition": "PDALNDMEHD300PHY",
           "numberOfEditions": 1,
           "fiatCost": 499.00,
-          "costInEth": 0.78
+          "costInEth": 1.9
         },
         {
           "artworkName": "Lending a hand 3",
           "ipfsPath": "lending_a_hand_3",
           "edition": "PDALNDMEHD300DIG",
           "numberOfEditions": 10,
-          "fiatCost": 49.00,
-          "costInEth": 0.08
+          "fiatCost": 99.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Lending a hand 2",
@@ -32,8 +32,8 @@
           "ipfsPath": "lending_a_hand_2",
           "edition": "PDALNDMEHD200DIG",
           "numberOfEditions": 10,
-          "fiatCost": 49.00,
-          "costInEth": 0.08
+          "fiatCost": 99.00,
+          "costInEth": 0.38
         }
       ]
     },
@@ -45,32 +45,32 @@
           "ipfsPath": "start_me_up",
           "edition": "BJDSTMEUP0001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 1000,
-          "costInEth": 3.5
+          "fiatCost": 1000.00,
+          "costInEth": 3.75
         },
         {
           "artworkName": "Poker face",
           "ipfsPath": "poker_face",
           "edition": "BJDPKRFCE0001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 1000,
-          "costInEth": 3.5
+          "fiatCost": 1000.00,
+          "costInEth": 3.75
         },
         {
           "artworkName": "Acid Rain Tuesday",
           "ipfsPath": "acid_rain_tuesday",
           "edition": "BJDACDRNTU001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 1000,
-          "costInEth": 3.5
+          "fiatCost": 1000.00,
+          "costInEth": 3.75
         },
         {
           "artworkName": "Loose Tapestries",
           "ipfsPath": "loose_tapestries",
           "edition": "BJDLOOTAP0001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 1000,
-          "costInEth": 3.5
+          "fiatCost": 1000.00,
+          "costInEth": 3.75
         }
       ]
     },
@@ -82,40 +82,40 @@
           "ipfsPath": "for_the_girls_and_boys",
           "edition": "JOCFORGRLBOY1PHY",
           "numberOfEditions": 1,
-          "fiatCost": 65,
-          "costInEth": 0.11
+          "fiatCost": 65.00,
+          "costInEth": 0.25
         },
         {
           "artworkName": "For the girls and boys",
           "ipfsPath": "for_the_girls_and_boys",
           "edition": "JOCFORGRLBOY1DIG",
           "numberOfEditions": 25,
-          "fiatCost": 25,
-          "costInEth": 0.001989
+          "fiatCost": 25.00,
+          "costInEth": 0.1
         },
         {
           "artworkName": "Pace of Life",
           "ipfsPath": "pace_of_life",
           "edition": "JOCPACOFLF001DIG",
-          "numberOfEditions": 10,
-          "fiatCost": 25,
-          "costInEth": 0.001989
+          "numberOfEditions": 25,
+          "fiatCost": 25.00,
+          "costInEth": 0.1
         },
         {
           "artworkName": "Family tree",
           "ipfsPath": "family_tree",
           "edition": "JOCFAMTREE001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 25,
-          "costInEth": 0.001989
+          "fiatCost": 25.00,
+          "costInEth": 0.1
         },
         {
           "artworkName": "Boo!",
           "ipfsPath": "boo",
           "edition": "JOCBOO0000001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 25,
-          "costInEth": 0.001989
+          "fiatCost": 25.00,
+          "costInEth": 0.1
         }
       ]
     },
@@ -127,8 +127,8 @@
           "ipfsPath": "pattern_play_1",
           "edition": "JBOPATPLAY001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 28,
-          "costInEth": 0.002
+          "fiatCost": 38.00,
+          "costInEth": 0.15
         }
       ]
     },
@@ -140,16 +140,16 @@
           "ipfsPath": "nature_boy",
           "edition": "STANATUREMAN1PHY",
           "numberOfEditions": 1,
-          "fiatCost": 250,
-          "costInEth": 1
+          "fiatCost": 250.00,
+          "costInEth": 0.95
         },
         {
           "artworkName": "Inside Earth",
           "ipfsPath": "inside_earth",
           "edition": "STAISDERTH001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 250,
-          "costInEth": 1
+          "fiatCost": 250.00,
+          "costInEth": 0.95
         }
       ]
     },
@@ -161,7 +161,7 @@
           "ipfsPath": "coin_journal_disrupting_finance",
           "edition": "CNJDISRPTFIN1PHY",
           "numberOfEditions": 1,
-          "fiatCost": 20,
+          "fiatCost": 20.00,
           "costInEth": 0.07
         },
         {
@@ -169,24 +169,24 @@
           "ipfsPath": "coin_journal_coinfest_night",
           "edition": "CNJCINFSTNG1HDIG",
           "numberOfEditions": 25,
-          "fiatCost": 5,
-          "costInEth": 0.086
+          "fiatCost": 10.00,
+          "costInEth": 0.04
         },
         {
           "artworkName": "CoinJournal X CoinFest (Day)",
           "ipfsPath": "coin_journal_coinfest_day",
           "edition": "CNJCINFSTDY1HDIG",
           "numberOfEditions": 25,
-          "fiatCost": 5,
-          "costInEth": 0.086
+          "fiatCost": 10.00,
+          "costInEth": 0.04
         },
         {
           "artworkName": "Blockchain Colouring Book",
           "ipfsPath": "coin_journal_blockchain_colouring",
           "edition": "CNJBLCKCOLBK1DIG",
           "numberOfEditions": 25,
-          "fiatCost": 1.5,
-          "costInEth": 0.086
+          "fiatCost": 10.00,
+          "costInEth": 0.04
         }
       ]
     },
@@ -198,7 +198,7 @@
           "ipfsPath": "89a_up_and_down",
           "edition": "89AUP&DOWN001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 33,
+          "fiatCost": 33.00,
           "costInEth": 0.12
         },
         {
@@ -206,7 +206,7 @@
           "ipfsPath": "89a_wake",
           "edition": "89AWAKE000001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 33,
+          "fiatCost": 33.00,
           "costInEth": 0.12
         },
         {
@@ -214,7 +214,7 @@
           "ipfsPath": "89a_kurushi",
           "edition": "89AKURUSHI001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 33,
+          "fiatCost": 33.00,
           "costInEth": 0.12
         }
       ]
@@ -227,8 +227,8 @@
           "ipfsPath": "frank_sidebottom",
           "edition": "DVAFRNKSIDBMEPHY",
           "numberOfEditions": 1,
-          "fiatCost": 1200,
-          "costInEth": 2.71
+          "fiatCost": 1200.00,
+          "costInEth": 4.5
         }
       ]
     },
@@ -240,40 +240,40 @@
           "ipfsPath": "peep",
           "edition": "LHKPEEP000001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 150,
-          "costInEth": 0.527
+          "fiatCost": 150.00,
+          "costInEth": 0.58
         },
         {
           "artworkName": "Peep",
           "ipfsPath": "peep",
           "edition": "LHKPEEP000001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 15,
-          "costInEth": 0.0527
+          "fiatCost": 15.00,
+          "costInEth": 0.06
         },
         {
           "artworkName": "Buzz",
           "ipfsPath": "buzz",
           "edition": "LHKBUZZ000001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 300,
-          "costInEth": 1.053
+          "fiatCost": 300.00,
+          "costInEth": 1.13
         },
         {
           "artworkName": "Buzz",
           "ipfsPath": "buzz",
           "edition": "LHKBUZZ000001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 30,
-          "costInEth": 0.1053
+          "fiatCost": 30.00,
+          "costInEth": 0.11
         },
         {
           "artworkName": "Roar",
           "ipfsPath": "roar",
           "edition": "LHKROAR000001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 550,
-          "costInEth": 1.93
+          "fiatCost": 550.00,
+          "costInEth": 2.1
         }
       ]
     },
@@ -285,64 +285,64 @@
           "ipfsPath": "manchester",
           "edition": "KORMANCHESTERPHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.351
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Manchester",
           "ipfsPath": "manchester",
           "edition": "KORMANCHESTERDIG",
           "numberOfEditions": 25,
-          "fiatCost": 20,
-          "costInEth": 0.071
+          "fiatCost": 20.00,
+          "costInEth": 0.08
         },
         {
           "artworkName": "Leeds",
           "ipfsPath": "leeds",
           "edition": "KORLEEDS00001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.351
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Leeds",
           "ipfsPath": "leeds",
           "edition": "KORLEEDS00001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 20,
-          "costInEth": 0.071
+          "fiatCost": 20.00,
+          "costInEth": 0.08
         },
         {
           "artworkName": "Berlin",
           "ipfsPath": "berlin",
           "edition": "KORBERLIN0001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.351
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Berlin",
           "ipfsPath": "berlin",
           "edition": "KORBERLIN0001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 20,
-          "costInEth": 0.071
+          "fiatCost": 20.00,
+          "costInEth": 0.08
         },
         {
           "artworkName": "Lisbon",
           "ipfsPath": "lisbon",
           "edition": "KORLISBON0001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.351
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Lisbon",
           "ipfsPath": "lisbon",
           "edition": "KORLISBON0001DIG",
           "numberOfEditions": 25,
-          "fiatCost": 20,
-          "costInEth": 0.071
+          "fiatCost": 20.00,
+          "costInEth": 0.08
         }
       ]
     },
@@ -354,8 +354,8 @@
           "ipfsPath": "neue_haas_unica",
           "edition": "MRLNEHAUN0001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 65,
-          "costInEth": 0.24
+          "fiatCost": 65.00,
+          "costInEth": 0.25
         }
       ]
     },
@@ -367,32 +367,32 @@
           "ipfsPath": "cotton_and_path_sample_1",
           "edition": "CHESAMPLE1CTNPHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.37
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Sample 2",
           "ipfsPath": "cotton_and_path_sample_2",
           "edition": "CHESAMPLE2CTNPHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.37
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Sample 3",
           "ipfsPath": "cotton_and_path_sample_3",
           "edition": "CHESAMPLE3CTNPHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.37
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         },
         {
           "artworkName": "Sample 4",
           "ipfsPath": "cotton_and_path_sample_4",
           "edition": "CHESAMPLE4CTNPHY",
           "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.37
+          "fiatCost": 100.00,
+          "costInEth": 0.38
         }
       ]
     },
@@ -404,24 +404,24 @@
           "ipfsPath": "lam_untitled_2011_1",
           "edition": "LAMUTLD2011#1PHY",
           "numberOfEditions": 1,
-          "fiatCost": 2844,
-          "costInEth": 10.50
+          "fiatCost": 2844.00,
+          "costInEth": 10.7
         },
         {
           "artworkName": "Untitled 2011 #2",
           "ipfsPath": "lam_untitled_2011_2",
           "edition": "LAMUTLD2011#2PHY",
           "numberOfEditions": 1,
-          "fiatCost": 2959,
-          "costInEth": 11
+          "fiatCost": 2959.00,
+          "costInEth": 11.1
         },
         {
           "artworkName": "Untitled 2011 #3",
           "ipfsPath": "lam_untitled_2011_3",
           "edition": "LAMUTLD2011#3PHY",
           "numberOfEditions": 1,
-          "fiatCost": 2959,
-          "costInEth": 11
+          "fiatCost": 2959.00,
+          "costInEth": 11.1
         }
       ]
     },
@@ -433,8 +433,8 @@
           "ipfsPath": "sch_the_green_lady",
           "edition": "SCHGREENLADY1PHY",
           "numberOfEditions": 1,
-          "fiatCost": 90,
-          "costInEth": 0.33
+          "fiatCost": 90.00,
+          "costInEth": 0.35
         }
       ]
     },
@@ -446,8 +446,8 @@
           "ipfsPath": "bryan_edmondson_inc",
           "edition": "BYEINC0000001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 65,
-          "costInEth": 0.33
+          "fiatCost": 65.00,
+          "costInEth": 0.25
         }
       ]
     },
@@ -459,24 +459,24 @@
           "ipfsPath": "tephra_ip138",
           "edition": "HSMTEPHRAP138PHY",
           "numberOfEditions": 1,
-          "fiatCost": 295,
-          "costInEth": 1
+          "fiatCost": 295.00,
+          "costInEth": 1.2
         },
         {
           "artworkName": "tephra iP0100",
           "ipfsPath": "tephra_ip0100",
           "edition": "HSMTEPHRP0100PHY",
           "numberOfEditions": 1,
-          "fiatCost": 295,
-          "costInEth": 1
+          "fiatCost": 295.00,
+          "costInEth": 1.2
         },
         {
           "artworkName": "tephra iP0250",
           "ipfsPath": "tephra_ip0250",
           "edition": "HSMTEPHiP0250PHY",
           "numberOfEditions": 1,
-          "fiatCost": 295,
-          "costInEth": 1
+          "fiatCost": 295.00,
+          "costInEth": 1.2
         }
       ]
     }
