@@ -6,8 +6,6 @@
 
     <h1>Assets <span v-if="assets">({{ assets.length }})</span></h1>
 
-
-
     <div class="centered">
       <section class="cards centered" v-if="assets">
         <asset v-for="asset in assets"

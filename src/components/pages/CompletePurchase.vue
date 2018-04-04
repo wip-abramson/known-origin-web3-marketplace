@@ -10,7 +10,7 @@
 
     <h1>&nbsp;</h1>
 
-    <article class="card assets_to_buy pad-bottom">
+    <article class="card assets_to_buy pad-bottom pad-top">
       <div>
         <div class="border-box">
           <div class="card-content">

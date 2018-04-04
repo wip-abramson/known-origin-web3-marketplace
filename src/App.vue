@@ -29,7 +29,8 @@
     </div>
 
     <footer id="footer" class="centered">
-      <current-network style="float: right"></current-network>
+      <current-network class="pull-right"></current-network>
+      <!--<a href="" class="pull-right" target="_blank"><img src="../static/telegram.png" style="width: 25px"/></a>-->
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
       <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
@@ -45,6 +46,7 @@
         |
         <router-link :to="{ name: 'assets' }">Assets</router-link>
       </div>
+
     </footer>
   </div>
 </template>
@@ -252,6 +254,7 @@
   #header {
     color: $primary;
     padding: 10px;
+    padding-bottom: 25px;
     margin-bottom: 35px;
     margin-top: 10px;
     background-color: $white;
@@ -333,10 +336,12 @@
 
     h3 {
       color: $primary;
+      font-size: 15px;
+      font-weight: bold;
     }
 
     img, .artists img {
-      width: 75%;
+      width: 50%;
     }
 
   }
@@ -448,13 +453,10 @@
 
   .edition-sold {
     position: absolute;
-    top: 100px;
-    right: 100px;
     background-color: $sold;
     color: $secondary;
     padding: 10px;
     opacity: 0.6;
-    font-size: 1.25em;
   }
 
   .edition-run {

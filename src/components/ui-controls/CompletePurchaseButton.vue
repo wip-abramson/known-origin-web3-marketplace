@@ -37,7 +37,7 @@
         <!--</button>-->
       <!--</div>-->
 
-      <div>
+      <div class="pad-bottom">
         <router-link v-if="asset.purchased !== 0" :to="{ name: 'account'}" class="btn btn-link">
           View account
         </router-link>

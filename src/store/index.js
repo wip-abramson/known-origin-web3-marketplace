@@ -205,7 +205,6 @@ const store = new Vuex.Store({
       web3.eth.getAccounts()
         .then((accounts) => {
           // TODO add refresh cycle / timeout
-
           let account = accounts[0];
 
           // init the KODA contract
