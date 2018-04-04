@@ -6,6 +6,7 @@ let mnemonic = require('../mnemonic');
 
 module.exports = function (deployer, network, accounts) {
 
+  let _curatorAccount = accounts[0];
   let _contractDeveloper = accounts[1];
 
   // Load in other accounts for different networks
@@ -14,7 +15,7 @@ module.exports = function (deployer, network, accounts) {
   }
 
   console.log(`Running within network = ${network}`);
-  console.log(`_creatorAccount = ${accounts[0]}`);
+  console.log(`_curatorAccount = ${accounts[0]}`);
   console.log(`_contractDeveloper = ${_contractDeveloper}`);
 
   deployer.deploy(KnownOriginDigitalAsset, _contractDeveloper);
