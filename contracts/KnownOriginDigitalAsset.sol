@@ -15,6 +15,8 @@ import "./ERC165.sol";
 * ERC721 compliant digital assets for real-world artwork.
 * BE ORIGINAL. BUY ORIGINAL.
 *
+* Developed with love by http://www.blockrocket.tech/
+*
 */
 contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   using SafeMath for uint256;
