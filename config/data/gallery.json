@@ -167,26 +167,18 @@
         {
           "artworkName": "CoinJournal X CoinFest (Night)",
           "ipfsPath": "coin_journal_coinfest_night",
+          "edition": "CNJCINFSTNG1HPHY",
+          "numberOfEditions": 1,
+          "fiatCost": 10.00,
+          "costInEth": 0.04
+        },
+        {
+          "artworkName": "CoinJournal X CoinFest (Night)",
+          "ipfsPath": "coin_journal_coinfest_night",
           "edition": "CNJCINFSTNG1HDIG",
           "numberOfEditions": 25,
-          "fiatCost": 10.00,
-          "costInEth": 0.04
-        },
-        {
-          "artworkName": "CoinJournal X CoinFest (Day)",
-          "ipfsPath": "coin_journal_coinfest_day",
-          "edition": "CNJCINFSTDY1HDIG",
-          "numberOfEditions": 25,
-          "fiatCost": 10.00,
-          "costInEth": 0.04
-        },
-        {
-          "artworkName": "Blockchain Colouring Book",
-          "ipfsPath": "coin_journal_blockchain_colouring",
-          "edition": "CNJBLCKCOLBK1DIG",
-          "numberOfEditions": 25,
-          "fiatCost": 10.00,
-          "costInEth": 0.04
+          "fiatCost": 2.00,
+          "costInEth": 0.0075
         }
       ]
     },

@@ -13,7 +13,7 @@ let promisifyGetBlock = Promise.promisify(web3.eth.getBlock);
 
 module.exports = function (deployer, network, accounts) {
 
-  let _curatorAccount = accounts[0];
+  let _curatorAccount = accounts[1];
 
   deployer
     .then(() => KnownOriginDigitalAsset.deployed())
