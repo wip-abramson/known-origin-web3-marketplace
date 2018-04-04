@@ -14,11 +14,9 @@
       <div class="no-web3-found-container">
         <div>
           <h1 class="text-danger">No Ethereum provider detected!</h1>
-
           <p>
             You need to install <a href='https://metmask.io' target="_blank">MetaMask</a> to use this application and buy digital assets.
           </p>
-
         </div>
         <div>
           <a href='https://metmask.io' target="_blank"><img src="../static/pay_with_metamask.png"/></a>
@@ -41,11 +39,11 @@
         |
         <router-link :to="{ name: 'license' }">License</router-link>
         |
-        <router-link :to="{ name: 'details' }">Contract details</router-link>
+        <router-link :to="{ name: 'details' }">Contract</router-link>
         |
         <router-link :to="{ name: 'gallery' }">Gallery</router-link>
         |
-        <router-link :to="{ name: 'assets' }">All assets</router-link>
+        <router-link :to="{ name: 'assets' }">Assets</router-link>
       </div>
     </footer>
   </div>
@@ -97,7 +95,7 @@
   $background: #f2f5fb;
   $black: black;
   $gray: #545454;
-  $white: #FFF;
+  $white: #FDFDFD;
   $font_family_1: 'Avenir', Helvetica, Arial, sans-serif;
 
   $sold: red;
@@ -254,9 +252,9 @@
   #header {
     color: $primary;
     padding: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 35px;
     margin-top: 10px;
-    background-color: #FDFDFD;
+    background-color: $white;
   }
 
   #footer {

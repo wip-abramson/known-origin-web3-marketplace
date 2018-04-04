@@ -25,8 +25,8 @@
         </asset>
       </section>
 
-      <section v-if="assetsPurchasedByAccount.length == 0" class="pad-top">
-        You don't have any digital assets yet...
+      <section v-if="assetsPurchasedByAccount.length == 0">
+        <p>You don't have any digital assets yet...</p>
 
         <div class="pad-top">
           <router-link :to="{ name: 'gallery'}" class="btn btn-link">
