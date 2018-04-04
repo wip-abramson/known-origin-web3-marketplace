@@ -11,6 +11,7 @@
     <h3>My Address</h3>
     <p class="pad-bottom">
     <address-icon :eth-address="account"></address-icon>
+      {{accountBalance}}
     </p>
 
     <hr/>

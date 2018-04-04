@@ -399,7 +399,7 @@ const store = new Vuex.Store({
 
           let purchase = contract.purchaseWithEther(_tokenId, {
             from: _buyer,
-            value: assetToPurchase.priceInWei
+            value: Web3.utils.toWei(assetToPurchase.priceInEther, 'ether')
           });
 
           purchase
@@ -419,7 +419,7 @@ const store = new Vuex.Store({
           commit(mutations.PURCHASE_FAILED, {tokenId: assetToPurchase.id, buyer: state.account});
         });
     },
-    [actions.PURCHASE_ASSET_WITH_FIAT]({commit, dispatch, state} = controls, assetToPurchase) {
+    [actions.PURCHASE_ASSET_WITH_FIAT]({commit, dispatch, state}, assetToPurchase) {
 
       let _buyer = state.account;
       let _tokenId = assetToPurchase.id;

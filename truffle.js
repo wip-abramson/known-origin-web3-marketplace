@@ -37,6 +37,12 @@ module.exports = {
       gas: 0xfffffffffff, // <-- Use this high gas value
       gasPrice: 0x01      // <-- Use this low gas price
     },
+    "live": {
+      network_id: 1,
+      provider: function () {
+        return new HDWalletProvider(mnemonic, `https://infura.io/${infuraApikey}`);
+      },
+    },
     ropsten: {
       provider: function () {
         return new HDWalletProvider(mnemonic, `https://ropsten.infura.io/${infuraApikey}`);
