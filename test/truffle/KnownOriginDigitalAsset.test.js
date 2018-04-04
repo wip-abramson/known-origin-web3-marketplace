@@ -20,8 +20,8 @@ require('chai')
   .should();
 
 contract('KnownOriginDigitalAsset', function (accounts) {
-  const _curator = accounts[0];
-  const _contractDeveloper = accounts[1];
+  const _curatorAccount = accounts[0];
+  const _developmentAccount = accounts[1];
   const _artist = accounts[2];
 
   const _buyer = accounts[3];
@@ -54,26 +54,27 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   });
 
   beforeEach(async function () {
-    this.token = await KnownOriginDigitalAsset.new(_contractDeveloper, {from: _curator});
+    // developers will mine the contract and pass the curator account into it...
+    this.token = await KnownOriginDigitalAsset.new(_curatorAccount, {from: _developmentAccount});
     _purchaseFromTime = latestTime(); // opens immediately
 
     await increaseTimeTo(_purchaseFromTime + duration.seconds(1)); // force time to move 1 seconds so normal tests pass
 
     // set base commission rates
-    await this.token.updateCommission('DIG', 12, 12, {from: _curator});
-    await this.token.updateCommission('PHY', 24, 15, {from: _curator});
+    await this.token.updateCommission('DIG', 12, 12, {from: _curatorAccount});
+    await this.token.updateCommission('PHY', 24, 15, {from: _curatorAccount});
   });
 
   describe('like a ERC721BasicToken', function () {
     beforeEach(async function () {
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
-      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
     });
 
     describe('balanceOf', function () {
       describe('when the given address owns some tokens', function () {
         it('returns the amount of tokens owned by the given address', async function () {
-          const balance = await this.token.balanceOf(_curator);
+          const balance = await this.token.balanceOf(_curatorAccount);
           balance.should.be.bignumber.equal(2);
         });
       });
@@ -118,7 +119,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         it('returns the owner of the given token ID', async function () {
           const owner = await this.token.ownerOf(tokenId);
-          owner.should.be.equal(_curator);
+          owner.should.be.equal(_curatorAccount);
         });
       });
 
@@ -375,7 +376,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('approve', function () {
       const tokenId = firstTokenId;
-      const sender = _curator;
+      const sender = _curatorAccount;
       const to = accounts[1];
 
       let logs = null;
@@ -497,7 +498,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     });
 
     describe('setApprovalForAll', function () {
-      const sender = _curator;
+      const sender = _curatorAccount;
 
       describe('when the operator willing to approve is not the owner', function () {
         const operator = accounts[1];
@@ -576,7 +577,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       describe('when the operator is the owner', function () {
-        const operator = _curator;
+        const operator = _curatorAccount;
 
         it('reverts', async function () {
           await assertRevert(this.token.setApprovalForAll(operator, true, {from: sender}));
@@ -587,11 +588,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
   describe('like a mintable and burnable ERC721Token', function () {
     beforeEach(async function () {
-      const result = await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-        from: _curator
+      const result = await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+        from: _curatorAccount
       });
-      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curator, {
-        from: _curator
+      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {
+        from: _curatorAccount
       });
     });
 
@@ -600,19 +601,19 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('when successful', function () {
         beforeEach(async function () {
-          const result = await this.token.mint(_tokenURI, 'XYZ0000000000DIG', _priceInWei, _purchaseFromTime, _curator, {
-            from: _curator
+          const result = await this.token.mint(_tokenURI, 'XYZ0000000000DIG', _priceInWei, _purchaseFromTime, _curatorAccount, {
+            from: _curatorAccount
           });
           logs = result.logs;
         });
 
         it('assigns the token to the new owner', async function () {
           const owner = await this.token.ownerOf(2); // zero indexed
-          owner.should.be.equal(_curator);
+          owner.should.be.equal(_curatorAccount);
         });
 
         it('increases the balance of its owner', async function () {
-          const balance = await this.token.balanceOf(_curator);
+          const balance = await this.token.balanceOf(_curatorAccount);
           balance.should.be.bignumber.equal(3);
         });
 
@@ -620,7 +621,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           logs.length.should.be.equal(1);
           logs[0].event.should.be.eq('Transfer');
           logs[0].args._from.should.be.equal(ZERO_ADDRESS);
-          logs[0].args._to.should.be.equal(_curator);
+          logs[0].args._to.should.be.equal(_curatorAccount);
           logs[0].args._tokenId.should.be.bignumber.equal(2);
         });
       });
@@ -628,7 +629,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('burn', function () {
       const tokenId = firstTokenId;
-      const sender = _curator;
+      const sender = _curatorAccount;
       let logs = null;
 
       describe('when successful', function () {
@@ -678,7 +679,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       describe('when the given token ID was not tracked by this contract', function () {
         it('reverts', async function () {
-          await assertRevert(this.token.burn(unknownTokenId, {from: _curator}));
+          await assertRevert(this.token.burn(unknownTokenId, {from: _curatorAccount}));
         });
       });
     });
@@ -688,15 +689,15 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('mint()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
       });
 
       describe('balanceOf', function () {
         describe('when the given address owns some tokens', function () {
           it('returns the amount of tokens owned by the given address', async function () {
-            const balance = await this.token.balanceOf(_curator);
+            const balance = await this.token.balanceOf(_curatorAccount);
             balance.should.be.bignumber.equal(1);
           });
         });
@@ -716,7 +717,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         tokenId.should.be.bignumber.equal(firstTokenId);
 
         let owner = assetInfo[1];
-        owner.should.be.equal(_curator);
+        owner.should.be.equal(_curatorAccount);
 
         let purchaseState = assetInfo[2];
         purchaseState.should.be.bignumber.equal(Unsold);
@@ -766,8 +767,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       beforeEach(async function () {
         const totalInEdition = _.range(0, NUMBER_OF_EDITIONS);
         for (let tokenId of totalInEdition) {
-          await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-            from: _curator
+          await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+            from: _curatorAccount
           });
         }
 
@@ -778,11 +779,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           isPurchased.should.be.bignumber.equal(Unsold);
 
           let ownerOf = await this.token.ownerOf(tokenId);
-          ownerOf.should.be.equal(_curator);
+          ownerOf.should.be.equal(_curatorAccount);
         }
 
-        //Ensure all Ids as expected and owned by _curator
-        let ownerTokens = await this.token.tokensOf(_curator);
+        //Ensure all Ids as expected and owned by _curatorAccount
+        let ownerTokens = await this.token.tokensOf(_curatorAccount);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
         ownerTokens.should.be.deep.equal(range);
 
@@ -802,19 +803,19 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
           // Approve new _buyer
           logs[0].event.should.be.eq('Approval');
-          logs[0].args._owner.should.be.equal(_curator);
+          logs[0].args._owner.should.be.equal(_curatorAccount);
           logs[0].args._approved.should.be.equal(_buyer);
           logs[0].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
           // Approval cleared on transfer
           logs[1].event.should.be.eq('Approval');
-          logs[1].args._owner.should.be.equal(_curator);
+          logs[1].args._owner.should.be.equal(_curatorAccount);
           logs[1].args._approved.should.be.equal(ZERO_ADDRESS);
           logs[1].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
           // Transferred
           logs[2].event.should.be.eq('Transfer');
-          logs[2].args._from.should.be.equal(_curator);
+          logs[2].args._from.should.be.equal(_curatorAccount);
           logs[2].args._to.should.be.equal(_buyer);
           logs[2].args._tokenId.should.be.bignumber.equal(tokenToPurchase);
 
@@ -835,8 +836,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           let getApproved = await this.token.getApproved(tokenToPurchase);
           getApproved.should.be.equal(ZERO_ADDRESS);
 
-          //Ensure _curator still owns all bu the purchased token
-          let ownerTokens = await this.token.tokensOf(_curator);
+          //Ensure _curatorAccount still owns all bu the purchased token
+          let ownerTokens = await this.token.tokensOf(_curatorAccount);
           ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
           ownerTokens.sort().should.be.deep.equal([0, 1, 2, 4, 5, 6, 7, 8, 9]);
         });
@@ -858,7 +859,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           isPurchased.should.be.bignumber.equal(Unsold);
 
           let ownerOf = await this.token.ownerOf(tokenToPurchase);
-          ownerOf.should.be.equal(_curator);
+          ownerOf.should.be.equal(_curatorAccount);
         });
       });
 
@@ -883,14 +884,14 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       describe('purchasing from different accounts', function () {
-        it('can purchase if currently owned by _curator', async function () {
+        it('can purchase if currently owned by _curatorAccount', async function () {
           await this.token.purchaseWithEther(tokenToPurchase, {
             value: _priceInWei,
-            from: _curator
+            from: _curatorAccount
           });
 
           let ownerOf = await this.token.ownerOf(tokenToPurchase);
-          ownerOf.should.be.equal(_curator);
+          ownerOf.should.be.equal(_curatorAccount);
 
           let isPurchased = await this.token.isPurchased(tokenToPurchase);
           isPurchased.should.be.bignumber.equal(EtherPurchase);
@@ -899,11 +900,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         it('can purchase if currently owned by contractDeveloper', async function () {
           await this.token.purchaseWithEther(tokenToPurchase, {
             value: _priceInWei,
-            from: _contractDeveloper
+            from: _developmentAccount
           });
 
           let ownerOf = await this.token.ownerOf(tokenToPurchase);
-          ownerOf.should.be.equal(_contractDeveloper);
+          ownerOf.should.be.equal(_developmentAccount);
 
           let isPurchased = await this.token.isPurchased(tokenToPurchase);
           isPurchased.should.be.bignumber.equal(EtherPurchase);
@@ -918,7 +919,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
           }));
 
           let ownerOf = await this.token.ownerOf(tokenToPurchase);
-          ownerOf.should.be.equal(_curator);
+          ownerOf.should.be.equal(_curatorAccount);
 
           let isPurchased = await this.token.isPurchased(tokenToPurchase);
           isPurchased.should.be.bignumber.equal(Unsold);
@@ -960,8 +961,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       beforeEach(async function () {
         _purchaseFromTime += duration.seconds(30);
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
       });
 
@@ -981,11 +982,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         it('should be able to buy once open', async function () {
           await this.token.purchaseWithFiat(firstTokenId, {
-            from: _curator
+            from: _curatorAccount
           });
 
           let ownerOf = await this.token.ownerOf(firstTokenId);
-          ownerOf.should.be.equal(_curator);
+          ownerOf.should.be.equal(_curatorAccount);
 
           let isPurchased = await this.token.isPurchased(firstTokenId);
           isPurchased.should.be.bignumber.equal(FiatPurchase);
@@ -1016,25 +1017,25 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('purchaseWithFiat()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
 
         let isPurchased = await this.token.isPurchased(firstTokenId);
         isPurchased.should.be.bignumber.equal(Unsold);
 
         let ownerOf = await this.token.ownerOf(firstTokenId);
-        ownerOf.should.be.equal(_curator);
+        ownerOf.should.be.equal(_curatorAccount);
       });
 
-      describe('can actually make purchaseWithFiat() if _curator', function () {
+      describe('can actually make purchaseWithFiat() if _curatorAccount', function () {
         it('updates owner and sets as sold', async function () {
           let {logs} = await this.token.purchaseWithFiat(new BigNumber(firstTokenId), {
-            from: _contractDeveloper
+            from: _developmentAccount
           });
 
           let ownerOf = await this.token.ownerOf(firstTokenId);
-          ownerOf.should.be.equal(_curator);
+          ownerOf.should.be.equal(_curatorAccount);
 
           let isPurchased = await this.token.isPurchased(firstTokenId);
           isPurchased.should.be.bignumber.equal(FiatPurchase);
@@ -1066,7 +1067,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       describe('only if not already sold via purchaseWithFiat()', function () {
         beforeEach(async function () {
           await this.token.purchaseWithFiat(firstTokenId, {
-            from: _contractDeveloper
+            from: _developmentAccount
           });
           let isPurchased = await this.token.isPurchased(firstTokenId);
           isPurchased.should.be.bignumber.equal(FiatPurchase);
@@ -1074,7 +1075,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         it('reverts if already sold', async function () {
           await assertRevert(this.token.purchaseWithFiat(firstTokenId, {
-            from: _curator
+            from: _curatorAccount
           }));
         });
       });
@@ -1090,8 +1091,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('reverseFiatPurchase()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
       });
 
@@ -1115,15 +1116,15 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         beforeEach(async function () {
           await this.token.purchaseWithFiat(firstTokenId, {
-            from: _contractDeveloper
+            from: _developmentAccount
           });
           let isPurchased = await this.token.isPurchased(firstTokenId);
           isPurchased.should.be.bignumber.equal(FiatPurchase);
         });
 
-        describe('can be called by _curator', async function () {
+        describe('can be called by _curatorAccount', async function () {
           it('and is successful', async function () {
-            let {logs} = await this.token.reverseFiatPurchase(firstTokenId, {from: _curator});
+            let {logs} = await this.token.reverseFiatPurchase(firstTokenId, {from: _curatorAccount});
 
             let isPurchased = await this.token.isPurchased(firstTokenId);
             isPurchased.should.be.bignumber.equal(Unsold);
@@ -1136,7 +1137,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         describe('can be called by developer', async function () {
           it('and is successful', async function () {
-            let {logs} = await this.token.reverseFiatPurchase(firstTokenId, {from: _contractDeveloper});
+            let {logs} = await this.token.reverseFiatPurchase(firstTokenId, {from: _developmentAccount});
 
             let isPurchased = await this.token.isPurchased(firstTokenId);
             isPurchased.should.be.bignumber.equal(Unsold);
@@ -1156,14 +1157,14 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     describe('setTokenURI()', function () {
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
       });
 
-      it('can be called by _curator', async function () {
+      it('can be called by _curatorAccount', async function () {
         await this.token.setTokenURI(firstTokenId, 'hash/1', {
-          from: _curator
+          from: _curatorAccount
         });
         let editionInfo = await this.token.editionInfo(firstTokenId);
         editionInfo[3].should.be.equal(_baseUri + 'hash/1');
@@ -1171,7 +1172,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       it('can be called by developer', async function () {
         await this.token.setTokenURI(firstTokenId, 'hash/2', {
-          from: _contractDeveloper
+          from: _developmentAccount
         });
         let editionInfo = await this.token.editionInfo(firstTokenId);
         editionInfo[3].should.be.equal(_baseUri + 'hash/2');
@@ -1189,14 +1190,14 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('setPriceInWei()', function () {
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
       });
 
-      it('can be called by _curator', async function () {
+      it('can be called by _curatorAccount', async function () {
         await this.token.setPriceInWei(firstTokenId, _priceInWei.add(1), {
-          from: _curator
+          from: _curatorAccount
         });
         let assetInfo = await this.token.assetInfo(firstTokenId);
         assetInfo[3].should.be.bignumber.equal(_priceInWei.add(1));
@@ -1204,7 +1205,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       it('can be called by developer', async function () {
         await this.token.setPriceInWei(firstTokenId, _priceInWei.sub(1), {
-          from: _contractDeveloper
+          from: _developmentAccount
         });
         let assetInfo = await this.token.assetInfo(firstTokenId);
         assetInfo[3].should.be.bignumber.equal(_priceInWei.sub(1));
@@ -1219,7 +1220,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       describe('once purchased', async function () {
         beforeEach(async function () {
           await this.token.purchaseWithFiat(firstTokenId, {
-            from: _contractDeveloper
+            from: _developmentAccount
           });
           let isPurchased = await this.token.isPurchased(firstTokenId);
           isPurchased.should.be.bignumber.equal(FiatPurchase);
@@ -1227,7 +1228,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         it('cannot be called', async function () {
           await assertRevert(this.token.setPriceInWei(firstTokenId, _priceInWei.sub(1), {
-            from: _curator
+            from: _curatorAccount
           }));
         });
       });
@@ -1265,12 +1266,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('updating commission', function () {
 
-      it('should be able to update as _curator', async function () {
+      it('should be able to update as _curatorAccount', async function () {
         let commission = await this.token.getCommissionForType('DIG');
         commission[0].should.be.bignumber.equal(12);
         commission[1].should.be.bignumber.equal(12);
 
-        await this.token.updateCommission('DIG', 5, 5, {from: _curator});
+        await this.token.updateCommission('DIG', 5, 5, {from: _curatorAccount});
 
         commission = await this.token.getCommissionForType('DIG');
         commission[0].should.be.bignumber.equal(5);
@@ -1282,7 +1283,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         commission[0].should.be.bignumber.equal(12);
         commission[1].should.be.bignumber.equal(12);
 
-        await this.token.updateCommission('DIG', 1, 2, {from: _contractDeveloper});
+        await this.token.updateCommission('DIG', 1, 2, {from: _developmentAccount});
 
         commission = await this.token.getCommissionForType('DIG');
         commission[0].should.be.bignumber.equal(1);
@@ -1293,16 +1294,16 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         await assertRevert(this.token.updateCommission('ABC', 50, 0, {from: _buyer}));
       });
 
-      it('should fail when _curator commission is zero', async function () {
-        await assertRevert(this.token.updateCommission('ABC', 0, 50, {from: _curator}));
+      it('should fail when _curatorAccount commission is zero', async function () {
+        await assertRevert(this.token.updateCommission('ABC', 0, 50, {from: _curatorAccount}));
       });
 
       it('should fail when developer commission is zero', async function () {
-        await assertRevert(this.token.updateCommission('ABC', 50, 0, {from: _curator}));
+        await assertRevert(this.token.updateCommission('ABC', 50, 0, {from: _curatorAccount}));
       });
 
       it('should fail when both commissions are greater than 99', async function () {
-        await assertRevert(this.token.updateCommission('ABC', 98, 2, {from: _curator}));
+        await assertRevert(this.token.updateCommission('ABC', 98, 2, {from: _curatorAccount}));
       });
 
       it('should be able to add a new commission', async function () {
@@ -1310,7 +1311,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         commission[0].should.be.bignumber.equal(0);
         commission[1].should.be.bignumber.equal(0);
 
-        await this.token.updateCommission('ABC', 30, 20, {from: _contractDeveloper});
+        await this.token.updateCommission('ABC', 30, 20, {from: _developmentAccount});
 
         commission = await this.token.getCommissionForType('ABC');
         commission[0].should.be.bignumber.equal(30);
@@ -1318,14 +1319,14 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('should fail when updating curator commission with decimals', async function () {
-        this.token.updateCommission('EFG', 98, 1.9, {from: _curator});
+        this.token.updateCommission('EFG', 98, 1.9, {from: _curatorAccount});
         let commission = await this.token.getCommissionForType('EFG');
         commission[0].should.be.bignumber.equal(98);
         commission[1].should.be.bignumber.equal(1);
       });
 
       it('should fail when updating developer commission with decimals', async function () {
-        this.token.updateCommission('EFG', 1.9, 98, {from: _curator});
+        this.token.updateCommission('EFG', 1.9, 98, {from: _curatorAccount});
         let commission = await this.token.getCommissionForType('EFG');
         commission[0].should.be.bignumber.equal(1);
         commission[1].should.be.bignumber.equal(98);
@@ -1337,11 +1338,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = 0;
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
-        this.curatorBalance = await web3.eth.getBalance(_curator);
-        this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        this.curatorBalance = await web3.eth.getBalance(_curatorAccount);
+        this.contractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
           value: _priceInWei,
@@ -1356,7 +1357,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('curator account receives correct value', async function () {
-        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        let updatedCuratorBalance = await web3.eth.getBalance(_curatorAccount);
 
         // curator is set as the artist account (as artist may not have account)
         // therefore curator gets the artist amount (to forward on)
@@ -1368,7 +1369,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('developer account receives correct value', async function () {
-        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         updatedContractDeveloperBalance.should.be.bignumber.equal(
           this.contractDeveloperBalance.add(_priceInWei.dividedBy(100).times(12)) // 12%
         );
@@ -1381,10 +1382,10 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       beforeEach(async function () {
         await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _artist, {
-          from: _curator
+          from: _curatorAccount
         });
-        this.curatorBalance = await web3.eth.getBalance(_curator);
-        this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        this.curatorBalance = await web3.eth.getBalance(_curatorAccount);
+        this.contractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         this.artistBalance = await web3.eth.getBalance(_artist);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
@@ -1400,7 +1401,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('curator account receives correct value', async function () {
-        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        let updatedCuratorBalance = await web3.eth.getBalance(_curatorAccount);
 
         updatedCuratorBalance.should.be.bignumber.equal(
           this.curatorBalance
@@ -1409,7 +1410,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('developer account receives correct value', async function () {
-        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         updatedContractDeveloperBalance.should.be.bignumber.equal(
           this.contractDeveloperBalance.add(_priceInWei.dividedBy(100).times(12)) // 12%
         );
@@ -1427,7 +1428,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       it('should revert as not allowed', async function () {
         await assertRevert(this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, ZERO_ADDRESS, {
-          from: _curator
+          from: _curatorAccount
         }));
       });
     });
@@ -1437,11 +1438,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const tokenToPurchase = 0;
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
-        this.curatorBalance = await web3.eth.getBalance(_curator);
-        this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        this.curatorBalance = await web3.eth.getBalance(_curatorAccount);
+        this.contractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
           value: _priceInWei,
@@ -1456,7 +1457,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('curator account receives correct value', async function () {
-        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        let updatedCuratorBalance = await web3.eth.getBalance(_curatorAccount);
         updatedCuratorBalance.should.be.bignumber.equal(
           this.curatorBalance
             .add(_priceInWei.dividedBy(100).times(24)) // 24%
@@ -1465,7 +1466,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('developer account receives correct value', async function () {
-        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         updatedContractDeveloperBalance.should.be.bignumber.equal(
           this.contractDeveloperBalance.add(_priceInWei.dividedBy(100).times(15))// 15%
         );
@@ -1480,10 +1481,10 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       beforeEach(async function () {
         await this.token.mint(_tokenURI, _editionWithMissingType, _priceInWei, _purchaseFromTime, _artist, {
-          from: _curator
+          from: _curatorAccount
         });
-        this.curatorBalance = await web3.eth.getBalance(_curator);
-        this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        this.curatorBalance = await web3.eth.getBalance(_curatorAccount);
+        this.contractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         this.artistBalance = await web3.eth.getBalance(_artist);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
@@ -1499,12 +1500,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('curator account receives correct value', async function () {
-        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        let updatedCuratorBalance = await web3.eth.getBalance(_curatorAccount);
         updatedCuratorBalance.should.be.bignumber.equal(this.curatorBalance);
       });
 
       it('developer account receives correct value', async function () {
-        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         updatedContractDeveloperBalance.should.be.bignumber.equal(this.contractDeveloperBalance);
       });
 
@@ -1523,10 +1524,10 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       beforeEach(async function () {
         await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, _artist, {
-          from: _curator
+          from: _curatorAccount
         });
-        this.curatorBalance = await web3.eth.getBalance(_curator);
-        this.contractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        this.curatorBalance = await web3.eth.getBalance(_curatorAccount);
+        this.contractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         this.artistBalance = await web3.eth.getBalance(_artist);
 
         await this.token.purchaseWithEther(tokenToPurchase, {
@@ -1541,12 +1542,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('curator account receives correct value of zero', async function () {
-        let updatedCuratorBalance = await web3.eth.getBalance(_curator);
+        let updatedCuratorBalance = await web3.eth.getBalance(_curatorAccount);
         updatedCuratorBalance.should.be.bignumber.equal(this.curatorBalance);
       });
 
       it('developer account receives correct value of zero', async function () {
-        let updatedContractDeveloperBalance = await web3.eth.getBalance(_contractDeveloper);
+        let updatedContractDeveloperBalance = await web3.eth.getBalance(_developmentAccount);
         updatedContractDeveloperBalance.should.be.bignumber.equal(this.contractDeveloperBalance);
       });
 
@@ -1560,8 +1561,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     describe('can re-set token base URI', function () {
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
       });
 
@@ -1580,8 +1581,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     describe('fallback function', function () {
 
       beforeEach(async function () {
-        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, _curator, {
-          from: _curator
+        await this.token.mint(_tokenURI, _editionPhysical, 0, _purchaseFromTime, _curatorAccount, {
+          from: _curatorAccount
         });
       });
 
@@ -1702,11 +1703,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     beforeEach(async function () {
       // Mint three editions
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
 
-      const balance = await this.token.balanceOf(_curator);
+      const balance = await this.token.balanceOf(_curatorAccount);
       balance.should.be.bignumber.equal(3);
     });
 
@@ -1725,7 +1726,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         let tokenIdPointer = await this.token.tokenIdPointer();
         tokenIdPointer.should.be.bignumber.equal(3); // zero indexed
 
-        await this.token.burn(2, {from: _curator});
+        await this.token.burn(2, {from: _curatorAccount});
 
         tokenIdPointer = await this.token.tokenIdPointer();
         tokenIdPointer.should.be.bignumber.equal(3); // zero indexed
@@ -1734,12 +1735,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
     describe('keeps track of the edition total number correctly', async function () {
       it('tracks total in edition correctly', async function () {
-        let editionNumber = await this.token.editionNumber(_editionDigital);
+        let editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(3);
 
-        await this.token.burn(2, {from: _curator});
+        await this.token.burn(2, {from: _curatorAccount});
 
-        editionNumber = await this.token.editionNumber(_editionDigital);
+        editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(2);
       });
     });
@@ -1748,17 +1749,17 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
       beforeEach(async function () {
         // burn the middle token
-        await this.token.burn(tokenToBurn, {from: _curator});
+        await this.token.burn(tokenToBurn, {from: _curatorAccount});
       });
 
       it('tokensOf() is correct', async function () {
-        let ownerTokens = await this.token.tokensOf(_curator);
+        let ownerTokens = await this.token.tokensOf(_curatorAccount);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
         ownerTokens.should.be.deep.equal([0, 2]);
       });
 
       it('balanceOf() is reduced', async function () {
-        const balance = await this.token.balanceOf(_curator);
+        const balance = await this.token.balanceOf(_curatorAccount);
         balance.should.be.bignumber.equal(2);
       });
 
@@ -1832,19 +1833,19 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         const totalSupply = await this.token.totalSupply();
         totalSupply.should.be.bignumber.equal(3);
 
-        let editionNumber = await this.token.editionNumber(_editionDigital);
+        let editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(3);
 
         // Burn 1
-        await this.token.burn(tokenToBurn, {from: _curator});
+        await this.token.burn(tokenToBurn, {from: _curatorAccount});
 
         // Add two new assets to the existing digital asset where one has been burnt
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
       });
 
       it('tracks total in edition correctly', async function () {
-        let editionNumber = await this.token.editionNumber(_editionDigital);
+        let editionNumber = await this.token.numberOf(_editionDigital);
         editionNumber.should.be.bignumber.equal(4);
       });
 
@@ -1854,12 +1855,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('balanceOf() is correct', async function () {
-        const balance = await this.token.balanceOf(_curator);
+        const balance = await this.token.balanceOf(_curatorAccount);
         balance.should.be.bignumber.equal(4);
       });
 
       it('tokensOf() is correct', async function () {
-        let ownerTokens = await this.token.tokensOf(_curator);
+        let ownerTokens = await this.token.tokensOf(_curatorAccount);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
         ownerTokens.should.be.deep.equal([0, 2, 3, 4]);
       });
@@ -1879,7 +1880,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         tokenId.should.be.bignumber.equal(3);
 
         let owner = assetInfo[1];
-        owner.should.be.equal(_curator);
+        owner.should.be.equal(_curatorAccount);
 
         let purchaseState = assetInfo[2];
         purchaseState.should.be.bignumber.equal(Unsold);
@@ -1914,9 +1915,9 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       const newlyMintedTokenId = 3;
 
       beforeEach(async function () {
-        await this.token.burn(tokenToBurn, {from: _curator});
+        await this.token.burn(tokenToBurn, {from: _curatorAccount});
         //new physical asset
-        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
       });
 
       it('totalSupply() is correct', async function () {
@@ -1925,12 +1926,12 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('balanceOf() is correct', async function () {
-        const balance = await this.token.balanceOf(_curator);
+        const balance = await this.token.balanceOf(_curatorAccount);
         balance.should.be.bignumber.equal(3);
       });
 
       it('tokensOf() is correct', async function () {
-        let ownerTokens = await this.token.tokensOf(_curator);
+        let ownerTokens = await this.token.tokensOf(_curatorAccount);
         ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
         ownerTokens.should.be.deep.equal([0, 2, newlyMintedTokenId]);
       });
@@ -1947,7 +1948,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
         tokenId.should.be.bignumber.equal(newlyMintedTokenId);
 
         let owner = assetInfo[1];
-        owner.should.be.equal(_curator);
+        owner.should.be.equal(_curatorAccount);
 
         let purchaseState = assetInfo[2];
         purchaseState.should.be.bignumber.equal(Unsold);
@@ -1979,11 +1980,11 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     describe('burning the same token twice', async function () {
 
       beforeEach(async function () {
-        await this.token.burn(tokenToBurn, {from: _curator});
+        await this.token.burn(tokenToBurn, {from: _curatorAccount});
       });
 
       it('reverts', async function () {
-        await assertRevert(this.token.burn(tokenToBurn, {from: _curator}));
+        await assertRevert(this.token.burn(tokenToBurn, {from: _curatorAccount}));
       });
     });
 
@@ -1996,9 +1997,30 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
 
       it('reverts when being burnt', async function () {
-        await assertRevert(this.token.burn(tokenToBurn, {from: _curator}));
+        await assertRevert(this.token.burn(tokenToBurn, {from: _curatorAccount}));
       });
     });
 
+  });
+
+  describe('resetting artist address', async function () {
+    const _editionXXXDigital = 'XXX0000000000DIG';
+
+    beforeEach(async function () {
+      await this.token.mint(_tokenURI, _editionXXXDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+    });
+
+    it('should adjust reference to new artist account', async function () {
+
+      let editionInfo = await this.token.editionInfo(firstTokenId);
+      let artistAcc = editionInfo[4];
+      artistAcc.toString().should.be.equal(_curatorAccount);
+
+      await this.token.setArtistAccount(_editionXXXDigital, _artist, {from: _curatorAccount});
+
+      editionInfo = await this.token.editionInfo(firstTokenId);
+      artistAcc = editionInfo[4];
+      artistAcc.toString().should.be.equal(_artist);
+    });
   });
 });
