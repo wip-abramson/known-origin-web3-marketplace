@@ -483,6 +483,8 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     * @param _artistAccount address of artist on blockchain
    */
   function setArtistAccount(bytes16 _edition, address _artistAccount) external onlyKnownOrigin {
+    require(_artistAccount != address(0));
+
     editionToArtistAccount[_edition] = _artistAccount;
   }
 }

@@ -2002,4 +2002,25 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     });
 
   });
+
+  describe('resetting artist address', async function () {
+    const _editionXXXDigital = 'XXX0000000000DIG';
+
+    beforeEach(async function () {
+      await this.token.mint(_tokenURI, _editionXXXDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+    });
+
+    it('should adjust reference to new artist account', async function () {
+
+      let editionInfo = await this.token.editionInfo(firstTokenId);
+      let artistAcc = editionInfo[4];
+      artistAcc.toString().should.be.equal(_curatorAccount);
+
+      await this.token.setArtistAccount(_editionXXXDigital, _artist, {from: _curatorAccount});
+
+      editionInfo = await this.token.editionInfo(firstTokenId);
+      artistAcc = editionInfo[4];
+      artistAcc.toString().should.be.equal(_artist);
+    });
+  });
 });
