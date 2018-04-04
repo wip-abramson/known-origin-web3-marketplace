@@ -16,5 +16,4 @@ selenium-debug.log
 *.sln
 *.iml
 /contracts-flat/
-/build/
 /test/unit/coverage/

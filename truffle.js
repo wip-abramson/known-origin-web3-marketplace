@@ -43,15 +43,15 @@ module.exports = {
       },
       network_id: 3,
       gas: 4075039, // default = 4712388
-      gasPrice: 12000000000 // default = 100 gwei = 100000000000
+      gasPrice: 25000000000 // default = 100 gwei = 100000000000
     },
     rinkeby: {
       provider: function () {
         return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/${infuraApikey}`);
       },
       network_id: 4,
-      gas: 3075039, // default = 4712388
-      gasPrice: 12000000000 // default = 100 gwei = 100000000000
+      gas: 7000000, // default = 4712388
+      gasPrice: 25000000000 // default = 100 gwei = 100000000000
     }
   }
 };
