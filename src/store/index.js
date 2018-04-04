@@ -268,18 +268,26 @@ const store = new Vuex.Store({
             let assetInfo = results[0];
             let editionInfo = results[1];
 
-            let tokenUri = editionInfo[3];
+            const rawEdition = editionInfo[1];
+            const owner = assetInfo[1];
+
+            // Handle burnt tokens by checking edition and owner are both blank
+            if (rawEdition === "0x00000000000000000000000000000000" && owner === "0x0000000000000000000000000000000000000000") {
+              return null; // return nulls for for so we can strip them out at the nxt stage
+            }
 
             // should always be 16 chars long
-            const edition = Web3.utils.toAscii(editionInfo[1]);
+            const edition = Web3.utils.toAscii(rawEdition);
+
+            const tokenUri = editionInfo[3];
 
             let fullAssetDetails = {
               id: assetInfo[0].toNumber(),
-              owner: assetInfo[1].toString(),
+              owner: owner.toString(),
               purchased: assetInfo[2].toNumber(),
               priceInWei: assetInfo[3].toString(),
               priceInEther: Web3.utils.fromWei(assetInfo[3].toString(), 'ether').valueOf(),
-              auctionStartDate: assetInfo[4].toString(10), // TODO handle auction start date
+              auctionStartDate: assetInfo[4].toString(10),
 
               edition: edition,
               // Last 3 chars of edition are type
@@ -307,6 +315,9 @@ const store = new Vuex.Store({
           return Promise.all(_.map(supply, (index) => lookupAssetInfo(contract, index)))
             .then((assets) => {
 
+              // Strip out burnt tokens which will appear as nulls in the list
+              assets = _.without(assets, null);
+
               let assetsByEditions = _.groupBy(assets, 'edition');
               let assetsByArtistCode = _.groupBy(assets, 'artistCode');
 
@@ -326,8 +337,8 @@ const store = new Vuex.Store({
             .then((results) => {
               commit(mutations.SET_COMMISSION_ADDRESSES, {
                 curatorAddress: results[0],
-                contractDeveloperAddress: results[2],
-                contractAddress: results[3]
+                contractDeveloperAddress: results[1],
+                contractAddress: results[2]
               });
             });
 

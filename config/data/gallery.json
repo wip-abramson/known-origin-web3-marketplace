@@ -46,15 +46,15 @@
           "edition": "BJDSTMEUP0001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
-          "costInEth": 1.57
+          "costInEth": 3.5
         },
         {
-          "artworkName": "Poker Face",
+          "artworkName": "Poker face",
           "ipfsPath": "poker_face",
           "edition": "BJDPKRFCE0001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
-          "costInEth": 1.57
+          "costInEth": 3.5
         },
         {
           "artworkName": "Acid Rain Tuesday",
@@ -62,7 +62,7 @@
           "edition": "BJDACDRNTU001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
-          "costInEth": 1.57
+          "costInEth": 3.5
         },
         {
           "artworkName": "Loose Tapestries",
@@ -70,7 +70,7 @@
           "edition": "BJDLOOTAP0001PHY",
           "numberOfEditions": 1,
           "fiatCost": 1000,
-          "costInEth": 1.57
+          "costInEth": 3.5
         }
       ]
     },
@@ -78,18 +78,18 @@
       "name": "James O'Connell",
       "artworks": [
         {
-          "artworkName": "Functional Flattery",
-          "ipfsPath": "functional_flattery",
-          "edition": "JOCFUNCFLT001PHY",
+          "artworkName": "For the girls and boys",
+          "ipfsPath": "for_the_girls_and_boys",
+          "edition": "JOCFORGRLBOY1PHY",
           "numberOfEditions": 1,
           "fiatCost": 65,
           "costInEth": 0.11
         },
         {
-          "artworkName": "Functional Flattery",
-          "ipfsPath": "functional_flattery",
-          "edition": "JOCFUNCFLT001DIG",
-          "numberOfEditions": 10,
+          "artworkName": "For the girls and boys",
+          "ipfsPath": "for_the_girls_and_boys",
+          "edition": "JOCFORGRLBOY1DIG",
+          "numberOfEditions": 25,
           "fiatCost": 25,
           "costInEth": 0.001989
         },
@@ -105,7 +105,7 @@
           "artworkName": "Family tree",
           "ipfsPath": "family_tree",
           "edition": "JOCFAMTREE001DIG",
-          "numberOfEditions": 10,
+          "numberOfEditions": 25,
           "fiatCost": 25,
           "costInEth": 0.001989
         },
@@ -113,7 +113,7 @@
           "artworkName": "Boo!",
           "ipfsPath": "boo",
           "edition": "JOCBOO0000001DIG",
-          "numberOfEditions": 10,
+          "numberOfEditions": 25,
           "fiatCost": 25,
           "costInEth": 0.001989
         }
@@ -136,20 +136,86 @@
       "name": "Sam Taylor",
       "artworks": [
         {
-          "artworkName": "Nature Man",
-          "ipfsPath": "nature_man",
+          "artworkName": "Nature Boy",
+          "ipfsPath": "nature_boy",
           "edition": "STANATUREMAN1PHY",
           "numberOfEditions": 1,
           "fiatCost": 250,
-          "costInEth": 0.89
+          "costInEth": 1
         },
         {
-          "artworkName": "Inside Man",
-          "ipfsPath": "inside_man",
-          "edition": "STAINSIDEMAN1PHY",
+          "artworkName": "Inside Earth",
+          "ipfsPath": "inside_earth",
+          "edition": "STAISDERTH001PHY",
           "numberOfEditions": 1,
-          "fiatCost": 200,
-          "costInEth": 0.69
+          "fiatCost": 250,
+          "costInEth": 1
+        }
+      ]
+    },
+    {
+      "name": "CoinJournal",
+      "artworks": [
+        {
+          "artworkName": "Disrupting Finance Since 2009",
+          "ipfsPath": "coin_journal_disrupting_finance",
+          "edition": "CNJDISRPTFIN1PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 20,
+          "costInEth": 0.07
+        },
+        {
+          "artworkName": "CoinJournal X CoinFest (Night)",
+          "ipfsPath": "coin_journal_coinfest_night",
+          "edition": "CNJCINFSTNG1HDIG",
+          "numberOfEditions": 25,
+          "fiatCost": 5,
+          "costInEth": 0.086
+        },
+        {
+          "artworkName": "CoinJournal X CoinFest (Day)",
+          "ipfsPath": "coin_journal_coinfest_day",
+          "edition": "CNJCINFSTDY1HDIG",
+          "numberOfEditions": 25,
+          "fiatCost": 5,
+          "costInEth": 0.086
+        },
+        {
+          "artworkName": "Blockchain Colouring Book",
+          "ipfsPath": "coin_journal_blockchain_colouring",
+          "edition": "CNJBLCKCOLBK1DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 1.5,
+          "costInEth": 0.086
+        }
+      ]
+    },
+    {
+      "name": "89-A",
+      "artworks": [
+        {
+          "artworkName": "Up&down",
+          "ipfsPath": "89a_up_and_down",
+          "edition": "89AUP&DOWN001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 33,
+          "costInEth": 0.12
+        },
+        {
+          "artworkName": "Wake",
+          "ipfsPath": "89a_wake",
+          "edition": "89AWAKE000001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 33,
+          "costInEth": 0.12
+        },
+        {
+          "artworkName": "Kurushi",
+          "ipfsPath": "89a_kurushi",
+          "edition": "89AKURUSHI001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 33,
+          "costInEth": 0.12
         }
       ]
     },
@@ -215,6 +281,38 @@
       "name": "Katie O'Rourke",
       "artworks": [
         {
+          "artworkName": "Manchester",
+          "ipfsPath": "manchester",
+          "edition": "KORMANCHESTERPHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.351
+        },
+        {
+          "artworkName": "Manchester",
+          "ipfsPath": "manchester",
+          "edition": "KORMANCHESTERDIG",
+          "numberOfEditions": 25,
+          "fiatCost": 20,
+          "costInEth": 0.071
+        },
+        {
+          "artworkName": "Leeds",
+          "ipfsPath": "leeds",
+          "edition": "KORLEEDS00001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 100,
+          "costInEth": 0.351
+        },
+        {
+          "artworkName": "Leeds",
+          "ipfsPath": "leeds",
+          "edition": "KORLEEDS00001DIG",
+          "numberOfEditions": 25,
+          "fiatCost": 20,
+          "costInEth": 0.071
+        },
+        {
           "artworkName": "Berlin",
           "ipfsPath": "berlin",
           "edition": "KORBERLIN0001PHY",
@@ -245,88 +343,6 @@
           "numberOfEditions": 25,
           "fiatCost": 20,
           "costInEth": 0.071
-        },
-        {
-          "artworkName": "Leeds",
-          "ipfsPath": "leeds",
-          "edition": "KORLEEDS00001PHY",
-          "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.351
-        },
-        {
-          "artworkName": "Leeds",
-          "ipfsPath": "leeds",
-          "edition": "KORLEEDS00001DIG",
-          "numberOfEditions": 25,
-          "fiatCost": 20,
-          "costInEth": 0.071
-        },
-        {
-          "artworkName": "Amsterdam",
-          "ipfsPath": "amsterdam",
-          "edition": "KORAMSTERDAM0PHY",
-          "numberOfEditions": 1,
-          "fiatCost": 100,
-          "costInEth": 0.351
-        },
-        {
-          "artworkName": "Amsterdam",
-          "ipfsPath": "amsterdam",
-          "edition": "KORAMSTERDAM0DIG",
-          "numberOfEditions": 25,
-          "fiatCost": 20,
-          "costInEth": 0.071
-        }
-      ]
-    },
-    {
-      "name": "89-A",
-      "artworks": [
-        {
-          "artworkName": "Up&down",
-          "ipfsPath": "89a_up_and_down",
-          "edition": "89AUP&DOWN001DIG",
-          "numberOfEditions": 25,
-          "fiatCost": 33,
-          "costInEth": 0.12
-        },
-        {
-          "artworkName": "Wake",
-          "ipfsPath": "89a_wake",
-          "edition": "89AWAKE000001DIG",
-          "numberOfEditions": 25,
-          "fiatCost": 33,
-          "costInEth": 0.12
-        }
-      ]
-    },
-    {
-      "name": "Hamish Muir",
-      "artworks": [
-        {
-          "artworkName": "tephra iP138",
-          "ipfsPath": "tephra_ip138",
-          "edition": "HSMTEPHRAP138PHY",
-          "numberOfEditions": 1,
-          "fiatCost": 300,
-          "costInEth": 1
-        },
-        {
-          "artworkName": "tephra iP0100",
-          "ipfsPath": "tephra_ip0100",
-          "edition": "HSMTEPHRP0100PHY",
-          "numberOfEditions": 1,
-          "fiatCost": 300,
-          "costInEth": 1
-        },
-        {
-          "artworkName": "tephra iP0250",
-          "ipfsPath": "tephra_ip0250",
-          "edition": "HSMTEPHiP0250PHY",
-          "numberOfEditions": 1,
-          "fiatCost": 300,
-          "costInEth": 1
         }
       ]
     },
@@ -419,6 +435,48 @@
           "numberOfEditions": 1,
           "fiatCost": 90,
           "costInEth": 0.33
+        }
+      ]
+    },
+    {
+      "name": "Bryan Edmondson",
+      "artworks": [
+        {
+          "artworkName": "INC",
+          "ipfsPath": "bryan_edmondson_inc",
+          "edition": "BYEINC0000001PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 65,
+          "costInEth": 0.33
+        }
+      ]
+    },
+    {
+      "name": "Hamish Muir",
+      "artworks": [
+        {
+          "artworkName": "tephra iP138",
+          "ipfsPath": "tephra_ip138",
+          "edition": "HSMTEPHRAP138PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 295,
+          "costInEth": 1
+        },
+        {
+          "artworkName": "tephra iP0100",
+          "ipfsPath": "tephra_ip0100",
+          "edition": "HSMTEPHRP0100PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 295,
+          "costInEth": 1
+        },
+        {
+          "artworkName": "tephra iP0250",
+          "ipfsPath": "tephra_ip0250",
+          "edition": "HSMTEPHiP0250PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 295,
+          "costInEth": 1
         }
       ]
     }

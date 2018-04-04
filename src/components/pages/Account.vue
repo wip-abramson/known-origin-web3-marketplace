@@ -25,7 +25,7 @@
         </asset>
       </section>
 
-      <section v-if="assetsPurchasedByAccount.length == 0">
+      <section v-if="assetsPurchasedByAccount.length == 0" class="pad-top">
         You don't have any digital assets yet...
 
         <div class="pad-top">

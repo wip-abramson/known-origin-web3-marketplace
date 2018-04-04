@@ -83,6 +83,9 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
 
   uint256 public totalNumberOfPurchases;
 
+  // A pointer to the next token to be minted, zero indexed
+  uint256 public tokenIdPointer = 0;
+
   enum PurchaseState {Unsold, EtherPurchase, FiatPurchase}
 
   mapping(string => CommissionStructure) internal editionTypeToCommission;
@@ -153,13 +156,16 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   function mint(string _tokenURI, bytes16 _edition, uint256 _priceInWei, uint32 _auctionStartDate, address _artistAccount) public onlyManagement {
     require(_artistAccount != address(0));
 
-    uint256 _tokenId = allTokens.length;
+    uint256 _tokenId = tokenIdPointer;
+
     super._mint(msg.sender, _tokenId);
     super._setTokenURI(_tokenId, _tokenURI);
 
     editionToArtistAccount[_edition] = _artistAccount;
 
     _populateTokenData(_tokenId, _edition, _priceInWei, _auctionStartDate);
+
+    tokenIdPointer = tokenIdPointer.add(1);
   }
 
   function _populateTokenData(uint _tokenId, bytes16 _edition, uint256 _priceInWei, uint32 _purchaseFromTime) internal {
@@ -175,9 +181,16 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _tokenId the KODA token ID
    */
   function burn(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyManagementOwnedToken(_tokenId) {
-    // TODO fix me - clean up internal metadata when being burnt
-    // _populateTokenData(_tokenId, 0x0, 0, 0) << will work?
+    require(exists(_tokenId));
     super._burn(ownerOf(_tokenId), _tokenId);
+
+    bytes16 edition = tokenIdToEdition[_tokenId];
+
+    delete tokenIdToEdition[_tokenId];
+    delete tokenIdToPriceInWei[_tokenId];
+    delete tokenIdToPurchaseFromTime[_tokenId];
+
+    editionToEditionNumber[edition] = editionToEditionNumber[edition].sub(1);
   }
 
   /**
@@ -187,6 +200,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _uri the token URI, will be concatenated with baseUri
    */
   function setTokenURI(uint256 _tokenId, string _uri) public onlyManagement {
+    require(exists(_tokenId));
     _setTokenURI(_tokenId, _uri);
   }
 
@@ -197,6 +211,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _priceInWei the price in wei
    */
   function setPriceInWei(uint _tokenId, uint256 _priceInWei) public onlyManagement onlyUnsold(_tokenId) {
+    require(exists(_tokenId));
     tokenIdToPriceInWei[_tokenId] = _priceInWei;
   }
 
@@ -248,6 +263,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @return true/false depending on success
    */
   function purchaseWithEther(uint256 _tokenId) public payable onlyUnsold(_tokenId) onlyManagementOwnedToken(_tokenId) onlyAfterPurchaseFromTime(_tokenId) {
+    require(exists(_tokenId));
 
     uint256 priceInWei = tokenIdToPriceInWei[_tokenId];
     require(msg.value >= priceInWei);
@@ -279,6 +295,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _tokenId the KODA token ID
    */
   function purchaseWithFiat(uint256 _tokenId) public onlyManagement onlyUnsold(_tokenId) onlyAfterPurchaseFromTime(_tokenId) {
+    require(exists(_tokenId));
 
     // now purchased - don't allow re-purchase!
     tokenIdToPurchased[_tokenId] = PurchaseState.FiatPurchase;
@@ -294,6 +311,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
    * @param _tokenId the KODA token ID
    */
   function reverseFiatPurchase(uint256 _tokenId) public onlyManagement onlyFiatPurchased(_tokenId) onlyAfterPurchaseFromTime(_tokenId) {
+    require(exists(_tokenId));
 
     // reset to Unsold
     tokenIdToPurchased[_tokenId] = PurchaseState.Unsold;
@@ -342,11 +360,11 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     uint32 _purchaseFromTime
   ) {
     return (
-    _tokenId,
-    ownerOf(_tokenId),
-    tokenIdToPurchased[_tokenId],
-    tokenIdToPriceInWei[_tokenId],
-    tokenIdToPurchaseFromTime[_tokenId]
+      _tokenId,
+      tokenOwner[_tokenId],
+      tokenIdToPurchased[_tokenId],
+      tokenIdToPriceInWei[_tokenId],
+      tokenIdToPurchaseFromTime[_tokenId]
     );
   }
 
@@ -364,11 +382,11 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
   ) {
     bytes16 edition = tokenIdToEdition[_tokenId];
     return (
-    _tokenId,
-    edition,
-    editionToEditionNumber[edition],
-    tokenURI(_tokenId),
-    editionToArtistAccount[edition]
+      _tokenId,
+      edition,
+      editionToEditionNumber[edition],
+      tokenURI(_tokenId),
+      editionToArtistAccount[edition]
     );
   }
 
@@ -376,29 +394,70 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     return ownedTokens[_owner];
   }
 
+  /**
+   * @dev Return the total number of assets in an edition
+   * @param _edition the edition identifier
+   */
+  function editionNumber(bytes16 _edition) public view returns (uint256) {
+    return editionToEditionNumber[_edition];
+  }
+
+  /**
+   * @dev Get the token purchase state for the given token
+   * @param _tokenId the KODA token ID
+   * @return the purchase sate, either 0, 1, 2, reverts if token not found
+   */
   function isPurchased(uint256 _tokenId) public view returns (PurchaseState _purchased) {
+    require(exists(_tokenId));
     return tokenIdToPurchased[_tokenId];
   }
 
+  /**
+   * @dev Get the edition identifier for the given token
+   * @param _tokenId the KODA token ID
+   * @return the edition is found, reverts if token not found
+   */
   function editionOf(uint256 _tokenId) public view returns (bytes16 _edition) {
+    require(exists(_tokenId));
     return tokenIdToEdition[_tokenId];
   }
 
+  /**
+   * @dev Get the purchase from time for the given token
+   * @param _tokenId the KODA token ID
+   * @return the purchased from time, reverts if token not found
+   */
   function purchaseFromTime(uint256 _tokenId) public view returns (uint32 _purchaseFromTime) {
+    require(exists(_tokenId));
     return tokenIdToPurchaseFromTime[_tokenId];
   }
 
+  /**
+   * @dev Get the price in wei for the given token
+   * @param _tokenId the KODA token ID
+   * @return the price in wei, reverts if token not found
+   */
   function priceInWei(uint256 _tokenId) public view returns (uint256 _priceInWei) {
+    require(exists(_tokenId));
     return tokenIdToPriceInWei[_tokenId];
   }
 
+  /**
+   * @dev Get the type for the provided edition, useful for testing purposes
+   * @param _edition the edition identifier
+   * @return the type or blank string
+   */
   function getTypeFromEdition(bytes16 _edition) public pure returns (string) {
     // return last 3 chars that represent the edition type
     return Strings.bytes16ToStr(_edition, 13, 16);
   }
 
+  /**
+   * @dev Get token URI fro the given token, useful for testing purposes
+   * @param _tokenId the KODA token ID
+   * @return the token ID or only the base URI if not found
+   */
   function tokenURI(uint256 _tokenId) public view returns (string) {
-    require(exists(_tokenId));
     return Strings.strConcat(tokenBaseURI, tokenURIs[_tokenId]);
   }
 
