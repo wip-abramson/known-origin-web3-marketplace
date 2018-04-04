@@ -1695,4 +1695,310 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
   });
+
+  describe('Burning tokens', async function () {
+
+    const tokenToBurn = 1;
+
+    beforeEach(async function () {
+      // Mint three editions
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+
+      const balance = await this.token.balanceOf(_curator);
+      balance.should.be.bignumber.equal(3);
+    });
+
+    describe('can only be called by management', async function () {
+      it('reverts when called by non management', async function () {
+        await assertRevert(this.token.burn(1, {from: _buyer}));
+      });
+
+      it('reverts when called by another non management', async function () {
+        await assertRevert(this.token.burn(2, {from: _anotherBuyer}));
+      });
+    });
+
+    describe('keeps track of the token ID pointer', async function () {
+      it('tracks id correctly even after burn', async function () {
+        let tokenIdPointer = await this.token.tokenIdPointer();
+        tokenIdPointer.should.be.bignumber.equal(3); // zero indexed
+
+        await this.token.burn(2, {from: _curator});
+
+        tokenIdPointer = await this.token.tokenIdPointer();
+        tokenIdPointer.should.be.bignumber.equal(3); // zero indexed
+      });
+    });
+
+    describe('keeps track of the edition total number correctly', async function () {
+      it('tracks total in edition correctly', async function () {
+        let editionNumber = await this.token.editionNumber(_editionDigital);
+        editionNumber.should.be.bignumber.equal(3);
+
+        await this.token.burn(2, {from: _curator});
+
+        editionNumber = await this.token.editionNumber(_editionDigital);
+        editionNumber.should.be.bignumber.equal(2);
+      });
+    });
+
+    describe('removes reference to internal data', async function () {
+
+      beforeEach(async function () {
+        // burn the middle token
+        await this.token.burn(tokenToBurn, {from: _curator});
+      });
+
+      it('tokensOf() is correct', async function () {
+        let ownerTokens = await this.token.tokensOf(_curator);
+        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
+        ownerTokens.should.be.deep.equal([0, 2]);
+      });
+
+      it('balanceOf() is reduced', async function () {
+        const balance = await this.token.balanceOf(_curator);
+        balance.should.be.bignumber.equal(2);
+      });
+
+      it('should not exist', async function () {
+        const result = await this.token.exists(tokenToBurn);
+        result.should.be.false;
+      });
+
+      it('should not be purchased', async function () {
+        await assertRevert(this.token.isPurchased(tokenToBurn));
+      });
+
+      it('should not have editionOf', async function () {
+        await assertRevert(this.token.editionOf(tokenToBurn));
+      });
+
+      it('should not have purchaseFromTime', async function () {
+        await assertRevert(this.token.purchaseFromTime(tokenToBurn));
+      });
+
+      it('should not have priceInWei', async function () {
+        await assertRevert(this.token.priceInWei(tokenToBurn));
+      });
+
+      it('should not have tokenURI', async function () {
+        let tokenUri = await this.token.tokenURI(tokenToBurn);
+        tokenUri.toString().should.be.equal(_baseUri);
+      });
+
+      it('assetInfo() returns missing data', async function () {
+        const assetInfo = await this.token.assetInfo(tokenToBurn);
+
+        let tokenId = assetInfo[0];
+        tokenId.should.be.bignumber.equal(tokenToBurn);
+
+        let owner = assetInfo[1];
+        owner.should.be.equal(ZERO_ADDRESS);
+
+        let purchaseState = assetInfo[2];
+        purchaseState.should.be.bignumber.equal(Unsold);
+
+        let priceInWei = assetInfo[3];
+        priceInWei.should.be.bignumber.equal(0);
+
+        let auctionStartDate = assetInfo[4];
+        auctionStartDate.should.be.bignumber.equal(0);
+      });
+
+      it('editionInfo() returns missing data', async function () {
+        let editionInfo = await this.token.editionInfo(tokenToBurn);
+
+        let tokenId = editionInfo[0];
+        tokenId.should.be.bignumber.equal(tokenToBurn);
+
+        let edition = editionInfo[1];
+        web3.toAscii(edition).should.be.equal(
+          '\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000'
+        );
+
+        let editionNumber = editionInfo[2];
+        editionNumber.should.be.bignumber.equal(0);
+
+        let tokenUri = editionInfo[3];
+        tokenUri.toString().should.be.equal(_baseUri);
+      });
+    });
+
+    describe('minting new assets of the same edition still works', async function () {
+
+      beforeEach(async function () {
+        const totalSupply = await this.token.totalSupply();
+        totalSupply.should.be.bignumber.equal(3);
+
+        let editionNumber = await this.token.editionNumber(_editionDigital);
+        editionNumber.should.be.bignumber.equal(3);
+
+        // Burn 1
+        await this.token.burn(tokenToBurn, {from: _curator});
+
+        // Add two new assets to the existing digital asset where one has been burnt
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+      });
+
+      it('tracks total in edition correctly', async function () {
+        let editionNumber = await this.token.editionNumber(_editionDigital);
+        editionNumber.should.be.bignumber.equal(4);
+      });
+
+      it('balanceOf() is correct', async function () {
+        const totalSupply = await this.token.totalSupply();
+        totalSupply.should.be.bignumber.equal(4);
+      });
+
+      it('balanceOf() is correct', async function () {
+        const balance = await this.token.balanceOf(_curator);
+        balance.should.be.bignumber.equal(4);
+      });
+
+      it('tokensOf() is correct', async function () {
+        let ownerTokens = await this.token.tokensOf(_curator);
+        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
+        ownerTokens.should.be.deep.equal([0, 2, 3, 4]);
+      });
+
+      it('should exists', async function () {
+        let result = await this.token.exists(3);
+        result.should.be.true;
+
+        result = await this.token.exists(4);
+        result.should.be.true;
+      });
+
+      it('assetInfo() returns correct data', async function () {
+        const assetInfo = await this.token.assetInfo(3);
+
+        let tokenId = assetInfo[0];
+        tokenId.should.be.bignumber.equal(3);
+
+        let owner = assetInfo[1];
+        owner.should.be.equal(_curator);
+
+        let purchaseState = assetInfo[2];
+        purchaseState.should.be.bignumber.equal(Unsold);
+
+        let priceInWei = assetInfo[3];
+        priceInWei.should.be.bignumber.equal(priceInWei);
+
+        let auctionStartDate = assetInfo[4];
+        auctionStartDate.should.be.bignumber.equal(auctionStartDate);
+      });
+
+      it('editionInfo() returns correct data', async function () {
+        let editionInfo = await this.token.editionInfo(3);
+
+        let tokenId = editionInfo[0];
+        tokenId.should.be.bignumber.equal(3);
+
+        let edition = editionInfo[1];
+        web3.toAscii(edition).should.be.equal(_editionDigital);
+
+        // mint 0,1,2 | burn 2 | mint 3,4 = total of 4 with zero index
+        let editionNumber = editionInfo[2];
+        editionNumber.should.be.bignumber.equal(4);
+
+        let tokenUri = editionInfo[3];
+        tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
+      });
+    });
+
+    describe('minting new assets under a new edition still works', async function () {
+
+      const newlyMintedTokenId = 3;
+
+      beforeEach(async function () {
+        await this.token.burn(tokenToBurn, {from: _curator});
+        //new physical asset
+        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curator, {from: _curator});
+      });
+
+      it('totalSupply() is correct', async function () {
+        const totalSupply = await this.token.totalSupply();
+        totalSupply.should.be.bignumber.equal(3);
+      });
+
+      it('balanceOf() is correct', async function () {
+        const balance = await this.token.balanceOf(_curator);
+        balance.should.be.bignumber.equal(3);
+      });
+
+      it('tokensOf() is correct', async function () {
+        let ownerTokens = await this.token.tokensOf(_curator);
+        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
+        ownerTokens.should.be.deep.equal([0, 2, newlyMintedTokenId]);
+      });
+
+      it('should exists', async function () {
+        const result = await this.token.exists(newlyMintedTokenId);
+        result.should.be.true;
+      });
+
+      it('assetInfo() returns correct data', async function () {
+        const assetInfo = await this.token.assetInfo(newlyMintedTokenId);
+
+        let tokenId = assetInfo[0];
+        tokenId.should.be.bignumber.equal(newlyMintedTokenId);
+
+        let owner = assetInfo[1];
+        owner.should.be.equal(_curator);
+
+        let purchaseState = assetInfo[2];
+        purchaseState.should.be.bignumber.equal(Unsold);
+
+        let priceInWei = assetInfo[3];
+        priceInWei.should.be.bignumber.equal(priceInWei);
+
+        let auctionStartDate = assetInfo[4];
+        auctionStartDate.should.be.bignumber.equal(auctionStartDate);
+      });
+
+      it('editionInfo() returns correct data', async function () {
+        let editionInfo = await this.token.editionInfo(newlyMintedTokenId);
+
+        let tokenId = editionInfo[0];
+        tokenId.should.be.bignumber.equal(newlyMintedTokenId);
+
+        let edition = editionInfo[1];
+        web3.toAscii(edition).should.be.equal(_editionPhysical);
+
+        let editionNumber = editionInfo[2];
+        editionNumber.should.be.bignumber.equal(1);
+
+        let tokenUri = editionInfo[3];
+        tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
+      });
+    });
+
+    describe('burning the same token twice', async function () {
+
+      beforeEach(async function () {
+        await this.token.burn(tokenToBurn, {from: _curator});
+      });
+
+      it('reverts', async function () {
+        await assertRevert(this.token.burn(tokenToBurn, {from: _curator}));
+      });
+    });
+
+    describe('tokens already purchased', async function () {
+      beforeEach(async function () {
+        await this.token.purchaseWithEther(tokenToBurn, {
+          value: _priceInWei,
+          from: _buyer
+        });
+      });
+
+      it('reverts when being burnt', async function () {
+        await assertRevert(this.token.burn(tokenToBurn, {from: _curator}));
+      });
+    });
+
+  });
 });
