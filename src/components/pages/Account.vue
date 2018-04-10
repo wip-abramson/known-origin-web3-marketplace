@@ -1,7 +1,7 @@
 <template>
   <div id="account">
     <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
-      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+      <img src="../../../static/back_arrow.svg" style="width: 35px"/>
     </router-link>
 
     <h1>My Account</h1>
@@ -25,7 +25,7 @@
         </asset>
       </section>
 
-      <section v-if="assetsPurchasedByAccount.length == 0">
+      <section v-if="assetsPurchasedByAccount.length == 0" class="text-center">
         <p>You don't have any digital assets yet...</p>
 
         <div class="pad-top">

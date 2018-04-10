@@ -20,8 +20,8 @@ require('chai')
   .should();
 
 contract('KnownOriginDigitalAsset', function (accounts) {
-  const _curatorAccount = accounts[0];
-  const _developmentAccount = accounts[1];
+  const _developmentAccount = accounts[0];
+  const _curatorAccount = accounts[1];
   const _artist = accounts[2];
 
   const _buyer = accounts[3];
@@ -61,20 +61,20 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     await increaseTimeTo(_purchaseFromTime + duration.seconds(1)); // force time to move 1 seconds so normal tests pass
 
     // set base commission rates
-    await this.token.updateCommission('DIG', 12, 12, {from: _curatorAccount});
-    await this.token.updateCommission('PHY', 24, 15, {from: _curatorAccount});
+    await this.token.updateCommission('DIG', 12, 12, {from: _developmentAccount});
+    await this.token.updateCommission('PHY', 24, 15, {from: _developmentAccount});
   });
 
   describe('like a ERC721BasicToken', function () {
     beforeEach(async function () {
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
-      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _developmentAccount});
+      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _developmentAccount});
     });
 
     describe('balanceOf', function () {
       describe('when the given address owns some tokens', function () {
         it('returns the amount of tokens owned by the given address', async function () {
-          const balance = await this.token.balanceOf(_curatorAccount);
+          const balance = await this.token.balanceOf(_developmentAccount);
           balance.should.be.bignumber.equal(2);
         });
       });
@@ -119,7 +119,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
 
         it('returns the owner of the given token ID', async function () {
           const owner = await this.token.ownerOf(tokenId);
-          owner.should.be.equal(_curatorAccount);
+          owner.should.be.equal(_developmentAccount);
         });
       });
 
@@ -132,8 +132,8 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe('transfers', function () {
-      const owner = accounts[0];
+    describe.only('transfers', function () {
+      const owner = _developmentAccount;
       const approved = accounts[2];
       const operator = accounts[3];
       const unauthorized = accounts[4];
@@ -589,10 +589,10 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   describe('like a mintable and burnable ERC721Token', function () {
     beforeEach(async function () {
       const result = await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
-        from: _curatorAccount
+        from: _developmentAccount
       });
       await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {
-        from: _curatorAccount
+        from: _developmentAccount
       });
     });
 

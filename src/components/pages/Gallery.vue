@@ -1,12 +1,17 @@
 <template>
   <div id="gallery">
    <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
-     <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+     <img src="../../../static/back_arrow.svg" style="width: 35px"/>
    </router-link>
 
     <h1>Gallery</h1>
 
-    <div class="">
+    <div class="text-center text-blue" v-if="assetsByEditions.length == 0">
+      <img src="../../../static/Timer.svg" style="width: 100px"/><br/>
+      <span class="loading">Loading...</span>
+    </div>
+
+    <div v-if="assetsByEditions">
       <section class="cards centered">
         <galleryEdition
           v-for="assetEdition, key in assetsByEditions"
@@ -36,5 +41,4 @@
 </script>
 
 <style scoped>
-
 </style>

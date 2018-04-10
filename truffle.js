@@ -30,6 +30,15 @@ module.exports = {
       port: 8545,
       network_id: '*'
     },
+    live: {
+      provider: function () {
+        let mnemonic_live = require('./mnemonic_live');
+        return new HDWalletProvider(mnemonic_live, `https://mainnet.infura.io/${infuraApikey}`);
+      },
+      network_id: 1,
+      gas: 4075039, // default = 4712388
+      gasPrice: 2000000000 // default = 100 gwei = 100000000000
+    },
     coverage: {
       host: "localhost",
       network_id: "*",
@@ -51,7 +60,7 @@ module.exports = {
       },
       network_id: 4,
       gas: 7000000, // default = 4712388
-      gasPrice: 25000000000 // default = 100 gwei = 100000000000
+      gasPrice: 21000000000 // default = 100 gwei = 100000000000
     }
   }
 };

@@ -1,17 +1,16 @@
 <template>
   <div id="details">
     <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
-      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+      <img src="../../../static/back_arrow.svg" style="width: 35px"/>
     </router-link>
 
     <h1>KODA smart contract</h1>
 
-    <h2 v-if="contractAddress">
-      Contract address:
-      <clickable-address :eth-address="contractAddress"></clickable-address>
-    </h2>
-
     <table>
+      <tr v-if="contractSymbol">
+        <td>Contract</td>
+        <td><clickable-address :eth-address="contractAddress"></clickable-address></td>
+      </tr>
       <tr v-if="contractSymbol">
         <td>Symbol</td>
         <td>{{ contractSymbol }}</td>
@@ -38,7 +37,7 @@
       </tr>
       <tr v-if="totalPurchaseValueInEther">
         <td>Total</td>
-        <td>{{ totalPurchaseValueInEther }}</td>
+        <td>{{ totalPurchaseValueInEther }} ETH</td>
       </tr>
     </table>
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="125px" height="119px" viewBox="0 0 125 119" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Page 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0.0003 125 0.0003 125 118.885 0 118.885"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-3130.000000, -213.000000)">
+            <g id="Group-10" transform="translate(3130.000000, 213.000000)">
+                <g id="Page-1">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-2"></g>
+                    <path d="M71,0.2493 C69.352,0.0993 67.685,0.0143 66,0.0003 L66,5.6603 C67.686,5.6763 69.355,5.7583 71,5.9253 C98.163,8.6773 119.34,31.5943 119.34,59.4873 C119.34,89.2373 95.25,113.1223 65.5,113.1223 C37.748,113.1223 14.922,91.9873 11.982,64.9873 L18.371,64.9873 L9.187,51.5773 L0,64.9873 L6.289,64.9873 C6.29,64.9873 6.291,65.2173 6.292,65.2293 C9.268,95.3373 34.598,118.8853 65.5,118.8853 C98.409,118.8853 125,92.3453 125,59.4363 C125,28.3823 101.32,3.0183 71,0.2493" id="Fill-1" fill="#4A90E2" mask="url(#mask-2)"></path>
+                    <path d="M67,62 C65.3636364,62 64,60.419244 64,58.5223368 L64,19.4776632 C64,17.580756 65.3636364,16 67,16 C68.6363636,16 70,17.580756 70,19.4776632 L70,58.6804124 C70,60.419244 68.6363636,62 67,62 Z" id="Shape" fill="#4A90E2" fill-rule="nonzero" mask="url(#mask-2)"></path>
+                    <path d="M52.7755703,80 C51.2616228,80 50,78.6811365 50,77.0985003 L50.4488595,51.9014997 C50.4488595,50.3188635 51.7104823,49 53.2244297,49 C54.7383772,49 56,50.3188635 56,51.9014997 L55.5511405,77.2303866 C55.5511405,78.6811365 54.2895177,80 52.7755703,80 Z" id="Shape" fill="#4A90E2" fill-rule="nonzero" mask="url(#mask-2)" transform="translate(53.000000, 64.500000) rotate(-109.000000) translate(-53.000000, -64.500000) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

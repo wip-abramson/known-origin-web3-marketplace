@@ -26,7 +26,7 @@
     },
     asyncComputed: {
       generateQrCode: function () {
-        return QRCode.toDataURL(window.location.href, {
+        return QRCode.toDataURL(window.location.href.replace('/qr', ''), {
           margin: 2,
         });
       }

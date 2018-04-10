@@ -11,7 +11,14 @@ module.exports = function (deployer, network, accounts) {
 
   // Load in other accounts for different networks
   if (network === 'ropsten' || network === 'rinkeby') {
-    _developerAccount = new HDWalletProvider(mnemonic, `https://ropsten.infura.io/${infuraApikey}`, 0).getAddress();
+    _developerAccount = new HDWalletProvider(mnemonic, `https://${network}.infura.io/${infuraApikey}`, 0).getAddress();
+    _curatorAccount = '0x5bFFf3CB3231cF81487E80358b644f1A670Fd98b';
+  }
+
+  if (network === 'live') {
+    let mnemonic_live = require('../mnemonic_live');
+    _developerAccount = new HDWalletProvider(mnemonic_live, `https://mainnet.infura.io/${infuraApikey}`, 0).getAddress();
+    _curatorAccount = '0x5bFFf3CB3231cF81487E80358b644f1A670Fd98b';
   }
 
   console.log(`Running within network = ${network}`);

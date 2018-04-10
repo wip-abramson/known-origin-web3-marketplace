@@ -251,7 +251,8 @@
 
   #header {
     color: $primary;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 25px;
     margin-bottom: 35px;
     margin-top: 10px;
     background-color: $white;
@@ -336,7 +337,7 @@
     }
 
     img, .artists img {
-      width: 75%;
+      width: 50%;
     }
 
   }
@@ -408,6 +409,9 @@
       flex: 0 1 calc(33% - 0.5em);
     }
 
+    #intro {
+      padding-left: 15px;
+    }
   }
 
   @media only screen and (max-width: 768px) {
@@ -448,8 +452,6 @@
 
   .edition-sold {
     position: absolute;
-    top: 100px;
-    right: 100px;
     background-color: $sold;
     color: $secondary;
     padding: 10px;
@@ -459,8 +461,11 @@
 
   .edition-run {
     background-color: $gray;
-    color: $secondary;
-    padding: 5px;
+    color: $white;
+    border-radius: 28px;
+    padding-left: 15px;
+    padding-right: 15px;
+    opacity: 0.6;
   }
 
   .error {
@@ -532,7 +537,6 @@
   }
 
   #intro {
-    padding-left: 25px;
     width: 50%;
   }
 
@@ -576,8 +580,17 @@
     text-align: center;
   }
 
+  .text-blue {
+    color: #4A90E2 !important;
+  }
 
   .no-web3-found-container {
     margin: 50px;
+  }
+
+  .loading {
+    padding-top: 20px;
+    font-weight: bold;
+    font-size: 32px;
   }
 </style>

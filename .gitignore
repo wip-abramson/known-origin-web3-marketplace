@@ -17,3 +17,4 @@ selenium-debug.log
 *.iml
 /contracts-flat/
 /test/unit/coverage/
+/mnemonic_live.js

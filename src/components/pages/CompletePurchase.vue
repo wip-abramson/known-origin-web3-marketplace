@@ -5,7 +5,7 @@
       :to="{ name: 'confirmPurchase',
         params: { edition: asset.edition }}"
       class="back-arrow" style="float: left">
-      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+      <img src="../../../static/back_arrow.svg" style="width: 35px"/>
     </router-link>
 
     <h1>&nbsp;</h1>
@@ -16,23 +16,23 @@
           <div class="card-content">
 
             <div v-if="isPurchaseTriggered(asset.id)" class="icon-message">
-              <img src="../../../static/GreenTick.svg" style="width: 100px"/>
-              <h2 class="text-muted pad-top">Your purchase is being initiated</h2>
+              <img src="../../../static/Timer.svg" style="width: 100px"/>
+              <h2 class="text-blue pad-top">Your purchase is being initiated...</h2>
             </div>
 
             <div v-if="isPurchaseStarted(asset.id)" class="icon-message">
-              <img src="../../../static/GreenTick.svg" style="width: 100px"/>
-              <h2 class="text-muted pad-top">Your purchase is being mined on the Blockchain...</h2>
+              <img src="../../../static/Timer.svg" style="width: 100px"/>
+              <h2 class="text-blue pad-top">Your purchase is being confirming...</h2>
             </div>
 
             <div v-if="isPurchaseSuccessful(asset.id)" class="icon-message">
               <img src="../../../static/GreenTick.svg" style="width: 100px"/>
-              <h2 class="text-success pad-top">Your purchase was successful</h2>
+              <h2 class="text-success pad-top">Your purchase was successful!</h2>
             </div>
 
             <div v-if="isPurchaseFailed(asset.id)" class="icon-message">
               <img src="../../../static/Failure.svg" style="width: 100px"/>
-              <h2 class="text-danger pad-top">Your purchase failed</h2>
+              <h2 class="text-danger pad-top">Your purchase failed!</h2>
             </div>
 
             <h3>{{ asset.otherMeta.artworkName }}</h3>
@@ -82,7 +82,7 @@
               <hr/>
             </div>
 
-            <h3>Total ETH: <span class="pull-right ">{{ asset.priceInEther }}</span></h3>
+            <div><h3>Total ETH: <span class="pull-right ">{{ asset.priceInEther }}</span></h3></div>
           </div>
         </div>
         <div class="border-box-buttons">
@@ -185,5 +185,10 @@
     text-align: center;
     margin: 30px;
     padding: 10px;
+  }
+
+  h3 {
+    line-height: 2em;
+    margin: 0;
   }
 </style>

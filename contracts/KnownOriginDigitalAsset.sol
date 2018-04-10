@@ -140,7 +140,6 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     _;
   }
 
-
   function KnownOriginDigitalAsset(address _curatorAccount) public ERC721Token("KnownOriginDigitalAsset", "KODA") {
     developerAccount = msg.sender;
     curatorAccount = _curatorAccount;
@@ -278,7 +277,7 @@ contract KnownOriginDigitalAsset is ERC721Token, ERC165 {
     _approvePurchaser(msg.sender, _tokenId);
 
     // transfer assets from contract creator (curator) to new owner
-    safeTransferFrom(curatorAccount, msg.sender, _tokenId);
+    safeTransferFrom(ownerOf(_tokenId), msg.sender, _tokenId);
 
     // now purchased - don't allow re-purchase!
     tokenIdToPurchased[_tokenId] = PurchaseState.EtherPurchase;

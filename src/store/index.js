@@ -82,8 +82,9 @@ const store = new Vuex.Store({
       return state.artists.filter((a) => a.featured);
     },
     isCurator: (state) => {
+      // FIXME isKnownOrigin
       if (state.curatorAddress && state.account) {
-        return state.curatorAddress.toLowerCase() === state.account.toLowerCase();
+        return state.curatorAddress.toLowerCase() === state.account.toLowerCase() || state.contractDeveloperAddress.toLowerCase() === state.account.toLowerCase();
       }
       return false;
     },

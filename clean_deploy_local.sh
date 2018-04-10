@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-truffle compile --all; truffle migrate --reset --all --network ganache
+truffle migrate --reset --network ganache

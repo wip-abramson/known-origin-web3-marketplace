@@ -1,7 +1,7 @@
 <template>
   <div id="artists">
     <router-link :to="{ name: 'dashboard' }" class="back-arrow" style="float: left">
-      <img src="../../../static/back_arrow.svg" style="width: 50px"/>
+      <img src="../../../static/back_arrow.svg" style="width: 35px"/>
     </router-link>
 
     <h1>Artists</h1>

@@ -2,18 +2,54 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 const Eth = require('ethjs');
 
+const HDWalletProvider = require('truffle-hdwallet-provider');
+const infuraApikey = 'nbCbdzC6IG9CF6hmvAVQ';
+let mnemonic = require('../mnemonic');
+
 const KnownOriginDigitalAsset = artifacts.require('KnownOriginDigitalAsset');
 
 const ipfsUploader = require('../scripts/ipfs-uploader');
 
-const galleryData = require('../config/data/gallery.json');
+const galleryData = {
+  "artists": [
+    {
+      "name": "CoinJournal",
+      "artworks": [
+        {
+          "artworkName": "Disrupting Finance Since 2009",
+          "ipfsPath": "coin_journal_disrupting_finance",
+          "edition": "CNJDISRPTFIN1PHY",
+          "numberOfEditions": 1,
+          "fiatCost": 20.00,
+          "costInEth": 0.07
+        }
+      ]
+    }
+  ]
+};
 
 let promisifyGetBlockNumber = Promise.promisify(web3.eth.getBlockNumber);
 let promisifyGetBlock = Promise.promisify(web3.eth.getBlock);
 
 module.exports = function (deployer, network, accounts) {
 
+  let _developerAccount = accounts[0];
   let _curatorAccount = accounts[1];
+
+  if (network === 'ropsten' || network === 'rinkeby') {
+    _developerAccount = new HDWalletProvider(mnemonic, `https://${network}.infura.io/${infuraApikey}`, 0).getAddress();
+    _curatorAccount = '0x5bFFf3CB3231cF81487E80358b644f1A670Fd98b';
+  }
+
+  if (network === 'live') {
+    let mnemonic_live = require('../mnemonic_live');
+    _developerAccount = new HDWalletProvider(mnemonic_live, `https://mainnet.infura.io/${infuraApikey}`, 0).getAddress();
+    _curatorAccount = '0x5bFFf3CB3231cF81487E80358b644f1A670Fd98b';
+  }
+
+  console.log(`Running within network = ${network}`);
+  console.log(`_curatorAccount = ${_curatorAccount}`);
+  console.log(`_developerAccount = ${_developerAccount}`);
 
   deployer
     .then(() => KnownOriginDigitalAsset.deployed())
@@ -30,7 +66,7 @@ module.exports = function (deployer, network, accounts) {
 
       console.log(`Deployed contract to address = [${instance.address}] to network [${network}]`);
 
-      if (network === 'ganache' || network === 'ropsten' || network === 'rinkeby') {
+      if (network === 'ganache' || network === 'live' || network === 'ropsten' || network === 'rinkeby') {
         console.log(`Loading in seed data`);
 
         const _openingTime = block.timestamp + 1; // one second in the future
@@ -79,10 +115,7 @@ const loadSeedData = (instance, _curatorAccount, _openingTime) => {
         edition,
         costInWei,
         openingTime,
-        _curatorAccount,
-        {
-          from: _curatorAccount,
-        }
+        _curatorAccount
       );
     });
   });

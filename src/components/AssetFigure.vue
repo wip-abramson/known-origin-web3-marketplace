@@ -1,12 +1,16 @@
 <template>
   <span>
     <figure class="thumbnail">
-      <span class="edition-type" v-if="!isAsset">{{ edition.type }} artwork</span>
+      <span class="edition-type">{{ edition.type }} artwork</span>
       <img :src="edition.lowResImg"/>
-      <span class="edition-sold-out" v-if="!isAsset && availableAssetsForEdition(edition.edition).length == 0">SOLD</span>
-      <span class="edition-sold" v-if="!isAsset && edition.purchased != 0">SOLD</span>
     </figure>
-    <span class="edition-run" v-if="!isAsset">1 of {{assetsForEdition(edition.edition).length}}</span>
+    <div class="edition-run-container">
+      <span class="edition-run" v-if="!isAsset"><strong>1 of {{assetsForEdition(edition.edition).length}}</strong></span>
+    </div>
+
+    <div v-if="isAsset && edition.purchased != 0 || !isAsset && availableAssetsForEdition(edition.edition).length == 0">
+        <h3 class="text-danger text-center">SOLD</h3>
+    </div>
   </span>
 </template>
 
@@ -26,5 +30,13 @@
 </script>
 
 <style scoped>
+  .edition-run-container {
+    padding-top: 3px;
+    padding-left: 5px;
+  }
 
+  h3 {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+  }
 </style>

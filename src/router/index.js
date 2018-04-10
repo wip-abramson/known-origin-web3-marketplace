@@ -79,7 +79,7 @@ export default new Router({
     },
     {
       path: '/artists/:artistCode/editions/:edition/qr',
-      name: 'confirmPurchase',
+      name: 'confirmPurchaseQr',
       component: ConfirmPurchaseQr,
       props: true
     },
