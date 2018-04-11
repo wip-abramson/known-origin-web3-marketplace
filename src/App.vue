@@ -32,7 +32,11 @@
       <current-network style="float: right"></current-network>
       <p>&copy; 2018 KNOWNORIGIN</p>
       <p>BE ORIGINAL. BUY ORIGINAL.</p>
-      <p><a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a></p>
+      <p>
+        <a href="mailto:hello@knownorigin.io">hello@knownorigin.io</a> |
+        <a href="https://t.me/knownorigin" target="_blank">Join us on Telegram</a> |
+        <a href="https://twitter.com/knownorigin_io" target="_blank">Follow us on Twitter</a>
+      </p>
 
       <div class="text-center pad-top">
         <router-link :to="{ name: 'dashboard' }">Home</router-link>
