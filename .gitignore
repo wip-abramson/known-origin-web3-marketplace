@@ -15,6 +15,5 @@ selenium-debug.log
 *.njsproj
 *.sln
 *.iml
-/contracts-flat/
 /test/unit/coverage/
 /mnemonic_live.js

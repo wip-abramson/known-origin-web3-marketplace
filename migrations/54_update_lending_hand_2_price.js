@@ -26,14 +26,17 @@ module.exports = function (deployer, network, accounts) {
   console.log(`_curatorAccount = ${_curatorAccount}`);
   console.log(`_developerAccount = ${_developerAccount}`);
 
-  deployer
-    .then(() => KnownOriginDigitalAsset.deployed())
-    .then((instance) => {
+  if (network === 'ganache' || network === 'live' || network === 'ropsten' || network === 'rinkeby') {
+    deployer
+      .then(() => KnownOriginDigitalAsset.deployed())
+      .then((instance) => {
 
-      let costInWei = Eth.toWei(1.9, 'ether');
+        let costInWei = Eth.toWei(1.9, 'ether');
 
-      return instance.setPriceInWei(19, costInWei);
-    });
-
+        return instance.setPriceInWei(19, costInWei);
+      });
+  } else {
+    console.log(`SKIPPING loading seed data as running on ${network}`);
+  }
 };
 

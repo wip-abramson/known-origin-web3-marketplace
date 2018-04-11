@@ -1,5 +1,4 @@
 const assertRevert = require('../helpers/assertRevert');
-const sendTransaction = require('../helpers/sendTransaction').sendTransaction;
 const etherToWei = require('../helpers/etherToWei');
 
 const advanceBlock = require('../helpers/advanceToBlock');
@@ -12,7 +11,6 @@ const _ = require('lodash');
 const BigNumber = web3.BigNumber;
 
 const KnownOriginDigitalAsset = artifacts.require('KnownOriginDigitalAsset');
-const ERC721Receiver = artifacts.require('ERC721ReceiverMock');
 
 require('chai')
   .use(require('chai-as-promised'))
@@ -33,14 +31,10 @@ contract('KnownOriginDigitalAsset', function (accounts) {
   const FiatPurchase = 2;
 
   const firstTokenId = 0;
-  const secondTokenId = 1;
-
-  const unknownTokenId = 99;
 
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
-  const RECEIVER_MAGIC_VALUE = '0xf0b9e5ba';
 
-  const _baseUri = 'https://ipfs.infura.io/ipfs/'; // FIXME load from contract?
+  const _baseUri = 'https://ipfs.infura.io/ipfs/';
   const _tokenURI = 'abc123';
   const _editionDigital = 'ABC0000000000DIG';
   const _editionPhysical = 'ABC0000000000PHY';
@@ -63,626 +57,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     // set base commission rates
     await this.token.updateCommission('DIG', 12, 12, {from: _developmentAccount});
     await this.token.updateCommission('PHY', 24, 15, {from: _developmentAccount});
-  });
-
-  describe('like a ERC721BasicToken', function () {
-    beforeEach(async function () {
-      await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _developmentAccount});
-      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _developmentAccount});
-    });
-
-    describe('balanceOf', function () {
-      describe('when the given address owns some tokens', function () {
-        it('returns the amount of tokens owned by the given address', async function () {
-          const balance = await this.token.balanceOf(_developmentAccount);
-          balance.should.be.bignumber.equal(2);
-        });
-      });
-
-      describe('when the given address does not own any tokens', function () {
-        it('returns 0', async function () {
-          const balance = await this.token.balanceOf(_buyer);
-          balance.should.be.bignumber.equal(0);
-        });
-      });
-
-      describe('when querying the zero address', function () {
-        it('throws', async function () {
-          await assertRevert(this.token.balanceOf(0));
-        });
-      });
-    });
-
-    describe('exists', function () {
-      describe('when the token exists', function () {
-        const tokenId = firstTokenId;
-
-        it('should return true', async function () {
-          const result = await this.token.exists(tokenId);
-          result.should.be.true;
-        });
-      });
-
-      describe('when the token does not exist', function () {
-        const tokenId = unknownTokenId;
-
-        it('should return false', async function () {
-          const result = await this.token.exists(tokenId);
-          result.should.be.false;
-        });
-      });
-    });
-
-    describe('ownerOf', function () {
-      describe('when the given token ID was tracked by this token', function () {
-        const tokenId = firstTokenId;
-
-        it('returns the owner of the given token ID', async function () {
-          const owner = await this.token.ownerOf(tokenId);
-          owner.should.be.equal(_developmentAccount);
-        });
-      });
-
-      describe('when the given token ID was not tracked by this token', function () {
-        const tokenId = unknownTokenId;
-
-        it('reverts', async function () {
-          await assertRevert(this.token.ownerOf(tokenId));
-        });
-      });
-    });
-
-    describe.only('transfers', function () {
-      const owner = _developmentAccount;
-      const approved = accounts[2];
-      const operator = accounts[3];
-      const unauthorized = accounts[4];
-      const tokenId = firstTokenId;
-      const data = '0x42';
-
-      let logs = null;
-
-      beforeEach(async function () {
-        this.to = accounts[1];
-        await this.token.approve(approved, tokenId, {from: owner});
-        await this.token.setApprovalForAll(operator, true, {from: owner});
-      });
-
-      const transferWasSuccessful = function ({owner, tokenId, approved}) {
-        it('transfers the ownership of the given token ID to the given address', async function () {
-          const newOwner = await this.token.ownerOf(tokenId);
-          newOwner.should.be.equal(this.to);
-        });
-
-        it('clears the approval for the token ID', async function () {
-          const approvedAccount = await this.token.getApproved(tokenId);
-          approvedAccount.should.be.equal(ZERO_ADDRESS);
-        });
-
-        if (approved) {
-          it('emits an approval and transfer events', async function () {
-            logs.length.should.be.equal(2);
-            logs[0].event.should.be.eq('Approval');
-            logs[0].args._owner.should.be.equal(owner);
-            logs[0].args._approved.should.be.equal(ZERO_ADDRESS);
-            logs[0].args._tokenId.should.be.bignumber.equal(tokenId);
-
-            logs[1].event.should.be.eq('Transfer');
-            logs[1].args._from.should.be.equal(owner);
-            logs[1].args._to.should.be.equal(this.to);
-            logs[1].args._tokenId.should.be.bignumber.equal(tokenId);
-          });
-        } else {
-          it('emits only a transfer event', async function () {
-            logs.length.should.be.equal(1);
-            logs[0].event.should.be.eq('Transfer');
-            logs[0].args._from.should.be.equal(owner);
-            logs[0].args._to.should.be.equal(this.to);
-            logs[0].args._tokenId.should.be.bignumber.equal(tokenId);
-          });
-        }
-
-        it('adjusts owners balances', async function () {
-          const newOwnerBalance = await this.token.balanceOf(this.to);
-          newOwnerBalance.should.be.bignumber.equal(1);
-
-          const previousOwnerBalance = await this.token.balanceOf(owner);
-          previousOwnerBalance.should.be.bignumber.equal(1);
-        });
-
-        it('adjusts owners tokens by index', async function () {
-          if (!this.token.tokenOfOwnerByIndex) return;
-
-          const newOwnerToken = await this.token.tokenOfOwnerByIndex(this.to, 0);
-          newOwnerToken.toNumber().should.be.equal(tokenId);
-
-          const previousOwnerToken = await this.token.tokenOfOwnerByIndex(owner, 0);
-          previousOwnerToken.toNumber().should.not.be.equal(tokenId);
-        });
-      };
-
-      const shouldTransferTokensByUsers = function (transferFunction) {
-        describe('when called by the owner', function () {
-          beforeEach(async function () {
-            ({logs} = await transferFunction.call(this, owner, this.to, tokenId, {from: owner}));
-          });
-          transferWasSuccessful({owner, tokenId, approved});
-        });
-
-        describe('when called by the approved individual', function () {
-          beforeEach(async function () {
-            ({logs} = await transferFunction.call(this, owner, this.to, tokenId, {from: approved}));
-          });
-          transferWasSuccessful({owner, tokenId, approved});
-        });
-
-        describe('when called by the operator', function () {
-          beforeEach(async function () {
-            ({logs} = await transferFunction.call(this, owner, this.to, tokenId, {from: operator}));
-          });
-          transferWasSuccessful({owner, tokenId, approved});
-        });
-
-        describe('when called by the owner without an approved user', function () {
-          beforeEach(async function () {
-            await this.token.approve(ZERO_ADDRESS, tokenId, {from: owner});
-            ({logs} = await transferFunction.call(this, owner, this.to, tokenId, {from: operator}));
-          });
-          transferWasSuccessful({owner, tokenId, approved: null});
-        });
-
-        describe('when sent to the owner', function () {
-          beforeEach(async function () {
-            ({logs} = await transferFunction.call(this, owner, owner, tokenId, {from: owner}));
-          });
-
-          it('keeps ownership of the token', async function () {
-            const newOwner = await this.token.ownerOf(tokenId);
-            newOwner.should.be.equal(owner);
-          });
-
-          it('clears the approval for the token ID', async function () {
-            const approvedAccount = await this.token.getApproved(tokenId);
-            approvedAccount.should.be.equal(ZERO_ADDRESS);
-          });
-
-          it('emits an approval and transfer events', async function () {
-            logs.length.should.be.equal(2);
-            logs[0].event.should.be.eq('Approval');
-            logs[0].args._owner.should.be.equal(owner);
-            logs[0].args._approved.should.be.equal(ZERO_ADDRESS);
-            logs[0].args._tokenId.should.be.bignumber.equal(tokenId);
-
-            logs[1].event.should.be.eq('Transfer');
-            logs[1].args._from.should.be.equal(owner);
-            logs[1].args._to.should.be.equal(owner);
-            logs[1].args._tokenId.should.be.bignumber.equal(tokenId);
-          });
-
-          it('keeps the owner balance', async function () {
-            const ownerBalance = await this.token.balanceOf(owner);
-            ownerBalance.should.be.bignumber.equal(2);
-          });
-
-          it('keeps same tokens by index', async function () {
-            if (!this.token.tokenOfOwnerByIndex) return;
-            const tokensListed = await Promise.all(_.range(2).map(i => this.token.tokenOfOwnerByIndex(owner, i)));
-            tokensListed.map(t => t.toNumber()).should.have.members([firstTokenId, secondTokenId]);
-          });
-        });
-
-        describe('when the address of the previous owner is incorrect', function () {
-          it('reverts', async function () {
-            await assertRevert(transferFunction.call(this, unauthorized, this.to, tokenId, {from: owner}));
-          });
-        });
-
-        describe('when the sender is not authorized for the token id', function () {
-          it('reverts', async function () {
-            await assertRevert(transferFunction.call(this, owner, this.to, tokenId, {from: unauthorized}));
-          });
-        });
-
-        describe('when the given token ID does not exist', function () {
-          it('reverts', async function () {
-            await assertRevert(transferFunction.call(this, owner, this.to, unknownTokenId, {from: owner}));
-          });
-        });
-
-        describe('when the address to transfer the token to is the zero address', function () {
-          it('reverts', async function () {
-            await assertRevert(transferFunction.call(this, owner, ZERO_ADDRESS, tokenId, {from: owner}));
-          });
-        });
-      };
-
-      describe('via transferFrom', function () {
-        shouldTransferTokensByUsers(function (from, to, tokenId, opts) {
-          return this.token.transferFrom(from, to, tokenId, opts);
-        });
-      });
-
-      describe('via safeTransferFrom', function () {
-        const safeTransferFromWithData = function (from, to, tokenId, opts) {
-          return sendTransaction(
-            this.token,
-            'safeTransferFrom',
-            'address,address,uint256,bytes',
-            [from, to, tokenId, data],
-            opts
-          );
-        };
-
-        const safeTransferFromWithoutData = function (from, to, tokenId, opts) {
-          return this.token.safeTransferFrom(from, to, tokenId, opts);
-        };
-
-        const shouldTransferSafely = function (transferFun, data) {
-          describe('to a user account', function () {
-            shouldTransferTokensByUsers(transferFun);
-          });
-
-          describe('to a valid receiver contract', function () {
-            beforeEach(async function () {
-              this.receiver = await ERC721Receiver.new(RECEIVER_MAGIC_VALUE, false);
-              this.to = this.receiver.address;
-            });
-
-            shouldTransferTokensByUsers(transferFun);
-
-            // TODO find solution to decodeLogs
-            it.skip('should call onERC721Received', async function () {
-              const result = await transferFun.call(this, owner, this.to, tokenId, {from: owner});
-              result.receipt.logs.length.should.be.equal(3);
-              const [log] = decodeLogs([result.receipt.logs[2]], ERC721Receiver, this.receiver.address);
-              log.event.should.be.eq('Received');
-              log.args._address.should.be.equal(owner);
-              log.args._tokenId.toNumber().should.be.equal(tokenId);
-              log.args._data.should.be.equal(data);
-            });
-          });
-        };
-
-        describe('with data', function () {
-          shouldTransferSafely(safeTransferFromWithData, data);
-        });
-
-        describe('without data', function () {
-          shouldTransferSafely(safeTransferFromWithoutData, '0x');
-        });
-
-        describe('to a receiver contract returning unexpected value', function () {
-          it('reverts', async function () {
-            const invalidReceiver = await ERC721Receiver.new('0x42', false);
-            await assertRevert(this.token.safeTransferFrom(owner, invalidReceiver.address, tokenId, {from: owner}));
-          });
-        });
-
-        describe('to a receiver contract that throws', function () {
-          it('reverts', async function () {
-            const invalidReceiver = await ERC721Receiver.new(RECEIVER_MAGIC_VALUE, true);
-            await assertRevert(this.token.safeTransferFrom(owner, invalidReceiver.address, tokenId, {from: owner}));
-          });
-        });
-
-        describe('to a contract that does not implement the required function', function () {
-          it('reverts', async function () {
-            const invalidReceiver = this.token;
-            await assertRevert(this.token.safeTransferFrom(owner, invalidReceiver.address, tokenId, {from: owner}));
-          });
-        });
-      });
-    });
-
-    describe('approve', function () {
-      const tokenId = firstTokenId;
-      const sender = _curatorAccount;
-      const to = accounts[1];
-
-      let logs = null;
-
-      const itClearsApproval = function () {
-        it('clears approval for the token', async function () {
-          const approvedAccount = await this.token.getApproved(tokenId);
-          approvedAccount.should.be.equal(ZERO_ADDRESS);
-        });
-      };
-
-      const itApproves = function (address) {
-        it('sets the approval for the target address', async function () {
-          const approvedAccount = await this.token.getApproved(tokenId);
-          approvedAccount.should.be.equal(address);
-        });
-      };
-
-      const itEmitsApprovalEvent = function (address) {
-        it('emits an approval event', async function () {
-          logs.length.should.be.equal(1);
-          logs[0].event.should.be.eq('Approval');
-          logs[0].args._owner.should.be.equal(sender);
-          logs[0].args._approved.should.be.equal(address);
-          logs[0].args._tokenId.should.be.bignumber.equal(tokenId);
-        });
-      };
-
-      describe('when clearing approval', function () {
-        describe('when there was no prior approval', function () {
-          beforeEach(async function () {
-            ({logs} = await this.token.approve(ZERO_ADDRESS, tokenId, {from: sender}));
-          });
-
-          itClearsApproval();
-
-          it('does not emit an approval event', async function () {
-            logs.length.should.be.equal(0);
-          });
-        });
-
-        describe('when there was a prior approval', function () {
-          beforeEach(async function () {
-            await this.token.approve(to, tokenId, {from: sender});
-            ({logs} = await this.token.approve(ZERO_ADDRESS, tokenId, {from: sender}));
-          });
-
-          itClearsApproval();
-          itEmitsApprovalEvent(ZERO_ADDRESS);
-        });
-      });
-
-      describe('when approving a non-zero address', function () {
-        describe('when there was no prior approval', function () {
-          beforeEach(async function () {
-            ({logs} = await this.token.approve(to, tokenId, {from: sender}));
-          });
-
-          itApproves(to);
-          itEmitsApprovalEvent(to);
-        });
-
-        describe('when there was a prior approval to the same address', function () {
-          beforeEach(async function () {
-            await this.token.approve(to, tokenId, {from: sender});
-            ({logs} = await this.token.approve(to, tokenId, {from: sender}));
-          });
-
-          itApproves(to);
-          itEmitsApprovalEvent(to);
-        });
-
-        describe('when there was a prior approval to a different address', function () {
-          beforeEach(async function () {
-            await this.token.approve(accounts[2], tokenId, {from: sender});
-            ({logs} = await this.token.approve(to, tokenId, {from: sender}));
-          });
-
-          itApproves(to);
-          itEmitsApprovalEvent(to);
-        });
-      });
-
-      describe('when the address that receives the approval is the owner', function () {
-        it('reverts', async function () {
-          await assertRevert(this.token.approve(sender, tokenId, {from: sender}));
-        });
-      });
-
-      describe('when the sender does not own the given token ID', function () {
-        it('reverts', async function () {
-          await assertRevert(this.token.approve(to, tokenId, {from: accounts[2]}));
-        });
-      });
-
-      describe('when the sender is approved for the given token ID', function () {
-        it('reverts', async function () {
-          await this.token.approve(accounts[2], tokenId, {from: sender});
-          await assertRevert(this.token.approve(to, tokenId, {from: accounts[2]}));
-        });
-      });
-
-      describe('when the sender is an operator', function () {
-        const operator = accounts[2];
-        beforeEach(async function () {
-          await this.token.setApprovalForAll(operator, true, {from: sender});
-          ({logs} = await this.token.approve(to, tokenId, {from: operator}));
-        });
-
-        itApproves(to);
-        itEmitsApprovalEvent(to);
-      });
-
-      describe('when the given token ID does not exist', function () {
-        it('reverts', async function () {
-          await assertRevert(this.token.approve(to, unknownTokenId, {from: sender}));
-        });
-      });
-    });
-
-    describe('setApprovalForAll', function () {
-      const sender = _curatorAccount;
-
-      describe('when the operator willing to approve is not the owner', function () {
-        const operator = accounts[1];
-
-        describe('when there is no operator approval set by the sender', function () {
-          it('approves the operator', async function () {
-            await this.token.setApprovalForAll(operator, true, {from: sender});
-
-            const isApproved = await this.token.isApprovedForAll(sender, operator);
-            isApproved.should.be.true;
-          });
-
-          it('emits an approval event', async function () {
-            const {logs} = await this.token.setApprovalForAll(operator, true, {from: sender});
-
-            logs.length.should.be.equal(1);
-            logs[0].event.should.be.eq('ApprovalForAll');
-            logs[0].args._owner.should.be.equal(sender);
-            logs[0].args._operator.should.be.equal(operator);
-            logs[0].args._approved.should.be.true;
-          });
-        });
-
-        describe('when the operator was set as not approved', function () {
-          beforeEach(async function () {
-            await this.token.setApprovalForAll(operator, false, {from: sender});
-          });
-
-          it('approves the operator', async function () {
-            await this.token.setApprovalForAll(operator, true, {from: sender});
-
-            const isApproved = await this.token.isApprovedForAll(sender, operator);
-            isApproved.should.be.true;
-          });
-
-          it('emits an approval event', async function () {
-            const {logs} = await this.token.setApprovalForAll(operator, true, {from: sender});
-
-            logs.length.should.be.equal(1);
-            logs[0].event.should.be.eq('ApprovalForAll');
-            logs[0].args._owner.should.be.equal(sender);
-            logs[0].args._operator.should.be.equal(operator);
-            logs[0].args._approved.should.be.true;
-          });
-
-          it('can unset the operator approval', async function () {
-            await this.token.setApprovalForAll(operator, false, {from: sender});
-
-            const isApproved = await this.token.isApprovedForAll(sender, operator);
-            isApproved.should.be.false;
-          });
-        });
-
-        describe('when the operator was already approved', function () {
-          beforeEach(async function () {
-            await this.token.setApprovalForAll(operator, true, {from: sender});
-          });
-
-          it('keeps the approval to the given address', async function () {
-            await this.token.setApprovalForAll(operator, true, {from: sender});
-
-            const isApproved = await this.token.isApprovedForAll(sender, operator);
-            isApproved.should.be.true;
-          });
-
-          it('emits an approval event', async function () {
-            const {logs} = await this.token.setApprovalForAll(operator, true, {from: sender});
-
-            logs.length.should.be.equal(1);
-            logs[0].event.should.be.eq('ApprovalForAll');
-            logs[0].args._owner.should.be.equal(sender);
-            logs[0].args._operator.should.be.equal(operator);
-            logs[0].args._approved.should.be.true;
-          });
-        });
-      });
-
-      describe('when the operator is the owner', function () {
-        const operator = _curatorAccount;
-
-        it('reverts', async function () {
-          await assertRevert(this.token.setApprovalForAll(operator, true, {from: sender}));
-        });
-      });
-    });
-  });
-
-  describe('like a mintable and burnable ERC721Token', function () {
-    beforeEach(async function () {
-      const result = await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {
-        from: _developmentAccount
-      });
-      await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {
-        from: _developmentAccount
-      });
-    });
-
-    describe('mint', function () {
-      let logs = null;
-
-      describe('when successful', function () {
-        beforeEach(async function () {
-          const result = await this.token.mint(_tokenURI, 'XYZ0000000000DIG', _priceInWei, _purchaseFromTime, _curatorAccount, {
-            from: _curatorAccount
-          });
-          logs = result.logs;
-        });
-
-        it('assigns the token to the new owner', async function () {
-          const owner = await this.token.ownerOf(2); // zero indexed
-          owner.should.be.equal(_curatorAccount);
-        });
-
-        it('increases the balance of its owner', async function () {
-          const balance = await this.token.balanceOf(_curatorAccount);
-          balance.should.be.bignumber.equal(3);
-        });
-
-        it('emits a transfer event', async function () {
-          logs.length.should.be.equal(1);
-          logs[0].event.should.be.eq('Transfer');
-          logs[0].args._from.should.be.equal(ZERO_ADDRESS);
-          logs[0].args._to.should.be.equal(_curatorAccount);
-          logs[0].args._tokenId.should.be.bignumber.equal(2);
-        });
-      });
-    });
-
-    describe('burn', function () {
-      const tokenId = firstTokenId;
-      const sender = _curatorAccount;
-      let logs = null;
-
-      describe('when successful', function () {
-        beforeEach(async function () {
-          const result = await this.token.burn(tokenId, {from: sender});
-          logs = result.logs;
-        });
-
-        it('burns the given token ID and adjusts the balance of the owner', async function () {
-          await assertRevert(this.token.ownerOf(tokenId));
-          const balance = await this.token.balanceOf(sender);
-          balance.should.be.bignumber.equal(1);
-        });
-
-        it('emits a burn event', async function () {
-          logs.length.should.be.equal(1);
-          logs[0].event.should.be.eq('Transfer');
-          logs[0].args._from.should.be.equal(sender);
-          logs[0].args._to.should.be.equal(ZERO_ADDRESS);
-          logs[0].args._tokenId.should.be.bignumber.equal(tokenId);
-        });
-      });
-
-      describe('when there is a previous approval', function () {
-        beforeEach(async function () {
-          await this.token.approve(_buyer, tokenId, {from: sender});
-          const result = await this.token.burn(tokenId, {from: sender});
-          logs = result.logs;
-        });
-
-        it('clears the approval', async function () {
-          const approvedAccount = await this.token.getApproved(tokenId);
-          approvedAccount.should.be.equal(ZERO_ADDRESS);
-        });
-
-        it('emits an approval event', async function () {
-          logs.length.should.be.equal(2);
-
-          logs[0].event.should.be.eq('Approval');
-          logs[0].args._owner.should.be.equal(sender);
-          logs[0].args._approved.should.be.equal(ZERO_ADDRESS);
-          logs[0].args._tokenId.should.be.bignumber.equal(tokenId);
-
-          logs[1].event.should.be.eq('Transfer');
-        });
-      });
-
-      describe('when the given token ID was not tracked by this contract', function () {
-        it('reverts', async function () {
-          await assertRevert(this.token.burn(unknownTokenId, {from: _curatorAccount}));
-        });
-      });
-    });
   });
 
   describe('custom functions', function () {
@@ -1592,112 +966,7 @@ contract('KnownOriginDigitalAsset', function (accounts) {
     });
   });
 
-  describe('ERC165 supportsInterface()', async function () {
-
-    describe('supports ERC165', async function () {
-      it('matches correct bytes', async function () {
-        let supportsERC165 = await this.token.supportsInterface('0x01ffc9a7');
-        supportsERC165.should.be.equal.true;
-      });
-    });
-
-    describe('supports ERC721Enumerable', async function () {
-      it('matches correct bytes', async function () {
-        let supportsERC721Enumerable = await this.token.supportsInterface('0x780e9d63');
-        supportsERC721Enumerable.should.be.equal.true;
-      });
-      it('supports totalSupply()', async function () {
-        let support = await this.token.supportsInterface('0x18160ddd');
-        support.should.be.equal.true;
-      });
-      it('supports tokenOfOwnerByIndex()', async function () {
-        let support = await this.token.supportsInterface('0x2f745c59');
-        support.should.be.equal.true;
-      });
-      it('supports tokenByIndex()', async function () {
-        let support = await this.token.supportsInterface('0x4f6ccce7');
-        support.should.be.equal.true;
-      });
-    });
-
-    describe('supports ERC721Metadata', async function () {
-      it('matches correct bytes', async function () {
-        let supportsERC721Metadata = await this.token.supportsInterface('0x5b5e139f');
-        supportsERC721Metadata.should.be.equal.true;
-      });
-      it('supports symbol()', async function () {
-        let support = await this.token.supportsInterface('0x06fdde03');
-        support.should.be.equal.true;
-      });
-      it('supports totalSupply()', async function () {
-        let support = await this.token.supportsInterface('0x95d89b41');
-        support.should.be.equal.true;
-      });
-      it('supports tokenURI()', async function () {
-        let support = await this.token.supportsInterface('0xc87b56dd');
-        support.should.be.equal.true;
-      });
-    });
-
-    describe('supports ERC721', async function () {
-      it('matches correct bytes', async function () {
-        let supportsERC721 = await this.token.supportsInterface('0xcff9d6b4');
-        supportsERC721.should.be.equal.true;
-      });
-      it('supports balanceOf()', async function () {
-        let support = await this.token.supportsInterface('0x70a08231');
-        support.should.be.equal.true;
-      });
-      it('supports ownerOf()', async function () {
-        let support = await this.token.supportsInterface('0x6352211e');
-        support.should.be.equal.true;
-      });
-      it('supports approve()', async function () {
-        let support = await this.token.supportsInterface('0x095ea7b3');
-        support.should.be.equal.true;
-      });
-      it('supports getApproved()', async function () {
-        let support = await this.token.supportsInterface('0x081812fc');
-        support.should.be.equal.true;
-      });
-      it('supports setApprovalForAll()', async function () {
-        let support = await this.token.supportsInterface('0xa22cb465');
-        support.should.be.equal.true;
-      });
-      it('supports isApprovedForAll()', async function () {
-        let support = await this.token.supportsInterface('0xe985e9c5');
-        support.should.be.equal.true;
-      });
-      it('supports transferFrom()', async function () {
-        let support = await this.token.supportsInterface('0x23b872dd');
-        support.should.be.equal.true;
-      });
-      it('supports safeTransferFrom()', async function () {
-        let support = await this.token.supportsInterface('0x42842e0e');
-        support.should.be.equal.true;
-      });
-      it('supports safeTransferFrom() overloaded with bytes', async function () {
-        let support = await this.token.supportsInterface('0xb88d4fde');
-        support.should.be.equal.true;
-      });
-    });
-
-    describe('supports ERC721 optional', async function () {
-      it('supports exists()', async function () {
-        let support = await this.token.supportsInterface('0x4f558e79');
-        support.should.be.equal.true;
-      });
-    });
-
-    describe('doesnt support missing feature', async function () {
-      it('fails to match something which doesnt exist', async function () {
-        let supportsERC165 = await this.token.supportsInterface('someOtherValue');
-        supportsERC165.should.be.equal.false;
-      });
-    });
-  });
-
-  describe('Burning tokens', async function () {
+  describe('Burning tokens - ', async function () {
 
     const tokenToBurn = 1;
 
@@ -1827,156 +1096,6 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       });
     });
 
-    describe('minting new assets of the same edition still works', async function () {
-
-      beforeEach(async function () {
-        const totalSupply = await this.token.totalSupply();
-        totalSupply.should.be.bignumber.equal(3);
-
-        let editionNumber = await this.token.numberOf(_editionDigital);
-        editionNumber.should.be.bignumber.equal(3);
-
-        // Burn 1
-        await this.token.burn(tokenToBurn, {from: _curatorAccount});
-
-        // Add two new assets to the existing digital asset where one has been burnt
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
-        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
-      });
-
-      it('tracks total in edition correctly', async function () {
-        let editionNumber = await this.token.numberOf(_editionDigital);
-        editionNumber.should.be.bignumber.equal(4);
-      });
-
-      it('balanceOf() is correct', async function () {
-        const totalSupply = await this.token.totalSupply();
-        totalSupply.should.be.bignumber.equal(4);
-      });
-
-      it('balanceOf() is correct', async function () {
-        const balance = await this.token.balanceOf(_curatorAccount);
-        balance.should.be.bignumber.equal(4);
-      });
-
-      it('tokensOf() is correct', async function () {
-        let ownerTokens = await this.token.tokensOf(_curatorAccount);
-        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
-        ownerTokens.should.be.deep.equal([0, 2, 3, 4]);
-      });
-
-      it('should exists', async function () {
-        let result = await this.token.exists(3);
-        result.should.be.true;
-
-        result = await this.token.exists(4);
-        result.should.be.true;
-      });
-
-      it('assetInfo() returns correct data', async function () {
-        const assetInfo = await this.token.assetInfo(3);
-
-        let tokenId = assetInfo[0];
-        tokenId.should.be.bignumber.equal(3);
-
-        let owner = assetInfo[1];
-        owner.should.be.equal(_curatorAccount);
-
-        let purchaseState = assetInfo[2];
-        purchaseState.should.be.bignumber.equal(Unsold);
-
-        let priceInWei = assetInfo[3];
-        priceInWei.should.be.bignumber.equal(priceInWei);
-
-        let auctionStartDate = assetInfo[4];
-        auctionStartDate.should.be.bignumber.equal(auctionStartDate);
-      });
-
-      it('editionInfo() returns correct data', async function () {
-        let editionInfo = await this.token.editionInfo(3);
-
-        let tokenId = editionInfo[0];
-        tokenId.should.be.bignumber.equal(3);
-
-        let edition = editionInfo[1];
-        web3.toAscii(edition).should.be.equal(_editionDigital);
-
-        // mint 0,1,2 | burn 2 | mint 3,4 = total of 4 with zero index
-        let editionNumber = editionInfo[2];
-        editionNumber.should.be.bignumber.equal(4);
-
-        let tokenUri = editionInfo[3];
-        tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
-      });
-    });
-
-    describe('minting new assets under a new edition still works', async function () {
-
-      const newlyMintedTokenId = 3;
-
-      beforeEach(async function () {
-        await this.token.burn(tokenToBurn, {from: _curatorAccount});
-        //new physical asset
-        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
-      });
-
-      it('totalSupply() is correct', async function () {
-        const totalSupply = await this.token.totalSupply();
-        totalSupply.should.be.bignumber.equal(3);
-      });
-
-      it('balanceOf() is correct', async function () {
-        const balance = await this.token.balanceOf(_curatorAccount);
-        balance.should.be.bignumber.equal(3);
-      });
-
-      it('tokensOf() is correct', async function () {
-        let ownerTokens = await this.token.tokensOf(_curatorAccount);
-        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
-        ownerTokens.should.be.deep.equal([0, 2, newlyMintedTokenId]);
-      });
-
-      it('should exists', async function () {
-        const result = await this.token.exists(newlyMintedTokenId);
-        result.should.be.true;
-      });
-
-      it('assetInfo() returns correct data', async function () {
-        const assetInfo = await this.token.assetInfo(newlyMintedTokenId);
-
-        let tokenId = assetInfo[0];
-        tokenId.should.be.bignumber.equal(newlyMintedTokenId);
-
-        let owner = assetInfo[1];
-        owner.should.be.equal(_curatorAccount);
-
-        let purchaseState = assetInfo[2];
-        purchaseState.should.be.bignumber.equal(Unsold);
-
-        let priceInWei = assetInfo[3];
-        priceInWei.should.be.bignumber.equal(priceInWei);
-
-        let auctionStartDate = assetInfo[4];
-        auctionStartDate.should.be.bignumber.equal(auctionStartDate);
-      });
-
-      it('editionInfo() returns correct data', async function () {
-        let editionInfo = await this.token.editionInfo(newlyMintedTokenId);
-
-        let tokenId = editionInfo[0];
-        tokenId.should.be.bignumber.equal(newlyMintedTokenId);
-
-        let edition = editionInfo[1];
-        web3.toAscii(edition).should.be.equal(_editionPhysical);
-
-        let editionNumber = editionInfo[2];
-        editionNumber.should.be.bignumber.equal(1);
-
-        let tokenUri = editionInfo[3];
-        tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
-      });
-    });
-
     describe('burning the same token twice', async function () {
 
       beforeEach(async function () {
@@ -1999,6 +1118,296 @@ contract('KnownOriginDigitalAsset', function (accounts) {
       it('reverts when being burnt', async function () {
         await assertRevert(this.token.burn(tokenToBurn, {from: _curatorAccount}));
       });
+    });
+
+    describe('minting assets of the same edition', async function () {
+
+      const newlyMintedTokenId = 3;
+
+      beforeEach(async function () {
+        const totalSupply = await this.token.totalSupply();
+        totalSupply.should.be.bignumber.equal(3);
+
+        let editionNumber = await this.token.numberOf(_editionDigital);
+        editionNumber.should.be.bignumber.equal(3);
+
+        // Burn 2 from same edition
+        await this.token.burn(tokenToBurn, {from: _curatorAccount});
+        await this.token.burn(tokenToBurn + 1, {from: _curatorAccount});
+
+        //new physical asset
+        await this.token.mint(_tokenURI, _editionDigital, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+      });
+
+      it('tracks total in edition correctly', async function () {
+        let editionNumber = await this.token.numberOf(_editionDigital);
+        editionNumber.should.be.bignumber.equal(2);
+      });
+
+      it('totalSupply() is correct', async function () {
+        const totalSupply = await this.token.totalSupply();
+        totalSupply.should.be.bignumber.equal(2);
+      });
+
+      it('balanceOf() is correct', async function () {
+        const balance = await this.token.balanceOf(_curatorAccount);
+        balance.should.be.bignumber.equal(2);
+      });
+
+      it('tokensOf() is correct', async function () {
+        let ownerTokens = await this.token.tokensOf(_curatorAccount);
+        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
+        ownerTokens.should.be.deep.equal([0, newlyMintedTokenId]);
+      });
+
+      describe('validates newly minted token data', async function () {
+
+        it('exists()', async function () {
+          const result = await this.token.exists(newlyMintedTokenId);
+          result.should.be.true;
+        });
+
+        it('assetInfo() returns correct data', async function () {
+          const assetInfo = await this.token.assetInfo(newlyMintedTokenId);
+
+          let tokenId = assetInfo[0];
+          tokenId.should.be.bignumber.equal(newlyMintedTokenId);
+
+          let owner = assetInfo[1];
+          owner.should.be.equal(_curatorAccount);
+
+          let purchaseState = assetInfo[2];
+          purchaseState.should.be.bignumber.equal(Unsold);
+
+          let priceInWei = assetInfo[3];
+          priceInWei.should.be.bignumber.equal(priceInWei);
+
+          let auctionStartDate = assetInfo[4];
+          auctionStartDate.should.be.bignumber.equal(auctionStartDate);
+        });
+
+        it('editionInfo() returns correct data', async function () {
+          let editionInfo = await this.token.editionInfo(newlyMintedTokenId);
+
+          let tokenId = editionInfo[0];
+          tokenId.should.be.bignumber.equal(newlyMintedTokenId);
+
+          let edition = editionInfo[1];
+          web3.toAscii(edition).should.be.equal(_editionDigital);
+
+          let editionNumber = editionInfo[2];
+          editionNumber.should.be.bignumber.equal(2);
+
+          let tokenUri = editionInfo[3];
+          tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
+        });
+
+      });
+
+      describe('validates burnt tokens', async function () {
+
+        it('does not exists()', async function () {
+          [tokenToBurn, tokenToBurn + 1].forEach(async function (id) {
+            let result = await this.token.exists(id);
+            result.should.be.false;
+          });
+        });
+
+        it('editionInfo() is empty for burnt token', async function () {
+          [tokenToBurn, tokenToBurn + 1].forEach(async function (id) {
+            let editionInfo = await this.token.editionInfo(id);
+
+            let tokenId = editionInfo[0];
+            tokenId.should.be.bignumber.equal(id);
+
+            let edition = editionInfo[1];
+            web3.toAscii(edition).should.be.equal(
+              '\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000'
+            );
+
+            let editionNumber = editionInfo[2];
+            editionNumber.should.be.bignumber.equal(0);
+
+            let tokenUri = editionInfo[3];
+            tokenUri.toString().should.be.equal(_baseUri);
+          });
+        });
+
+        it('assetInfo() is empty', async function () {
+          [tokenToBurn, tokenToBurn + 1].forEach(async function (id) {
+            const assetInfo = await this.token.assetInfo(id);
+
+            let tokenId = assetInfo[0];
+            tokenId.should.be.bignumber.equal(id);
+
+            let owner = assetInfo[1];
+            owner.should.be.equal(ZERO_ADDRESS);
+
+            let purchaseState = assetInfo[2];
+            purchaseState.should.be.bignumber.equal(0);
+
+            let priceInWei = assetInfo[3];
+            priceInWei.should.be.bignumber.equal(0);
+
+            let auctionStartDate = assetInfo[4];
+            auctionStartDate.should.be.bignumber.equal(0);
+          });
+        });
+      });
+
+    });
+
+    describe('minting assets of a NEW edition', async function () {
+
+      const newlyMintedTokenId = 3;
+      const anotherNewlyMintedTokenId = 4;
+
+      beforeEach(async function () {
+        const totalSupply = await this.token.totalSupply();
+        totalSupply.should.be.bignumber.equal(3);
+
+        let editionNumber = await this.token.numberOf(_editionDigital);
+        editionNumber.should.be.bignumber.equal(3);
+
+        // Burn 2 so only 1 left
+        await this.token.burn(tokenToBurn, {from: _curatorAccount});
+        await this.token.burn(tokenToBurn + 1, {from: _curatorAccount});
+
+        //Mint 2 new physical asset
+        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+        await this.token.mint(_tokenURI, _editionPhysical, _priceInWei, _purchaseFromTime, _curatorAccount, {from: _curatorAccount});
+      });
+
+      it('totalSupply() is correct', async function () {
+        const totalSupply = await this.token.totalSupply();
+        totalSupply.should.be.bignumber.equal(3);
+      });
+
+      it('balanceOf() is correct', async function () {
+        const balance = await this.token.balanceOf(_curatorAccount);
+        balance.should.be.bignumber.equal(3);
+      });
+
+      it('tokensOf() is correct', async function () {
+        let ownerTokens = await this.token.tokensOf(_curatorAccount);
+        ownerTokens = ownerTokens.map((tokenId) => tokenId.toNumber());
+        ownerTokens.should.be.deep.equal([0, newlyMintedTokenId, anotherNewlyMintedTokenId]);
+      });
+
+      describe('existing edition', async function () {
+        it('tracks total in edition correctly', async function () {
+          let editionNumber = await this.token.numberOf(_editionDigital);
+          editionNumber.should.be.bignumber.equal(1);
+        });
+      });
+
+      describe('newly minted edition edition', async function () {
+        it('tracks total in edition correctly', async function () {
+          let editionNumber = await this.token.numberOf(_editionPhysical);
+          editionNumber.should.be.bignumber.equal(2);
+        });
+      });
+
+      describe('validates newly minted token data', async function () {
+
+        it('exists()', async function () {
+          [newlyMintedTokenId, anotherNewlyMintedTokenId].forEach(async function (id) {
+            const result = await this.token.exists(id);
+            result.should.be.true;
+          });
+        });
+
+        it('assetInfo() returns correct data', async function () {
+          [newlyMintedTokenId, anotherNewlyMintedTokenId].forEach(async function (id) {
+            const assetInfo = await this.token.assetInfo(id);
+
+            let tokenId = assetInfo[0];
+            tokenId.should.be.bignumber.equal(id);
+
+            let owner = assetInfo[1];
+            owner.should.be.equal(_curatorAccount);
+
+            let purchaseState = assetInfo[2];
+            purchaseState.should.be.bignumber.equal(Unsold);
+
+            let priceInWei = assetInfo[3];
+            priceInWei.should.be.bignumber.equal(priceInWei);
+
+            let auctionStartDate = assetInfo[4];
+            auctionStartDate.should.be.bignumber.equal(auctionStartDate);
+          });
+        });
+
+        it('editionInfo() returns correct data', async function () {
+          [newlyMintedTokenId, anotherNewlyMintedTokenId].forEach(async function (id) {
+            let editionInfo = await this.token.editionInfo(id);
+
+            let tokenId = editionInfo[0];
+            tokenId.should.be.bignumber.equal(id);
+
+            let edition = editionInfo[1];
+            web3.toAscii(edition).should.be.equal(_editionPhysical);
+
+            let editionNumber = editionInfo[2];
+            editionNumber.should.be.bignumber.equal(2);
+
+            let tokenUri = editionInfo[3];
+            tokenUri.toString().should.be.equal(_baseUri + _tokenURI);
+          });
+        });
+      });
+
+      describe('validates burnt tokens', async function () {
+
+        it('does not exists()', async function () {
+          [tokenToBurn, tokenToBurn + 1].forEach(async function (id) {
+            let result = await this.token.exists(id);
+            result.should.be.false;
+          });
+        });
+
+        it('editionInfo() is empty for burnt token', async function () {
+          [tokenToBurn, tokenToBurn + 1].forEach(async function (id) {
+            let editionInfo = await this.token.editionInfo(id);
+
+            let tokenId = editionInfo[0];
+            tokenId.should.be.bignumber.equal(id);
+
+            let edition = editionInfo[1];
+            web3.toAscii(edition).should.be.equal(
+              '\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000'
+            );
+
+            let editionNumber = editionInfo[2];
+            editionNumber.should.be.bignumber.equal(0);
+
+            let tokenUri = editionInfo[3];
+            tokenUri.toString().should.be.equal(_baseUri);
+          });
+        });
+
+        it('assetInfo() is empty', async function () {
+          [tokenToBurn, tokenToBurn + 1].forEach(async function (id) {
+            const assetInfo = await this.token.assetInfo(id);
+
+            let tokenId = assetInfo[0];
+            tokenId.should.be.bignumber.equal(id);
+
+            let owner = assetInfo[1];
+            owner.should.be.equal(ZERO_ADDRESS);
+
+            let purchaseState = assetInfo[2];
+            purchaseState.should.be.bignumber.equal(0);
+
+            let priceInWei = assetInfo[3];
+            priceInWei.should.be.bignumber.equal(0);
+
+            let auctionStartDate = assetInfo[4];
+            auctionStartDate.should.be.bignumber.equal(0);
+          });
+        });
+      });
+
     });
 
   });
