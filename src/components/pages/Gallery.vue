@@ -6,34 +6,34 @@
 
     <h1>Gallery</h1>
 
-    <div class="text-center text-blue" v-if="assets.length == 0">
-      <img src="../../../static/Timer.svg" style="width: 100px"/><br/>
-      <span class="loading">Loading...</span>
-    </div>
+    <hr/>
 
     <div>
-      <span>
-        Sold/Unsold: {{showSold}}
+      <p>
         <toggle-button :value="showSold"
                        :labels="{checked: 'Sold', unchecked: 'Unsold'}"
                        :sync="true" color="#82C7EB"
                        :width="65"
                        @change="onSoldToggleChanged"/>
-      </span>
+      </p>
 
-      <span>
-        Filter By Artist: {{selectedArtist}}
-        <select v-model="selectedArtist">
-          <option disabled value="">Please select one</option>
+      <p>
+        <select style="border: thin dashed;" v-model="selectedArtist">
+          <option value="">Filter by artist</option>
           <option v-for="artist in artists" v-bind:value="artist.artistCode">
             {{ artist.name }}
           </option>
         </select>
-      </span>
+      </p>
     </div>
 
-    <br />
-    
+    <hr/>
+
+    <div class="text-center text-blue" v-if="Object.keys(assets).length === 0">
+      <img src="../../../static/Timer.svg" style="width: 100px"/><br/>
+      <span class="loading">Loading...</span>
+    </div>
+
     <div v-if="assets">
       <section class="cards centered">
         <galleryEdition
@@ -60,7 +60,7 @@
     data() {
       return {
         showSold: false,
-        selectedArtist: null
+        selectedArtist: ''
       };
     },
     methods: {
