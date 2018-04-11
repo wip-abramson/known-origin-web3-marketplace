@@ -7,9 +7,11 @@ import store from './store';
 import logging from './logging';
 import VModal from 'vue-js-modal';
 import AsyncComputed from 'vue-async-computed';
+import ToggleButton from 'vue-js-toggle-button';
 
 Vue.use(VModal);
 Vue.use(AsyncComputed);
+Vue.use(ToggleButton);
 
 Vue.config.productionTip = false
 

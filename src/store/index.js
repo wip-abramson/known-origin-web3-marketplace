@@ -89,7 +89,26 @@ const store = new Vuex.Store({
       return false;
     },
     lookupAssetsByArtistCode: (state) => (artistCode) => {
-      return _.filter(state.assetsByEditions, (key, value) => value.startsWith(artistCode));
+      return _.filter(state.assetsByEditions, (value, key) => key.startsWith(artistCode));
+    },
+    assetsByEditionsFilter: (state) => (showSold = false, artistCode) => {
+      let unsoldFilter = (asset) => asset.purchased === 0;
+      let soldFilter = (asset) => asset.purchased === 1 || asset.purchased === 2;
+      let filteredAssetsByEditions = {};
+      _.forEach(state.assetsByEditions, (assets, key) => {
+        let results = _.filter(assets, showSold ? soldFilter : unsoldFilter);
+        if (results.length > 0) {
+
+          if (artistCode && key.startsWith(artistCode)) {
+            filteredAssetsByEditions[key] = results;
+          }
+
+          if (!artistCode) {
+            filteredAssetsByEditions[key] = results;
+          }
+        }
+      });
+      return filteredAssetsByEditions;
     },
     assetPurchaseState: (state) => (assetId) => {
       return _.get(state.purchaseState, assetId);
