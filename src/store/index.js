@@ -43,6 +43,7 @@ const store = new Vuex.Store({
     assets: [],
     assetsByEditions: [],
     assetsByArtistCode: [],
+    editionSummary: [],
 
     // Frontend state
     purchaseState: {}
@@ -91,24 +92,17 @@ const store = new Vuex.Store({
     lookupAssetsByArtistCode: (state) => (artistCode) => {
       return _.filter(state.assetsByEditions, (value, key) => key.startsWith(artistCode));
     },
-    assetsByEditionsFilter: (state) => (showSold = false, artistCode) => {
-      let unsoldFilter = (asset) => asset.purchased === 0;
-      let soldFilter = (asset) => asset.purchased === 1 || asset.purchased === 2;
-      let filteredAssetsByEditions = {};
-      _.forEach(state.assetsByEditions, (assets, key) => {
-        let results = _.filter(assets, showSold ? soldFilter : unsoldFilter);
-        if (results.length > 0) {
+    editionSummaryFilter: (state) => (showSold = false, priceFilter = 'asc') => {
 
-          if (artistCode && key.startsWith(artistCode)) {
-            filteredAssetsByEditions[key] = results;
-          }
+      if (showSold) {
+        return _.orderBy(state.editionSummary.filter((edition) => {
+          return edition.totalSupply === edition.totalPurchased;
+        }), 'priceInEther', priceFilter);
+      }
 
-          if (!artistCode) {
-            filteredAssetsByEditions[key] = results;
-          }
-        }
-      });
-      return filteredAssetsByEditions;
+      return _.orderBy(state.editionSummary.filter((edition) => {
+        return edition.totalSupply !== edition.totalPurchased;
+      }), 'priceInEther', priceFilter);
     },
     assetPurchaseState: (state) => (assetId) => {
       return _.get(state.purchaseState, assetId);
@@ -132,10 +126,11 @@ const store = new Vuex.Store({
       state.contractDeveloperAddress = contractDeveloperAddress;
       state.contractAddress = contractAddress;
     },
-    [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtistCode}) {
+    [mutations.SET_ASSETS](state, {assets, assetsByEditions, assetsByArtistCode, editionSummary}) {
       Vue.set(state, 'assets', assets);
       Vue.set(state, 'assetsByEditions', assetsByEditions);
       Vue.set(state, 'assetsByArtistCode', assetsByArtistCode);
+      Vue.set(state, 'editionSummary', editionSummary);
     },
     [mutations.SET_ARTISTS](state, {artists}) {
       state.artists = artists;
@@ -341,10 +336,30 @@ const store = new Vuex.Store({
               let assetsByEditions = _.groupBy(assets, 'edition');
               let assetsByArtistCode = _.groupBy(assets, 'artistCode');
 
+              // flatten out the editions so we can easily work with them on the gallery page
+              let editionSummary = _.map(assetsByEditions, function (assets, editionKey) {
+
+                let editionSummary = {
+                  edition: editionKey,
+                  totalSupply: assets.length,
+                  totalPurchased: assets.filter((asset) => asset.purchased === 1 || asset.purchased === 2).length
+                };
+
+                // Add the first asset to the flat list
+                _.extend(editionSummary, assets[0]);
+
+                // chop the ID to ensure its not an asset
+                delete editionSummary.id;
+                delete editionSummary.purchased;
+
+                return editionSummary;
+              });
+
               commit(mutations.SET_ASSETS, {
                 assets: assets,
                 assetsByEditions: assetsByEditions,
                 assetsByArtistCode: assetsByArtistCode,
+                editionSummary: editionSummary,
               });
             });
         });

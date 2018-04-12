@@ -12,34 +12,30 @@
       <p>
         <toggle-button :value="showSold"
                        :labels="{checked: 'Sold', unchecked: 'Unsold'}"
-                       :sync="true" color="#82C7EB"
-                       :width="65"
+                       :sync="true" color="#82C7EB" :width="65"
                        @change="onSoldToggleChanged"/>
-      </p>
 
-      <p>
-        <select style="border: thin dashed;" v-model="selectedArtist">
-          <option value="">Filter by artist</option>
-          <option v-for="artist in artists" v-bind:value="artist.artistCode">
-            {{ artist.name }}
-          </option>
+        <select style="border: thin dashed;" title="price filter" v-model="priceFilter">
+          <option value="asc">Low to high</option>
+          <option value="desc">High to low</option>
         </select>
       </p>
+
     </div>
 
     <hr/>
 
-    <div class="text-center text-blue" v-if="Object.keys(assets).length === 0">
+    <div class="text-center text-blue" v-if="editions.length === 0">
       <img src="../../../static/Timer.svg" style="width: 100px"/><br/>
       <span class="loading">Loading...</span>
     </div>
 
-    <div v-if="assets">
+    <div v-if="editions">
       <section class="cards centered">
         <galleryEdition
-          v-for="assetEdition, key in assets"
-          :edition="assetEdition[0]"
-          :key="key">
+          v-for="edition in editions"
+          :edition="edition"
+          :key="edition.edition">
         </galleryEdition>
       </section>
     </div>
@@ -60,7 +56,7 @@
     data() {
       return {
         showSold: false,
-        selectedArtist: ''
+        priceFilter: 'asc'
       };
     },
     methods: {
@@ -70,10 +66,10 @@
     },
     computed: {
       ...mapState([
-        'artists'
+        'editionSummary'
       ]),
-      assets: function () {
-        return this.$store.getters.assetsByEditionsFilter(this.showSold, this.selectedArtist);
+      editions: function () {
+        return this.$store.getters.editionSummaryFilter(this.showSold, this.priceFilter);
       },
     }
   };
