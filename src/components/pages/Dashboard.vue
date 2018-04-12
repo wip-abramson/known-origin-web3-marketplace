@@ -33,6 +33,7 @@
       <section class="cards">
         <artist v-for="artist in featuredArtists" :artist="artist" :key="artist.name"></artist>
       </section>
+
     </div>
     <router-link :to="{ name: 'artists' }" class="btn btn-link">View all artists</router-link>
 
@@ -41,10 +42,10 @@
       <div>
         <section>
           <p>
-            Selling va the KnownOrigin marketplace is a new wat for artist, illustrators and creative practitioners to monetize their craft.
+            Selling via the KnownOrigin marketplace is a new way for artist, illustrators and creative practitioners to monetize their craft.
           </p>
           <p>
-            Is artists have the freedom to be more original, more people can own original artwork.
+            Its artists have the freedom to be more original, more people can own original artwork.
           </p>
         </section>
         <section>
@@ -65,18 +66,18 @@
           <h3>Step 2.</h3>
           <h4>Asset uploaded.</h4>
           <p>
-            Upon upload, a corresponding ERC-721 compliant tradeable token is created, also know a KODA token, on the Ethereum public Blockchain.
+            Upon upload, a corresponding ERC-721 compliant tradeable token is minted, also know a KODA token, on the Ethereum public Blockchain.
           </p>
           <p>
-            KnownOrigin.io use the latest ERC-721 compliant smart contract to manage asset identity and purchasing.
+            KnownOrigin.io uses the latest ERC-721 compliant smart contract to manage asset identity and purchasing.
           </p>
           <p class="pad-top"><img src="/../static/HP_Upload_icn.svg" style="height: 250px"/></p>
         </section>
         <section>
           <h3>Step 3.</h3>
-          <h4>People can by the art work using Ethereum.</h4>
+          <h4>People can buy the art work using Ethereum.</h4>
           <p>
-            Art buyers are assigned the corresponding KODA token at the point of purchase.
+            Art buyers are assigned the corresponding KODA token at the point of a successful purchase.
           </p>
           <p>
             The KODA smart contract provides proof of ownership as well as seamless and transparent transfers of assets.
@@ -85,7 +86,7 @@
         </section>
         <section>
           <h3>Step 4.</h3>
-          <h4>Collectors can view purchase Artwork.</h4>
+          <h4>Collectors can view purchased artwork.</h4>
           <p>
             KnownOrigin.io provides an Account page which will show for all owned KODA assets.
           </p>
