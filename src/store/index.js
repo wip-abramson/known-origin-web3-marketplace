@@ -314,9 +314,10 @@ const store = new Vuex.Store({
 
             return lookupIPFSData(tokenUri).then((ipfsMeta) => {
               // set IPFS lookup back on object
-              _.set(fullAssetDetails, 'otherMeta', ipfsMeta.otherMeta);
+              _.set(fullAssetDetails, 'artworkName', ipfsMeta.name);
               _.set(fullAssetDetails, 'description', ipfsMeta.description);
               _.set(fullAssetDetails, 'lowResImg', ipfsMeta.lowResImg);
+              _.set(fullAssetDetails, 'otherMeta', ipfsMeta.otherMeta);
               return fullAssetDetails;
             });
           });

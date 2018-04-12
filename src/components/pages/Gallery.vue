@@ -19,6 +19,8 @@
           <option value="asc">Low to high</option>
           <option value="desc">High to low</option>
         </select>
+
+        <input type="text" v-model="search"/>
       </p>
 
     </div>
@@ -56,7 +58,8 @@
     data() {
       return {
         showSold: false,
-        priceFilter: 'asc'
+        priceFilter: 'asc',
+        search: ''
       };
     },
     methods: {
@@ -69,7 +72,19 @@
         'editionSummary'
       ]),
       editions: function () {
-        return this.$store.getters.editionSummaryFilter(this.showSold, this.priceFilter);
+
+        return this.$store.getters.editionSummaryFilter(this.showSold, this.priceFilter)
+          .filter(function (item) {
+
+            if (this.search.length === 0) {
+              return true;
+            }
+
+            let matchesName = item.artworkName.toLowerCase().indexOf(this.search.toLowerCase()) >= 0;
+            let matchesDescription = item.description.toLowerCase().indexOf(this.search.toLowerCase()) >= 0;
+
+            return matchesName || matchesDescription;
+          }.bind(this));
       },
     }
   };
