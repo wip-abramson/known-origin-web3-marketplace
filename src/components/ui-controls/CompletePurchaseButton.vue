@@ -21,11 +21,11 @@
         </button>
 
         <div class="pad-top">
-          <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isCurator && !soldAsFiat">
+          <button type="button" v-on:click="completeFiatPurchase" class="btn btn-warning" v-if="isKnownOrigin && !soldAsFiat">
             FIAT purchase
           </button>
 
-          <button type="button" v-on:click="reverseFiatPurchase" class="btn btn-danger" v-if="isCurator && soldAsFiat">
+          <button type="button" v-on:click="reverseFiatPurchase" class="btn btn-danger" v-if="isKnownOrigin && soldAsFiat">
             Reverse FIAT purchase
           </button>
         </div>
@@ -76,7 +76,7 @@
     },
     computed: {
       ...mapGetters([
-        'isCurator',
+        'isKnownOrigin',
         'assetPurchaseState',
         'isPurchaseTriggered',
         'isPurchaseStarted',

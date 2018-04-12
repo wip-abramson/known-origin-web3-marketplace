@@ -82,8 +82,7 @@ const store = new Vuex.Store({
     featuredArtists: (state) => {
       return state.artists.filter((a) => a.featured);
     },
-    isCurator: (state) => {
-      // FIXME isKnownOrigin
+    isKnownOrigin: (state) => {
       if (state.curatorAddress && state.account) {
         return state.curatorAddress.toLowerCase() === state.account.toLowerCase() || state.contractDeveloperAddress.toLowerCase() === state.account.toLowerCase();
       }

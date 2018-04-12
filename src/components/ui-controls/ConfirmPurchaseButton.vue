@@ -6,8 +6,8 @@
       </a>
     </p>
 
-    <h3 v-if="!findNextAssetToPurchase(edition)">
-       SOLD
+    <h3 class="text-danger text-center" v-if="!findNextAssetToPurchase(edition)">
+      SOLD
     </h3>
   </div>
 </template>
@@ -27,7 +27,7 @@
       },
     },
     computed: {
-      ...mapGetters(['isCurator', 'findNextAssetToPurchase']),
+      ...mapGetters(['isKnownOrigin', 'findNextAssetToPurchase']),
     },
     data () {
       return {

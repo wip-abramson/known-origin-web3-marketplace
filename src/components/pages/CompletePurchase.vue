@@ -139,7 +139,7 @@
       ...mapGetters([
         'assetsForEdition',
         'firstAssetForEdition',
-        'isCurator',
+        'isKnownOrigin',
         'assetPurchaseState',
         'isPurchaseTriggered',
         'isPurchaseStarted',
